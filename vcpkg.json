@@ -1,0 +1,12 @@
+{
+    "name": "ridegen",
+    "version-string": "22.02",
+    "dependencies": [
+        "zlib",
+        "libpng",
+        "assimp",
+        "embree3",
+        "jansson",
+        "libzip"
+    ]
+}

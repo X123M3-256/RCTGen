@@ -1,0 +1,45 @@
+{
+"id":"openrct2.ride.alp1",
+"ride_type":"alpine_rc",
+"author":"Edward Calver",
+"version":"1.0",
+"name":"Alpine Coaster Cars",
+"description":"Toboggan cars equipped with rider operated brakes",
+"capacity":"2 passengers per car",
+"preview":"examples/alpine/preview.png",
+"flags":["no_collision_crashes","rider_controls_speed"],
+"sprites":["flat","gentle_slopes","diagonals","banked_turns"],
+"zero_cars":0,
+"min_cars_per_train":1,
+"max_cars_per_train":1,
+"build_menu_priority":5,
+"preview_tab_car":0,
+"running_sound":"steel",
+"secondary_sound":"scream1",
+"default_colors":
+	[
+	["bright_red","bright_red","yellow"],
+	["light_blue","black","light_orange"],
+	["yellow","yellow","bright_red"]
+	],
+"configuration":{"default":0},
+"meshes":["examples/alpine/car.obj","examples/alpine/peep.obj"],
+"vehicles":
+	[
+		{
+		"flags":[],
+		"model":
+			[
+			{"mesh_index":0,"position":[0,0,0],"orientation":[0,0,0]}
+			],
+		"mass":450,
+		"spacing":1.9,
+		"draw_order":7,
+		"capacity":2,
+		"riders":
+			[
+			{"mesh_index":1,"position":[0,0,0],"orientation":[0,0,0]}
+			]
+		}	
+	]
+}

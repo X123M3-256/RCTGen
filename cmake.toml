@@ -1,0 +1,101 @@
+# Reference: https://build-cpp.github.io/cmkr/cmake-toml
+[project]
+name = "RCT2RideGen"
+languages = ["CXX"]
+msvc-runtime = "static"
+cmake-after = '''
+    find_package(ZLIB REQUIRED)
+    find_package(PNG REQUIRED)
+    find_package(embree 3 CONFIG REQUIRED)
+    find_package(assimp CONFIG REQUIRED)
+    find_package(jansson CONFIG REQUIRED)
+    find_package(libzip CONFIG REQUIRED)
+'''
+
+[target.IsoRender]
+type = "static"
+sources = [
+    "libIsoRender/src/vectormath.cpp",
+    "libIsoRender/src/renderer.cpp",
+    "libIsoRender/src/model.cpp",
+    "libIsoRender/src/palette.cpp",
+    "libIsoRender/src/raytrace.cpp",
+    "libIsoRender/src/image.cpp",
+    "libIsoRender/src/pack.cpp",
+]
+headers = [
+	"libIsoRender/src/color.h",
+    "libIsoRender/src/image.h",
+    "libIsoRender/src/model.h",
+    "libIsoRender/src/palette.h",
+    "libIsoRender/src/raytrace.h",
+    "libIsoRender/src/renderer.h",
+    "libIsoRender/src/vectormath.h",
+]
+include-directories = ["libIsoRender/src"]
+link-libraries = [
+    "PNG::PNG",
+    "ZLIB::ZLIB",
+    "embree",
+    "jansson::jansson",
+    "assimp::assimp",
+]
+
+[target.TestIsoRender]
+type = "executable"
+sources = [
+    "libIsoRender/src/main.cpp",
+]
+link-libraries = [
+    "IsoRender",
+]
+
+[target.makevehicle]
+type = "executable"
+sources = [
+    "RCT2RideGen/src/main.cpp",
+    "RCT2RideGen/src/project.cpp",
+]
+link-libraries = [
+    "IsoRender",
+    "libzip::zip",
+]
+cmake-after = """
+add_custom_command(TARGET makevehicle PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
+                   ${CMAKE_SOURCE_DIR}/examples $<TARGET_FILE_DIR:makevehicle>/examples)
+"""
+
+[target.maketrack]
+type = "executable"
+sources = [
+    "TrackRender/src/main.cpp",
+    "TrackRender/src/track.cpp",
+    "TrackRender/src/track_sections.cpp",
+    "TrackRender/src/sprites.cpp",
+]
+headers = [
+    "TrackRender/src/track.h",
+    "TrackRender/src/sprites.h",
+    "TrackRender/src/rmc_tie.h",
+]
+link-libraries = [
+    "IsoRender",
+    "libzip::zip",
+]
+
+[target.subposition]
+type = "executable"
+sources = [
+    "TrackRender/src/subposition.cpp",
+    "TrackRender/src/track_sections.cpp",
+]
+headers = [
+    "TrackRender/src/track.h",
+    "TrackRender/src/sprites.h",
+    "TrackRender/src/rmc_tie.h",
+]
+link-libraries = [
+    "IsoRender",
+    "libzip::zip",
+]

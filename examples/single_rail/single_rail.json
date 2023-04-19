@@ -1,0 +1,76 @@
+{
+"id":"openrct2.ride.single_rail_coaster",
+"ride_type":"single_rail_rc",
+"name":"Single Rail Roller Coaster Trains",
+"description":"Roller coaster trains in which riders are seated single file",
+"capacity":"1 passenger per car",
+"preview":"examples/single_rail/preview.png",
+"sprites":["flat","gentle_slopes","steep_slopes","vertical_slopes","diagonals","banked_turns","inline_twists","banked_sloped_turns","corkscrews","zero_g_rolls"],
+"zero_cars":0,
+"min_cars_per_train":5,
+"max_cars_per_train":12,
+"build_menu_priority":5,
+"preview_tab_car":0,
+"running_sound":"steel_smooth",
+"secondary_sound":"scream1",
+"default_colors":
+	[
+	["bright_red","bright_red","yellow"],
+	["light_blue","black","light_orange"],
+	["yellow","yellow","bright_red"]
+	],
+"configuration":{"default":1,"front":0},
+"meshes":["examples/single_rail/front_car.obj","examples/single_rail/car.obj","examples/single_rail/peep.obj","examples/single_rail/restraint.obj","examples/single_rail/peep_restraint.obj"],
+"vehicles":
+	[
+		{
+		"flags":["secondary_remap","tertiary_remap","restraint_animation","riders_scream"],
+		"model":
+			[
+			{"mesh_index":0,"position":[0,0,0],"orientation":[0,0,0]},
+			{"mesh_index":3,"position":[-0.552875,0.8509,0],"orientation":[[0,0,0],[0,35,0],[0,70,0],[0,105,0]]}
+			],
+		"mass":220,
+		"spacing":1.25,
+		"draw_order":8,
+		"capacity":1,
+		"riders":[
+			[
+			{"mesh_index":2,"position":[0,0,0],"orientation":[0,0,0]},
+			{"mesh_index":[4,-1,-1,-1],"position":[0,0,0],"orientation":[0,0,0]}]
+			]
+		},	
+		{
+		"flags":["secondary_remap","tertiary_remap","restraint_animation","riders_scream"],
+		"model":
+			[
+			{"mesh_index":1,"position":[0,0,0],"orientation":[0,0,0]},
+			{"mesh_index":3,"position":[-0.552875,0.8509,0],"orientation":[[0,0,0],[0,35,0],[0,70,0],[0,105,0]]}
+			],
+		"mass":200,
+		"spacing":1.25,
+		"draw_order":8,
+		"capacity":1,
+		"riders":[
+			[
+			{"mesh_index":2,"position":[0,0,0],"orientation":[0,0,0]},
+			{"mesh_index":[4,-1,-1,-1],"position":[0,0,0],"orientation":[0,0,0]}
+			]
+			]
+		}	
+	],
+
+
+
+"lights":[
+	{"type":"diffuse","shadow":false,"direction":[0,-1,0],"strength":0.1},
+	{"type":"diffuse","shadow":false,"direction":[0,0.5,-1],"strength":0.6},
+	{"type":"specular","shadow":false,"direction":[1,1.65,-1],"strength":1.0},
+	{"type":"diffuse","shadow":false,"direction":[1,1.7,-1],"strength":0.8},
+	{"type":"diffuse","shadow":false,"direction":[0,1,0],"strength":0.6},
+	{"type":"diffuse","shadow":false,"direction":[-1,0.85,1],"strength":0.475},
+	{"type":"diffuse","shadow":false,"direction":[0.75,0.4,-1],"strength":0.6},
+	{"type":"diffuse","shadow":false,"direction":[1,0.25,0],"strength":0.5}
+	],
+"output_directory":"/home/edward/.config/OpenRCT2/object/"
+}

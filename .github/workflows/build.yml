@@ -28,6 +28,7 @@ jobs:
         manifest-dir: ${{ github.workspace }}
         triplet: ${{ matrix.config.vcpkg_triplet }}
         token: ${{ github.token }}
+        cache-key: ${{ matrix.config.os }}
     - name: Build
       run: |
         cmake ${{ steps.vcpkg.outputs.vcpkg-cmake-config }} -S . -B build

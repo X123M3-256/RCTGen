@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <cstdlib>
 #ifdef _MSC_VER
 #define _USE_MATH_DEFINES
 #endif
@@ -1996,21 +1997,12 @@ sprite_rotation_t get_closest_rotation(matrix_t rotation, int groups)
     return sprite_group_rotations[min_group][min_index];
 }
 
-
-
-
 typedef struct
 {
     int x;
     int y;
     int z;
 }subposition_t;
-
-int abs(int x)
-{
-    if (x < 0)return -x;
-    return x;
-}
 
 subposition_t get_subposition(vector3_t point, int view, int reverse, int diag)
 {
@@ -2096,7 +2088,7 @@ track_point_t get_track_point(track_section_t* track_section, float progress, in
 //Generate the subposition data for a track piece
 //Reverse value is difference in height (in pixels) between final tile element base and track element end +1
 //Inverted track is 3 pixels higher than upright track of same height
-void generate_view_subposition_data(track_section_t* track_section, char* name, int groups, int view, int reverse)
+void generate_view_subposition_data(track_section_t* track_section, const char* name, int groups, int view, int reverse)
 {
     //Calculate start and finish angles
     track_point_t start = track_section->curve(0);
@@ -2204,7 +2196,7 @@ void generate_view_subposition_data(track_section_t* track_section, char* name, 
     puts("})\n");
 }
 
-void generate_subposition_data(track_section_t* track_section, char* name, int groups, int reverse)
+void generate_subposition_data(track_section_t* track_section, const char* name, int groups, int reverse)
 {
     for (int i = 0; i < 4; i++)
     {
@@ -2279,7 +2271,7 @@ void calc_g_forces(track_section_t* track_section)
 
 
 
-int main(int argc, char** argv)
+int main(int argc, const char** argv)
 {
     //get_angle();
     //calc_g_forces(&(track_list_default.zero_g_roll_left));

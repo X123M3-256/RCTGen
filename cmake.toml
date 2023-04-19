@@ -12,6 +12,11 @@ cmake-after = '''
     find_package(libzip CONFIG REQUIRED)
 '''
 
+[settings]
+CMAKE_MSVC_RUNTIME_LIBRARY = "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+CMAKE_LIBRARY_OUTPUT_DIRECTORY = "${CMAKE_BINARY_DIR}/$<CONFIG>"
+CMAKE_RUNTIME_OUTPUT_DIRECTORY = "${CMAKE_BINARY_DIR}/$<CONFIG>"
+
 [target.IsoRender]
 type = "static"
 sources = [

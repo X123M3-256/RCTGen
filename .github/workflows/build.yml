@@ -3,75 +3,33 @@ name: Build
 on: [push, pull_request]
 
 jobs:
-  windows-msvc:
+  build:
     # Skip building pull requests from the same repository
     if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) }}
-    name: Windows (MSVC, ${{ matrix.buildtype }})
-    runs-on: windows-latest
+    runs-on: ${{ matrix.config.os }}
     strategy:
-      fail-fast: false
       matrix:
-        buildtype: [Debug, Release]
+        config:
+        - os: ubuntu-latest
+          vcpkg_triplet: x64-linux-release
+          build_type: Release
+        - os: windows-latest
+          vcpkg_triplet: x64-windows-release
+          build_type: Release
     env:
-      BUILD_TYPE: ${{ matrix.buildtype }}
+      BUILD_TYPE: ${{ matrix.config.build_type }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-
-    - name: Build
-      run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
-        cmake --build build --config ${{ env.BUILD_TYPE }} --parallel
-
-    - name: Test
-      run: |
-        ctest --version
-        cd build
-        ctest . -C ${{ env.BUILD_TYPE }} --verbose
-                
-  ubuntu-gcc:
-    # Skip building pull requests from the same repository
-    if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) }}
-    name: Ubuntu (GCC, ${{ matrix.buildtype }})
-    runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: false
-      matrix:
-        buildtype: [Debug, Release]
-    env:
-      BUILD_TYPE: ${{ matrix.buildtype }}
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - name: Build
-      run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
-        cmake --build build --config ${{ env.BUILD_TYPE }} --parallel
-        
-  ubuntu-clang:
-    # Skip building pull requests from the same repository
-    if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) }}
-    name: Ubuntu (Clang, ${{ matrix.buildtype }})
-    runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: false
-      matrix:
-        buildtype: [Debug, Release]
-    env:
-      BUILD_TYPE: ${{ matrix.buildtype }}
-    steps:
-    - name: Set up Clang
-      uses: egor-tensin/setup-clang@v1
+    - name: Vcpkg Setup
+      id: vcpkg
+      uses: johnwason/vcpkg-action@v4
       with:
-        version: 12
-        platform: x64
-        
-    - name: Checkout
-      uses: actions/checkout@v2
-
+        manifest-dir: ${{ github.workspace }}
+        triplet: ${{ matrix.config.vcpkg_triplet }}
+        token: ${{ github.token }}
     - name: Build
       run: |
-        cmake -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+        cmake ${{ steps.vcpkg.outputs.vcpkg-cmake-config }} -S . -B build
         cmake --build build --config ${{ env.BUILD_TYPE }} --parallel
 

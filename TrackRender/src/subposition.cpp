@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <cstdlib>
 #ifdef _MSC_VER
 #define _USE_MATH_DEFINES
 #endif
@@ -1996,21 +1997,12 @@ sprite_rotation_t get_closest_rotation(matrix_t rotation, int groups)
     return sprite_group_rotations[min_group][min_index];
 }
 
-
-
-
 typedef struct
 {
     int x;
     int y;
     int z;
 }subposition_t;
-
-int abs(int x)
-{
-    if (x < 0)return -x;
-    return x;
-}
 
 subposition_t get_subposition(vector3_t point, int view, int reverse, int diag)
 {

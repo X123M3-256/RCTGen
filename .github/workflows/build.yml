@@ -8,6 +8,7 @@ jobs:
     if: ${{ github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository) }}
     runs-on: ${{ matrix.config.os }}
     strategy:
+      fail-fast: false
       matrix:
         config:
         - os: ubuntu-latest
@@ -31,6 +32,14 @@ jobs:
         cache-key: ${{ matrix.config.os }}
     - name: Build
       run: |
-        cmake ${{ steps.vcpkg.outputs.vcpkg-cmake-config }} -S . -B build
+        cmake ${{ steps.vcpkg.outputs.vcpkg-cmake-config }} -S . -B build -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
         cmake --build build --config ${{ env.BUILD_TYPE }} --parallel
-
+    - name: Upload artifacts (CI)
+      uses: actions/upload-artifact@v2
+      with:
+        name: rctgen-${{ runner.config.os }}-${{ env.BUILD_TYPE }}
+        path: |
+          ${{ github.workspace }}/build/${{ env.BUILD_TYPE }}
+          !${{ github.workspace }}/build/${{ env.BUILD_TYPE }}/**/*.lib
+          !${{ github.workspace }}/build/${{ env.BUILD_TYPE }}/**/*.pdb
+        if-no-files-found: error

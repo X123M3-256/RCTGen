@@ -37,7 +37,7 @@ jobs:
     - name: Upload artifacts (CI)
       uses: actions/upload-artifact@v2
       with:
-        name: rctgen-${{ runner.config.os }}-${{ env.BUILD_TYPE }}
+        name: rctgen-${{ matrix.config.os }}-${{ env.BUILD_TYPE }}
         path: |
           ${{ github.workspace }}/build/${{ env.BUILD_TYPE }}
           !${{ github.workspace }}/build/${{ env.BUILD_TYPE }}/**/*.lib

@@ -742,7 +742,7 @@ void write_track_section(context_t* context, track_section_t* track_section, tra
             }
 
 
-            FILE* file = fopen(final_filename, "w");
+            FILE* file = fopen(final_filename, "wb");
             if (file == NULL)
             {
                 printf("Error: could not open %s for writing\n", final_filename);

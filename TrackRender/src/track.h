@@ -73,7 +73,8 @@ enum track_flags
     TRACK_NO_LIFT_SPRITE = 8,
     TRACK_SEPARATE_TIE = 16,
     TRACK_TIE_AT_BOUNDARY = 32,
-    TRACK_SPLIT = 64
+    TRACK_SPLIT = 64,
+    TRACK_SPECIAL_OFFSETS = 128
 };
 
 enum track_subtypes

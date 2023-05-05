@@ -29,7 +29,7 @@ int load_model(mesh_t* model, json_t* json, const char* name)
         {
             if (mesh_load_transform(model, json_string_value(mesh), rotate_y(-0.5 * M_PI)))
             {
-                printf("Failed to load model \"%s\"\n", json_string_value(mesh));
+                printf("Failed to load model from file \"%s\"\n", json_string_value(mesh));
                 return 1;
             }
             return 0;
@@ -121,6 +121,7 @@ int load_track_type(track_type_t* track_type, json_t* json)
             else if (strcmp(json_string_value(flag_name), "no_lift_sprite") == 0)track_type->flags |= TRACK_NO_LIFT_SPRITE;
             else if (strcmp(json_string_value(flag_name), "separate_tie") == 0)track_type->flags |= TRACK_SEPARATE_TIE;
             else if (strcmp(json_string_value(flag_name), "tie_at_boundary") == 0)track_type->flags |= TRACK_SEPARATE_TIE | TRACK_TIE_AT_BOUNDARY;
+            else if (strcmp(json_string_value(flag_name), "special_end_offsets") == 0)track_type->flags |= TRACK_SPECIAL_OFFSETS;
             else
             {
                 printf("Error: Unrecognized flag \"%s\"\n", json_string_value(flag_name));
@@ -137,7 +138,9 @@ int load_track_type(track_type_t* track_type, json_t* json)
             printf("Error: Property \"sections\" is not an array\n");
             return 1;
         }
-        if (load_groups(groups, &(track_type->groups)))return 1;
+        // Error reporting contained in load_groups
+        if (load_groups(groups, &(track_type->groups)))
+            return 1;
     }
 
     if (track_type->flags & TRACK_HAS_LIFT)
@@ -157,7 +160,7 @@ int load_track_type(track_type_t* track_type, json_t* json)
         {
             if (!json_is_integer(offset))
             {
-                printf("Error: Property \"lift_sections\" is not an array\n");
+                printf("Error: Property \"lift_offset\" is not an int\n");
                 return 1;
             }
             track_type->lift_offset = json_integer_value(offset);
@@ -232,10 +235,15 @@ int load_track_type(track_type_t* track_type, json_t* json)
         return 1;
     }
 
-    if (load_model(&(track_type->mesh), models, "track"))return 1;
+    if (load_model(&(track_type->mesh), models, "track"))
+    {
+        printf("Error: Track mesh not found\n");
+        return 1;
+    }
     if (load_model(&(track_type->mask), models, "mask"))
     {
         mesh_destroy(&(track_type->mesh));
+        printf("Error: Mask mesh not found\n");
         return 1;
     }
 
@@ -245,6 +253,7 @@ int load_track_type(track_type_t* track_type, json_t* json)
         {
             mesh_destroy(&(track_type->mesh));
             mesh_destroy(&(track_type->mask));
+            printf("Error: Lift mesh not found\n");
             return 1;
         }
     }
@@ -256,6 +265,7 @@ int load_track_type(track_type_t* track_type, json_t* json)
             mesh_destroy(&(track_type->mesh));
             mesh_destroy(&(track_type->mask));
             if (track_type->flags & TRACK_HAS_LIFT)mesh_destroy(&(track_type->lift_mesh));
+            printf("Error: separate tie mesh not found\n");
             return 1;
         }
     }
@@ -273,6 +283,7 @@ int load_track_type(track_type_t* track_type, json_t* json)
             mesh_destroy(&(track_type->mask));
             if (track_type->flags & TRACK_HAS_LIFT)mesh_destroy(&(track_type->lift_mesh));
             for (int j = 0; j < i; j++)mesh_destroy(&(track_type->models[j]));
+            printf("Error: failed to load model %s\n", support_model_names[i]);
             return 1;
         }
     }
@@ -433,7 +444,11 @@ int main(int argc, char** argv)
     }
 
     track_type_t track_type;
-    if (load_track_type(&track_type, track))return 1;
+    if (load_track_type(&track_type, track))
+    {
+        printf("Error loading track\n");
+        return 1;
+    }
 
     char full_path[256];
     snprintf(full_path, 256, "%s%s", base_dir, spritefile_in);

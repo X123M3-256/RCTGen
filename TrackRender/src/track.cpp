@@ -603,17 +603,19 @@ void render_track_sections(context_t* context, track_section_t* track_section, t
     int extrude_in_front_even = !(track_section->flags & TRACK_EXIT_90_DEG) && (track_section->flags & TRACK_EXTRUDE_IN_FRONT);
     int extrude_in_front_odd = (track_section->flags & TRACK_EXIT_90_DEG) && (track_section->flags & TRACK_EXTRUDE_IN_FRONT);
 
-    /*
-    set_offset(0,track_section);
-        if(views&0x1)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,0x1,sprites,subtype);
-    set_offset(1,track_section);
-        if(views&0x2)render_track_section(context,track_section,track_type,0,extrude_in_front_even,track_mask,0x2,sprites,subtype);
-    set_offset(2,track_section);
-        if(views&0x4)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,0x4,sprites,subtype);
-    set_offset(3,track_section);
-        if(views&0x8)render_track_section(context,track_section,track_type,0,extrude_in_front_even,track_mask,0x8,sprites,subtype);
-    return;
-    */
+    if (track_type->flags & TRACK_SPECIAL_OFFSETS)
+    {
+        set_offset(0, track_section);
+        if (views & 0x1)render_track_section(context, track_section, track_type, extrude_behind, extrude_in_front_even, track_mask, 0x1, sprites, subtype);
+        set_offset(1, track_section);
+        if (views & 0x2)render_track_section(context, track_section, track_type, 0, extrude_in_front_even, track_mask, 0x2, sprites, subtype);
+        set_offset(2, track_section);
+        if (views & 0x4)render_track_section(context, track_section, track_type, extrude_behind, extrude_in_front_even, track_mask, 0x4, sprites, subtype);
+        set_offset(3, track_section);
+        if (views & 0x8)render_track_section(context, track_section, track_type, 0, extrude_in_front_even, track_mask, 0x8, sprites, subtype);
+        return;
+    }
+
 
     if ((track_section->flags & TRACK_EXTRUDE_BEHIND) || (track_section->flags & TRACK_EXTRUDE_IN_FRONT))
     {

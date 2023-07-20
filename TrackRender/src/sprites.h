@@ -22,4 +22,3 @@ extern image_t small_flat_to_steep_up_chain[4];
 extern image_t small_steep_to_flat_up_chain[4];
 extern image_t small_flat_to_steep_up_diag_chain[4];
 extern image_t small_steep_to_flat_up_diag_chain[4];
-

@@ -11,6 +11,8 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 	message(FATAL_ERROR "In-tree builds are not supported. Run CMake from a separate directory: cmake -B build")
 endif()
 
+message("${CMAKE_MODULE_PATH}")
+
 set(CMKR_ROOT_PROJECT OFF)
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 	set(CMKR_ROOT_PROJECT ON)
@@ -40,10 +42,10 @@ project(RCT2RideGen
 
     find_package(ZLIB REQUIRED)
     find_package(PNG REQUIRED)
-    find_package(embree 3 CONFIG REQUIRED)
-    find_package(assimp CONFIG REQUIRED)
-    find_package(jansson CONFIG REQUIRED)
-    find_package(libzip CONFIG REQUIRED)
+    find_package(embree 3 REQUIRED)
+    find_package(assimp REQUIRED)
+    find_package(jansson REQUIRED)
+    find_package(libzip REQUIRED)
 
 # Target: IsoRender
 set(IsoRender_SOURCES
@@ -136,7 +138,6 @@ set(maketrack_SOURCES
 	"TrackRender/src/sprites.cpp"
 	"TrackRender/src/track.h"
 	"TrackRender/src/sprites.h"
-	"TrackRender/src/rmc_tie.h"
 	cmake.toml
 )
 
@@ -161,7 +162,6 @@ set(subposition_SOURCES
 	"TrackRender/src/track_sections.cpp"
 	"TrackRender/src/track.h"
 	"TrackRender/src/sprites.h"
-	"TrackRender/src/rmc_tie.h"
 	cmake.toml
 )
 

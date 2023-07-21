@@ -249,11 +249,13 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 		if(rendered_views&1)start_angle=0;
 		else if(rendered_views&2)start_angle=1;
 		else if(rendered_views&4)start_angle=2;
-
+		if(track_section->flags&(TRACK_DIAGONAL|TRACK_DIAGONAL_2))start_angle=(start_angle+1) % 4;
 		int end_angle=start_angle;
 		if(track_section->flags&TRACK_EXIT_90_DEG_LEFT)end_angle-=1;
 		else if(track_section->flags&TRACK_EXIT_90_DEG_RIGHT)end_angle+=1;
 		else if(track_section->flags&TRACK_EXIT_180_DEG)end_angle+=2;
+		else if((track_section->flags&TRACK_EXIT_45_DEG_LEFT)&&(track_section->flags&(TRACK_DIAGONAL|TRACK_DIAGONAL_2)))end_angle-=1;
+		else if((track_section->flags&TRACK_EXIT_45_DEG_RIGHT)&&!(track_section->flags&(TRACK_DIAGONAL|TRACK_DIAGONAL_2)))end_angle+=1;
 		if(end_angle<0)end_angle+=4;
 		if(end_angle>3)end_angle-=4;
 
@@ -304,6 +306,7 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 			{
 				int use_alt=(track_type->models_loaded&(1<<MODEL_TRACK_ALT))&&(i&2);
 				if(track_section->flags&TRACK_ALT_INVERT)use_alt=!use_alt;
+				if(extrude_behind)use_alt=!use_alt;
 				//Add track model
 				if(!(track_type->models_loaded&(1<<MODEL_TRACK_TIE))&&start_tie)args.offset=offset-tie_length;
 				if(use_alt)context_add_model_transformed(context,&(track_type->models[MODEL_TRACK_ALT]),track_transform,&args,track_mask);
@@ -443,7 +446,7 @@ int is_in_mask(int x,int y,mask_t* mask)
 
 int compare_vec(vector3_t vec1,vector3_t vec2,int rot)
 {
-	return vector3_norm(vector3_sub(vec1,vector3_normalize(matrix_vector(views[rot],vec2))))<0.1;
+	return vector3_norm(vector3_sub(vec1,vector3_normalize(matrix_vector(views[rot],vec2))))<0.15;
 }
 
 int offset_table_index_with_rot(track_point_t track,int rot)
@@ -452,7 +455,7 @@ int offset_table_index_with_rot(track_point_t track,int rot)
 	//Get bank angle
 	int banked=fabs(fabs(asin(sqrt(track.normal.x*track.normal.x+track.normal.z*track.normal.z)))-0.25*M_PI)<0.1;
 	int right=(banked&&track.binormal.y<0) ? 0x10 : 0;
-
+	//printf("%f %f %f\n",track.tangent.x,track.tangent.y,track.tangent.z);
 	//Flat
 	if(compare_vec(track.tangent,vector3(0,0,TILE_SIZE),rot))
 	{
@@ -529,8 +532,8 @@ float offset_tables[10][8]={
     {0,-1,0,-1.5,0,-1,0,-1.5},
     {0,-1,0,-2,0,-2,0,-1},            //Gentle
     {1,-0.5,1,-0.5,0.5,-1,1,-0.5},    //Steep
-    {1,-1.5,-1,-1.5,1,0,-1,0},        //Bank
-    {0.75,-1,-0.75,-2,1,-0.5,0,-0.25},//Gentle Bank
+    {0,-2,-1,-1.5,1,0,-1,0},          //Bank
+    {0.75,-2,-0.75,-2,1,-0.5,0,-0.5}, //Gentle Bank   -0.5,-1    0.5,0
     {0,0,0,0,0,0,0,0},                //Inverted
     {0,-1.25,0,-1.25,0,-1.25,0,-1.25},//Diagonal
     {0,-1.75,-1,-0.25,0,-0.25,-1,-1.5},//Diagonal Bank
@@ -538,8 +541,9 @@ float offset_tables[10][8]={
     {0,0,0,0,0,0,0,0},                //Other
 };
 
-/*LIM
-float offset_tables[8][8]={
+//LIM
+/*
+float offset_tables[10][8]={
     {0,0.5,0,0,0,0.5,0,0},
     {0,1.0,0,0,0,0,0,0},//Gentle
     {-2.25,0,-2.0,0,-0.75,0,-1.5,-1.0},//Steep
@@ -585,7 +589,7 @@ vector3_t get_offset(int table,int view_angle)
 	//Correct for end rotation
 	if(end_angle !=0)offset=matrix_vector(rotate_y(-0.5*M_PI*end_angle),offset);
 
-	//printf("Offset %.2f %.2f %.2f\n",offset.x,offset.y,offset.z);
+	//printf("Offset %d %d %.2f\n",index,rotated_view_angle,offset_tables[index][2*rotated_view_angle+1]);
 	return offset;
 }
 
@@ -600,21 +604,21 @@ void set_offset(int view_angle,track_section_t* track_section)
 
 void render_track_sections(context_t* context,track_section_t* track_section,track_type_t* track_type,int track_mask,int subtype,int views,image_t* sprites)
 {
-	int extrude_behind=track_section->flags&TRACK_EXTRUDE_BEHIND;
-	int extrude_in_front_even=!(track_section->flags&TRACK_EXIT_90_DEG)&&(track_section->flags&TRACK_EXTRUDE_IN_FRONT);
-	int extrude_in_front_odd=(track_section->flags&TRACK_EXIT_90_DEG)&&(track_section->flags&TRACK_EXTRUDE_IN_FRONT);
+int extrude_behind=track_section->flags&TRACK_EXTRUDE_BEHIND;
+int extrude_in_front_even=!(track_section->flags&TRACK_EXIT_45_DEG_LEFT)&&(track_section->flags&TRACK_EXTRUDE_IN_FRONT);
+int extrude_in_front_odd=(track_section->flags&TRACK_EXIT_45_DEG_LEFT)&&(track_section->flags&TRACK_EXTRUDE_IN_FRONT);
 
 	if(track_type->flags&TRACK_SPECIAL_OFFSETS)
 	{
-		set_offset(0,track_section);
+	set_offset(0,track_section);
 		if(views&0x1)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,0x1,sprites,subtype);
-		set_offset(1,track_section);
-		if(views&0x2)render_track_section(context,track_section,track_type,0,extrude_in_front_even,track_mask,0x2,sprites,subtype);
-		set_offset(2,track_section);
+	set_offset(1,track_section);
+		if(views&0x2)render_track_section(context,track_section,track_type,0,extrude_in_front_odd,track_mask,0x2,sprites,subtype);
+	set_offset(2,track_section);
 		if(views&0x4)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,0x4,sprites,subtype);
-		set_offset(3,track_section);
-		if(views&0x8)render_track_section(context,track_section,track_type,0,extrude_in_front_even,track_mask,0x8,sprites,subtype);
-		return;
+	set_offset(3,track_section);
+		if(views&0x8)render_track_section(context,track_section,track_type,0,extrude_in_front_odd,track_mask,0x8,sprites,subtype);
+	return;
 	}
 
 	if((track_section->flags&TRACK_EXTRUDE_BEHIND)||(track_section->flags&TRACK_EXTRUDE_IN_FRONT))

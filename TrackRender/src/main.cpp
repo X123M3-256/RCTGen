@@ -75,6 +75,7 @@ int load_groups(json_t* json,uint32_t* out)
 		else if(strcmp(json_string_value(group_name),"corkscrews") ==0)groups|=TRACK_GROUP_CORKSCREWS;
 		else if(strcmp(json_string_value(group_name),"large_corkscrews") ==0)groups|=TRACK_GROUP_LARGE_CORKSCREWS;
 		else if(strcmp(json_string_value(group_name),"half_loops") ==0)groups|=TRACK_GROUP_HALF_LOOPS;
+		else if(strcmp(json_string_value(group_name),"vertical_loops")==0)groups|=TRACK_GROUP_VERTICAL_LOOPS;
 		else if(strcmp(json_string_value(group_name),"medium_half_loops") ==0)groups|=TRACK_GROUP_MEDIUM_HALF_LOOPS;
 		else if(strcmp(json_string_value(group_name),"large_half_loops") ==0)groups|=TRACK_GROUP_LARGE_HALF_LOOPS;
 		else if(strcmp(json_string_value(group_name),"zero_g_rolls") ==0)groups|=TRACK_GROUP_ZERO_G_ROLLS;

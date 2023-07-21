@@ -1043,6 +1043,13 @@ int write_track_subtype(context_t* context,track_type_t* track_type,track_list_t
 		sprintf(output_path,"%.255shalf_loop%s",output_dir,suffix);
 		write_track_section(context,&(track_list.half_loop),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}
+	if(groups&TRACK_GROUP_VERTICAL_LOOPS)
+	{
+		sprintf(output_path,"%.255sleft_vertical_loop%s",output_dir,suffix);
+		write_track_section(context,&(track_list.left_vertical_loop),track_type,base_dir,output_path,sprites,subtype,NULL);
+		sprintf(output_path,"%.255sright_vertical_loop%s",output_dir,suffix);
+		write_track_section(context,&(track_list.right_vertical_loop),track_type,base_dir,output_path,sprites,subtype,NULL);
+	}
 	if(groups&TRACK_GROUP_LARGE_SLOPE_TRANSITIONS)
 	{
 		sprintf(output_path,"%.255sflat_to_steep_up%s",output_dir,suffix);

@@ -120,7 +120,8 @@ enum track_groups
 	TRACK_GROUP_STEEP_SLOPED_TURNS=0x4000000,
 	TRACK_GROUP_LARGE_SLOPED_TURNS=0x8000000,
 	TRACK_GROUP_LARGE_BANKED_SLOPED_TURNS=0x10000000,
-	TRACK_GROUP_VERTICAL_BOOSTERS=0x20000000,
+	TRACK_GROUP_VERTICAL_LOOPS=0x20000000,
+	TRACK_GROUP_VERTICAL_BOOSTERS=0x40000000,
 };
 
 enum models
@@ -288,6 +289,8 @@ typedef struct
 	track_section_t inline_twist_left;
 	track_section_t inline_twist_right;
 	track_section_t half_loop;
+	track_section_t left_vertical_loop;
+	track_section_t right_vertical_loop;
 	track_section_t medium_half_loop_left;
 	track_section_t medium_half_loop_right;
 	track_section_t large_half_loop_left;

@@ -374,17 +374,25 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 				mat.entries[7]*=-1;
 				mat.entries[8]*=-1;
 			}
-			if((track_section->flags&TRACK_SPECIAL_MASK) ==TRACK_SPECIAL_LAUNCHED_LIFT)
+
+			if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE)
 			{
-				mat=matrix_mult(mat,rotate_x(0.387596687));
-				mat=matrix_mult(mat,matrix(1,0,0,0,1,0,0,0,1.080123));
-			}
-			else if((track_section->flags&TRACK_SPECIAL_MASK) ==TRACK_SPECIAL_VERTICAL_BOOSTER)
-			{
-				mat=matrix_mult(mat,rotate_x(-0.5*M_PI));
-				mat=matrix_mult(mat,matrix(1,0,0,0,1,0,0,0,0.816496580928));
-			}
-			context_add_model(context,&(track_type->models[index]),transform(mat,vector3(!(track_section->flags&TRACK_VERTICAL) ? -0.5*TILE_SIZE : 0,z_offset-2*CLEARANCE_HEIGHT,0)),track_mask);
+			int num_special_meshes=(int)floor(0.5+track_section->length/track_type->brake_length);
+			float special_scale=track_section->length/(num_special_meshes*track_type->brake_length);
+			float special_length=special_scale*track_type->brake_length;
+				for(int i=0; i<num_special_meshes; i++)
+				{
+				track_transform_args_t args;
+				args.scale=special_scale;
+				args.offset=i*special_length;
+				args.z_offset=z_offset;
+				args.track_curve=track_section->curve;
+				args.flags=track_section->flags;
+				args.length=track_section->length;
+
+				context_add_model_transformed(context,&(track_type->models[index]),track_transform,&args,track_mask);
+				}
+			} else context_add_model(context,&(track_type->models[index]),transform(mat,vector3(!(track_section->flags&TRACK_VERTICAL) ? -0.5*TILE_SIZE : 0,z_offset-2*CLEARANCE_HEIGHT,0)),track_mask);
 		}
 	}
 
@@ -803,8 +811,26 @@ int write_track_subtype(context_t* context,track_type_t* track_type,track_list_t
 	{
 		sprintf(output_path,"%.255sbrake%s",output_dir,suffix);
 		write_track_section(context,&(track_list.brake),track_type,base_dir,output_path,sprites,subtype,NULL);
-		sprintf(output_path,"%.255sblock_brake%s",output_dir,suffix);
-		write_track_section(context,&(track_list.block_brake),track_type,base_dir,output_path,sprites,subtype,NULL);
+		//sprintf(output_path,"%.255sblock_brake%s",output_dir,suffix);
+		//write_track_section(context,&(track_list.block_brake),track_type,base_dir,output_path,sprites,subtype,NULL);
+		/*
+		if(groups&TRACK_GROUP_DIAGONAL_BRAKES)
+		{
+			sprintf(output_path,"%.255sbrake_diag%s",output_dir,suffix);
+			write_track_section(context,&(track_list.brake_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
+		}*/
+	}
+	if(groups&TRACK_GROUP_SLOPED_BRAKES)
+	{
+	printf("Test here\n");
+		sprintf(output_path,"%.255sbrake_gentle%s",output_dir,suffix);
+		write_track_section(context,&(track_list.brake_gentle),track_type,base_dir,output_path,sprites,subtype,NULL);
+	
+		if(groups&TRACK_GROUP_DIAGONAL_BRAKES)
+		{
+			sprintf(output_path,"%.255sbrake_gentle_diag%s",output_dir,suffix);
+			write_track_section(context,&(track_list.brake_gentle_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
+		}
 	}
 	if(groups&TRACK_GROUP_BOOSTERS)
 	{

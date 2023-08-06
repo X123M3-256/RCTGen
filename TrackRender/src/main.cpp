@@ -54,6 +54,8 @@ int load_groups(json_t* json,uint32_t* out)
 		}
 		if(strcmp(json_string_value(group_name),"flat") ==0)groups|=TRACK_GROUP_FLAT;
 		else if(strcmp(json_string_value(group_name),"brakes") ==0)groups|=TRACK_GROUP_BRAKES;
+		else if(strcmp(json_string_value(group_name),"diagonal_brakes") ==0)groups|=TRACK_GROUP_DIAGONAL_BRAKES;
+		else if(strcmp(json_string_value(group_name),"sloped_brakes") ==0)groups|=TRACK_GROUP_SLOPED_BRAKES;
 		else if(strcmp(json_string_value(group_name),"turns") ==0)groups|=TRACK_GROUP_TURNS;
 		else if(strcmp(json_string_value(group_name),"gentle_slopes") ==0)groups|=TRACK_GROUP_GENTLE_SLOPES;
 		else if(strcmp(json_string_value(group_name),"steep_slopes") ==0)groups|=TRACK_GROUP_STEEP_SLOPES;
@@ -175,6 +177,19 @@ int load_track_type(track_type_t* track_type,json_t* json)
 		printf("Error: Property \"length\" not found or is not a number\n");
 		return 1;
 	}
+
+	//Load brake length
+	json_t* brake_length=json_object_get(json,"brake_length");
+	if(brake_length !=NULL)
+	{
+		if(json_is_number(brake_length))track_type->brake_length=json_number_value(brake_length)*TILE_SIZE;
+		else
+		{
+			printf("Error: Property \"brake_length\" not found or is not a number\n");
+			return 1;
+		}
+	}
+	else track_type->brake_length=TILE_SIZE;
 
 	//Load tie length
 	if(track_type->flags&TRACK_TIE_AT_BOUNDARY)

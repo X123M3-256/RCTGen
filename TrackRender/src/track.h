@@ -122,6 +122,8 @@ enum track_groups
 	TRACK_GROUP_LARGE_BANKED_SLOPED_TURNS=0x10000000,
 	TRACK_GROUP_VERTICAL_LOOPS=0x20000000,
 	TRACK_GROUP_VERTICAL_BOOSTERS=0x40000000,
+	TRACK_GROUP_DIAGONAL_BRAKES=0x80000000,
+	TRACK_GROUP_SLOPED_BRAKES=0x100000000,
 };
 
 enum models
@@ -167,6 +169,7 @@ typedef struct
 	mesh_t mask;
 	mesh_t models[NUM_MODELS];
 	float length;
+	float brake_length;
 	float tie_length;
 	float pivot;
 	float z_offset;
@@ -212,6 +215,9 @@ typedef struct
 	track_section_t flat;
 	track_section_t flat_asymmetric;
 	track_section_t brake;
+	track_section_t brake_diag;
+	track_section_t brake_gentle;
+	track_section_t brake_gentle_diag;
 	track_section_t block_brake;
 	track_section_t booster;
 	track_section_t flat_to_gentle_up;

@@ -39,7 +39,7 @@ int load_model(mesh_t* model,json_t* json,const char* name)
 	return 2;
 }
 
-int load_groups(json_t* json,uint32_t* out)
+int load_groups(json_t* json,uint64_t* out)
 {
 	//Load track sections
 	uint32_t groups=0;

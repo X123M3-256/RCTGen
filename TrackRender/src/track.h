@@ -159,8 +159,8 @@ enum models
 typedef struct
 {
 	uint32_t flags;
-	uint32_t groups;
-	uint32_t lift_groups;
+	uint64_t groups;
+	uint64_t lift_groups;
 	int32_t lift_offset;
 	uint32_t models_loaded;
 	mesh_t mesh;
@@ -219,6 +219,7 @@ typedef struct
 	track_section_t brake_gentle;
 	track_section_t brake_gentle_diag;
 	track_section_t block_brake;
+	track_section_t block_brake_diag;
 	track_section_t booster;
 	track_section_t flat_to_gentle_up;
 	track_section_t gentle_up_to_flat;

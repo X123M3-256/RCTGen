@@ -375,11 +375,13 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 				mat.entries[8]*=-1;
 			}
 
-			if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE)
+			if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BOOSTER)
 			{
-			int num_special_meshes=(int)floor(0.5+track_section->length/track_type->brake_length);
-			float special_scale=track_section->length/(num_special_meshes*track_type->brake_length);
-			float special_length=special_scale*track_type->brake_length;
+			float special_length=track_type->brake_length;
+				if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE)special_length=TILE_SIZE;
+			int num_special_meshes=(int)floor(0.5+track_section->length/special_length);
+			float special_scale=track_section->length/(num_special_meshes*special_length);
+			special_length=special_scale*special_length;
 				for(int i=0; i<num_special_meshes; i++)
 				{
 				track_transform_args_t args;
@@ -787,7 +789,7 @@ int write_track_subtype(context_t* context,track_type_t* track_type,track_list_t
 	char output_path[300];
 	const char* suffix="";
 
-	int groups=0;
+	uint64_t groups=0;
 	switch(subtype)
 	{
 	case TRACK_SUBTYPE_DEFAULT:
@@ -811,14 +813,15 @@ int write_track_subtype(context_t* context,track_type_t* track_type,track_list_t
 	{
 		sprintf(output_path,"%.255sbrake%s",output_dir,suffix);
 		write_track_section(context,&(track_list.brake),track_type,base_dir,output_path,sprites,subtype,NULL);
-		//sprintf(output_path,"%.255sblock_brake%s",output_dir,suffix);
-		//write_track_section(context,&(track_list.block_brake),track_type,base_dir,output_path,sprites,subtype,NULL);
-		/*
-		if(groups&TRACK_GROUP_DIAGONAL_BRAKES)
-		{
-			sprintf(output_path,"%.255sbrake_diag%s",output_dir,suffix);
-			write_track_section(context,&(track_list.brake_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
-		}*/
+		sprintf(output_path,"%.255sblock_brake%s",output_dir,suffix);
+		write_track_section(context,&(track_list.block_brake),track_type,base_dir,output_path,sprites,subtype,NULL);
+	}
+	if(groups&TRACK_GROUP_DIAGONAL_BRAKES)
+	{
+		sprintf(output_path,"%.255sbrake_diag%s",output_dir,suffix);
+		write_track_section(context,&(track_list.brake_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
+		sprintf(output_path,"%.255sblock_brake_diag%s",output_dir,suffix);
+		write_track_section(context,&(track_list.block_brake_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}
 	if(groups&TRACK_GROUP_SLOPED_BRAKES)
 	{

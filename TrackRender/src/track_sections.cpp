@@ -9259,10 +9259,11 @@ const track_section_t large_zero_g_roll_right={
 const track_section_t flat={0,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
 const track_section_t flat_asymmetric={0,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
 const track_section_t brake={TRACK_SPECIAL_BRAKE,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
-const track_section_t brake_diag={TRACK_SPECIAL_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
+const track_section_t brake_diag={TRACK_SPECIAL_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
 const track_section_t brake_gentle={TRACK_SPECIAL_BRAKE,gentle_curve,GENTLE_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
 const track_section_t brake_gentle_diag={TRACK_SPECIAL_BRAKE|TRACK_DIAGONAL|TRACK_EXTRUDE_BEHIND|TRACK_SUPPORT_BASE,gentle_diag_curve,GENTLE_DIAG_LENGTH,{{0,1,&diag_slope_mask},{0,1,&diag_slope_mask},{0,1,&diag_slope_mask},{0,1,&diag_slope_mask}}};
 const track_section_t block_brake={TRACK_SPECIAL_BLOCK_BRAKE,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
+const track_section_t block_brake_diag={TRACK_SPECIAL_BLOCK_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
 const track_section_t booster={TRACK_SPECIAL_BOOSTER,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
 const track_section_t launched_lift={TRACK_SPECIAL_LAUNCHED_LIFT,gentle_curve,GENTLE_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
 const track_section_t flat_to_gentle_up={0,flat_to_gentle_up_curve,FLAT_TO_GENTLE_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
@@ -18735,6 +18736,7 @@ track_list_t track_list_default={
 	brake_gentle,
 	brake_gentle_diag,
 	block_brake,
+	block_brake_diag,
 	booster,
 	flat_to_gentle_up,
 	gentle_up_to_flat,
@@ -18868,6 +18870,7 @@ track_list_t track_list_semi_split={
 	brake_gentle,
 	brake_gentle_diag,
 	block_brake,
+	block_brake_diag,
 	booster,
 	flat_to_gentle_up,
 	gentle_up_to_flat,
@@ -19001,6 +19004,7 @@ track_list_t track_list_split={
 	brake_gentle, 
 	brake_gentle_diag,
 	split_block_brake,
+	block_brake_diag,
 	split_booster,
 	split_flat_to_gentle_up,
 	split_gentle_up_to_flat,

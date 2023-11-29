@@ -375,7 +375,7 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 				mat.entries[8]*=-1;
 			}
 
-			if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BOOSTER)
+			if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BOOSTER || (track_section->flags & TRACK_SPECIAL_MASK) == TRACK_SPECIAL_LAUNCHED_LIFT)
 			{
 			float special_length=track_type->brake_length;
 				if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE)special_length=TILE_SIZE;

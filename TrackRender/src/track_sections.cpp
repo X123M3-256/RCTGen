@@ -231,6 +231,28 @@ track_point_t vertical_to_steep_up_curve(float distance)
 	    -TILE_SIZE/6,2*TILE_SIZE/3,0,0,-2*CLEARANCE_HEIGHT/3,CLEARANCE_HEIGHT,20*CLEARANCE_HEIGHT/3,0,-1.27409680e-07,3.35138224e-06,-3.50358430e-05,1.85655626e-04,-3.24817476e-05,-6.05934285e-03,2.00014155e-01,distance
 	);
 }
+
+track_point_t very_small_turn_left_curve(float distance)
+{
+    float angle = distance / (0.5 * TILE_SIZE);
+    track_point_t point;
+    point.position = vector3(0.5 * TILE_SIZE * (1.0 - cos(angle)), 0, 0.5 * TILE_SIZE * sin(angle));
+    point.tangent = vector3(sin(angle), 0.0, cos(angle));
+    point.normal = vector3(0.0, 1.0, 0.0);
+    point.binormal = vector3_cross(point.tangent, point.normal);
+    return point;
+}
+track_point_t very_small_turn_right_curve(float distance)
+{
+    float angle = distance / (0.5 * TILE_SIZE);
+    track_point_t point;
+    point.position = vector3(0.5 * TILE_SIZE * (cos(angle) - 1.0), 0, 0.5 * TILE_SIZE * sin(angle));
+    point.tangent = vector3(-sin(angle), 0.0, cos(angle));
+    point.normal = vector3(0.0, 1.0, 0.0);
+    point.binormal = vector3_cross(point.normal, point.tangent);
+    return point;
+}
+
 track_point_t small_turn_left_curve(float distance)
 {
 	float angle=distance/(1.5*TILE_SIZE);
@@ -9283,6 +9305,9 @@ const track_section_t steep_to_vertical_up={TRACK_VERTICAL|TRACK_NO_SUPPORTS|TRA
 const track_section_t vertical_to_steep_up={TRACK_VERTICAL|TRACK_NO_SUPPORTS|TRACK_SPECIAL_VERTICAL_TO_STEEP,vertical_to_steep_up_curve,STEEP_TO_VERTICAL_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
 const track_section_t vertical={TRACK_VERTICAL|TRACK_NO_SUPPORTS|TRACK_SPECIAL_VERTICAL,vertical_curve,VERTICAL_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
 const track_section_t vertical_booster={TRACK_VERTICAL|TRACK_NO_SUPPORTS|TRACK_SPECIAL_VERTICAL_BOOSTER,vertical_curve,VERTICAL_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
+//very small Turns
+
+const track_section_t very_small_turn_left = { TRACK_EXIT_90_DEG_LEFT,very_small_turn_left_curve,VERY_SMALL_TURN_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}} };
 
 //Turns
 rect_t small_turn_left_rects[165]={
@@ -18747,6 +18772,7 @@ track_list_t track_list_default={
 	steep_to_vertical_up,
 	vertical_to_steep_up,
 	vertical,
+    very_small_turn_left,
 	small_turn_left,
 	medium_turn_left,
 	large_turn_left_to_diag,

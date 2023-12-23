@@ -124,6 +124,7 @@ enum track_groups
 	TRACK_GROUP_VERTICAL_BOOSTERS=0x40000000,
 	TRACK_GROUP_DIAGONAL_BRAKES=0x80000000,
 	TRACK_GROUP_SLOPED_BRAKES=0x100000000,
+	TRACK_GROUP_VERY_SMALL_TURNS=0x1,
 };
 
 enum models
@@ -230,6 +231,7 @@ typedef struct
 	track_section_t steep_to_vertical_up;
 	track_section_t vertical_to_steep_up;
 	track_section_t vertical;
+	track_section_t very_small_turn_left;
 	track_section_t small_turn_left;
 	track_section_t medium_turn_left;
 	track_section_t large_turn_left_to_diag;

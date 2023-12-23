@@ -56,6 +56,7 @@ int load_groups(json_t* json,uint64_t* out)
 		else if(strcmp(json_string_value(group_name),"brakes") ==0)groups|=TRACK_GROUP_BRAKES;
 		else if(strcmp(json_string_value(group_name),"diagonal_brakes") ==0)groups|=TRACK_GROUP_DIAGONAL_BRAKES;
 		else if(strcmp(json_string_value(group_name),"sloped_brakes") ==0)groups|=TRACK_GROUP_SLOPED_BRAKES;
+		else if(strcmp(json_string_value(group_name), "very_small_turns") == 0)groups |= TRACK_GROUP_VERY_SMALL_TURNS;
 		else if(strcmp(json_string_value(group_name),"turns") ==0)groups|=TRACK_GROUP_TURNS;
 		else if(strcmp(json_string_value(group_name),"gentle_slopes") ==0)groups|=TRACK_GROUP_GENTLE_SLOPES;
 		else if(strcmp(json_string_value(group_name),"steep_slopes") ==0)groups|=TRACK_GROUP_STEEP_SLOPES;
@@ -85,6 +86,7 @@ int load_groups(json_t* json,uint64_t* out)
 		else if(strcmp(json_string_value(group_name),"launched_lifts") ==0)groups|=TRACK_GROUP_LAUNCHED_LIFTS;
 		else if(strcmp(json_string_value(group_name),"turn_bank_transitions") ==0)groups|=TRACK_GROUP_TURN_BANK_TRANSITIONS;
 		else if(strcmp(json_string_value(group_name),"vertical_boosters") ==0)groups|=TRACK_GROUP_VERTICAL_BOOSTERS;
+		
 		else
 		{
 			printf("Error: Unrecognized section group \"%s\"\n",json_string_value(group_name));

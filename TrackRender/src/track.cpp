@@ -879,7 +879,7 @@ int write_track_subtype(context_t* context,track_type_t* track_type,track_list_t
 	//very_small_Turns
 	if (groups & TRACK_GROUP_VERY_SMALL_TURNS)
 	{
-		sprintf(output_path, "%.255svery_small_turn_left%s", output_dir, suffix);
+		sprintf(output_path, "%.255svery_small_turns%s", output_dir, suffix);
 		write_track_section(context, &(track_list.very_small_turn_left), track_type, base_dir, output_path, sprites, subtype, NULL);
 			}
 

@@ -42,7 +42,7 @@ int load_model(mesh_t* model,json_t* json,const char* name)
 int load_groups(json_t* json,uint64_t* out)
 {
 	//Load track sections
-	uint32_t groups=0;
+	uint64_t groups=0;
 	for(int i=0; i<json_array_size(json); i++)
 	{
 		json_t* group_name=json_array_get(json,i);
@@ -279,11 +279,38 @@ int load_track_type(track_type_t* track_type,json_t* json)
 			printf("Error: separate tie mesh not found\n");
 			return 1;
 		}
+
+		if(track_type->flags&TRACK_TIE_AT_BOUNDARY)
+		{
+			if(load_model(&(track_type->mesh_tie),models,"track_tie"))
+			{
+				mesh_destroy(&(track_type->mesh));
+				mesh_destroy(&(track_type->mask));
+				mesh_destroy(&(track_type->tie_mesh));
+				if(track_type->flags&TRACK_HAS_LIFT)mesh_destroy(&(track_type->lift_mesh));
+				printf("Error: track_tie mesh not found\n");
+				return 1;
+			}
+			if(track_type->flags&TRACK_HAS_LIFT)
+			{
+				if(load_model(&(track_type->lift_mesh_tie),models,"lift_tie"))
+				{
+					mesh_destroy(&(track_type->mesh));
+					mesh_destroy(&(track_type->mask));
+					mesh_destroy(&(track_type->tie_mesh));
+					mesh_destroy(&(track_type->mesh_tie));
+					mesh_destroy(&(track_type->lift_mesh));
+					printf("Error: lift_tie mesh not found\n");
+					return 1;
+				}
+			}
+		}
+
+
 	}
 
 	const char* support_model_names[NUM_MODELS]={
 	    "track_alt",
-	    "track_tie",
 	    "support_flat",
 	    "support_bank_sixth",
 	    "support_bank_third",

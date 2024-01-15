@@ -129,7 +129,6 @@ enum track_groups
 enum models
 {
 	MODEL_TRACK_ALT,
-	MODEL_TRACK_TIE,
 	MODEL_FLAT,
 	MODEL_BANK_SIXTH,
 	MODEL_BANK_THIRD,
@@ -153,7 +152,7 @@ enum models
 	MODEL_SPECIAL_LARGE_ZERO_G_ROLL
 };
 
-#define NUM_MODELS 23
+#define NUM_MODELS 22
 #define SUPPORT_SPECIAL_START SUPPORT_SPECIAL_STEEP_TO_VERTICAL
 
 typedef struct
@@ -164,7 +163,9 @@ typedef struct
 	int32_t lift_offset;
 	uint32_t models_loaded;
 	mesh_t mesh;
+	mesh_t mesh_tie;
 	mesh_t lift_mesh;
+	mesh_t lift_mesh_tie;
 	mesh_t tie_mesh;
 	mesh_t mask;
 	mesh_t models[NUM_MODELS];

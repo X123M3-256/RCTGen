@@ -213,13 +213,16 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 	float z_offset=((track_type->z_offset/8.0)*CLEARANCE_HEIGHT);
 
 	mesh_t* mesh;
+	mesh_t* mesh_tie;
 	switch(subtype)
 	{
 	case TRACK_SUBTYPE_DEFAULT:
 		mesh=&(track_type->mesh);
+		mesh_tie=&(track_type->mesh_tie);
 		break;
 	case TRACK_SUBTYPE_LIFT:
 		mesh=&(track_type->lift_mesh);
+		mesh_tie=&(track_type->lift_mesh_tie);
 		break;
 	default:
 		assert(0);
@@ -299,16 +302,16 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 				    ),
 				    track_mask
 				);
-				if(track_type->models_loaded&(1<<MODEL_TRACK_TIE))context_add_model_transformed(context,&(track_type->models[MODEL_TRACK_TIE]),track_transform,&args,track_mask);
+				context_add_model_transformed(context,mesh_tie,track_transform,&args,track_mask);
 				offset+=tie_length;
 			}
 			else if(i&1)
 			{
-				int use_alt=(track_type->models_loaded&(1<<MODEL_TRACK_ALT))&&(i&2);
+				int use_alt=i&2;
 				if(track_section->flags&TRACK_ALT_INVERT)use_alt=!use_alt;
 				if(extrude_behind)use_alt=!use_alt;
+				if(!(track_type->models_loaded&(1<<MODEL_TRACK_ALT)))use_alt=0;
 				//Add track model
-				if(!(track_type->models_loaded&(1<<MODEL_TRACK_TIE))&&start_tie)args.offset=offset-tie_length;
 				if(use_alt)context_add_model_transformed(context,&(track_type->models[MODEL_TRACK_ALT]),track_transform,&args,track_mask);
 				else context_add_model_transformed(context,mesh,track_transform,&args,track_mask);
 				//Add track mask
@@ -320,6 +323,10 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 				offset+=inter_length;
 			}
 		}
+
+
+
+
 	}
 	else
 	{
@@ -538,6 +545,7 @@ float offset_tables[10][8]={
 */
 
 //Giga
+/*
 float offset_tables[10][8]={
     {0,-1,0,-1.5,0,-1,0,-1.5},
     {0,-1,0,-2,0,-2,0,-1},            //Gentle
@@ -550,6 +558,24 @@ float offset_tables[10][8]={
     {0,-1.5,0,-1.5,0,-1.5,0,-1.5},    //Diagonal gentle
     {0,0,0,0,0,0,0,0},                //Other
 };
+*/
+
+//Mini
+float offset_tables[10][8]={
+    {0,-1.45,0,-1.45,0,-1.45,0,-1.45},
+    {0,-1,0,-1.25,0,-1.25,0,-1},            //Gentle
+    {1,-0.5,1,-0.5,0.5,-1,1,-0.5},    //Steep
+    {0,-2,-1,-1.5,1,0,-1,0},          //Bank
+    {0.75,-2,-0.75,-2,1,-0.5,-0.5,-0.4}, //Gentle Bank   -0.5,-1    0.5,0
+    {0,0,0,0,0,0,0,0},                //Inverted
+    {0,-1.25,0,-1.25,0,-1.25,0,-1.25},//Diagonal
+    {0,-1.75,-1,-0.25,0,-0.25,-1,-1.5},//Diagonal Bank
+    {0,-1.5,0,-1.5,0,-1.5,0,-1.5},    //Diagonal gentle
+    {0,0,0,0,0,0,0,0},                //Other
+};
+
+
+
 
 //LIM
 /*
@@ -815,12 +841,14 @@ int write_track_subtype(context_t* context,track_type_t* track_type,track_list_t
 		write_track_section(context,&(track_list.brake),track_type,base_dir,output_path,sprites,subtype,NULL);
 		sprintf(output_path,"%.255sblock_brake%s",output_dir,suffix);
 		write_track_section(context,&(track_list.block_brake),track_type,base_dir,output_path,sprites,subtype,NULL);
+		write_track_section(context,&(track_list.block_brake),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}
 	if(groups&TRACK_GROUP_DIAGONAL_BRAKES)
 	{
 		sprintf(output_path,"%.255sbrake_diag%s",output_dir,suffix);
 		write_track_section(context,&(track_list.brake_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
 		sprintf(output_path,"%.255sblock_brake_diag%s",output_dir,suffix);
+		write_track_section(context,&(track_list.block_brake_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
 		write_track_section(context,&(track_list.block_brake_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}
 	if(groups&TRACK_GROUP_SLOPED_BRAKES)
@@ -839,6 +867,12 @@ int write_track_subtype(context_t* context,track_type_t* track_type,track_list_t
 	{
 		sprintf(output_path,"%.255sbooster%s",output_dir,suffix);
 		write_track_section(context,&(track_list.booster),track_type,base_dir,output_path,sprites,subtype,NULL);
+	}
+	//Launched lift
+	if(groups&TRACK_GROUP_LAUNCHED_LIFTS)
+	{
+		sprintf(output_path,"%.255spowered_lift%s",output_dir,suffix);
+		write_track_section(context,&(track_list.launched_lift),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}
 	if(groups&TRACK_GROUP_VERTICAL_BOOSTERS)
 	{
@@ -1203,12 +1237,6 @@ int write_track_subtype(context_t* context,track_type_t* track_type,track_list_t
 		write_track_section(context,&(track_list.large_turn_right_bank_to_orthogonal_gentle_up),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}
 
-	//Launched lift
-	if(groups&TRACK_GROUP_LAUNCHED_LIFTS)
-	{
-		sprintf(output_path,"%.255spowered_lift%s",output_dir,suffix);
-		write_track_section(context,&(track_list.launched_lift),track_type,base_dir,output_path,sprites,subtype,NULL);
-	}
 
 	return 0;
 }

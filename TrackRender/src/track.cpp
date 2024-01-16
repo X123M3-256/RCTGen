@@ -518,7 +518,7 @@ y        z
 |_
 */
 
-/*
+
 float offset_tables[10][8]={
     {0,0,0,0,0,0,0,0},
     {0,0,0,0,0,0,0,0},//Gentle 1
@@ -535,9 +535,10 @@ float offset_tables[10][8]={
     {0,0,0,0,0,0,0,0},//Diagonal gentle 8
     {0,0,0,0,0,0,0,0},//Other
     };
-*/
+
 
 //Giga
+/*
 float offset_tables[10][8]={
     {0,-1,0,-1.5,0,-1,0,-1.5},
     {0,-1,0,-2,0,-2,0,-1},            //Gentle
@@ -550,7 +551,7 @@ float offset_tables[10][8]={
     {0,-1.5,0,-1.5,0,-1.5,0,-1.5},    //Diagonal gentle
     {0,0,0,0,0,0,0,0},                //Other
 };
-
+*/
 //LIM
 /*
 float offset_tables[10][8]={
@@ -578,6 +579,7 @@ vector3_t get_offset(int table,int view_angle)
 
 	vector3_t offset=vector3(0,0,0);
 	if(table ==0xFF)return offset;
+
 
 	offset.x=0;
 	offset.z=offset_tables[index][2*rotated_view_angle]*TILE_SIZE/32.0;

@@ -46,8 +46,9 @@ enum
 	TRACK_SPECIAL_BRAKE=0x10000000,
 	TRACK_SPECIAL_BLOCK_BRAKE=0x11000000,
 	TRACK_SPECIAL_BOOSTER=0x12000000,
-	TRACK_SPECIAL_LAUNCHED_LIFT=0x013000000,
-	TRACK_SPECIAL_VERTICAL_BOOSTER=0x014000000,
+	TRACK_SPECIAL_MAGNETIC_BRAKE=0x13000000,
+	TRACK_SPECIAL_LAUNCHED_LIFT=0x014000000,
+	TRACK_SPECIAL_VERTICAL_BOOSTER=0x015000000,
 	TRACK_SPECIAL_MASK=0xFF000000
 };
 
@@ -124,6 +125,7 @@ enum track_groups
 	TRACK_GROUP_VERTICAL_BOOSTERS=0x40000000,
 	TRACK_GROUP_DIAGONAL_BRAKES=0x80000000,
 	TRACK_GROUP_SLOPED_BRAKES=0x100000000,
+	TRACK_GROUP_MAGNETIC_BRAKES=0x200000000,
 };
 
 enum models
@@ -140,6 +142,7 @@ enum models
 	MODEL_SPECIAL_BRAKE,
 	MODEL_SPECIAL_BLOCK_BRAKE,
 	MODEL_SPECIAL_BOOSTER,
+	MODEL_SPECIAL_MAGNETIC_BRAKE,
 	MODEL_SPECIAL_STEEP_TO_VERTICAL,
 	MODEL_SPECIAL_VERTICAL_TO_STEEP,
 	MODEL_SPECIAL_VERTICAL,
@@ -152,7 +155,7 @@ enum models
 	MODEL_SPECIAL_LARGE_ZERO_G_ROLL
 };
 
-#define NUM_MODELS 22
+#define NUM_MODELS 23
 #define SUPPORT_SPECIAL_START SUPPORT_SPECIAL_STEEP_TO_VERTICAL
 
 typedef struct
@@ -219,6 +222,10 @@ typedef struct
 	track_section_t brake_diag;
 	track_section_t brake_gentle;
 	track_section_t brake_gentle_diag;
+	track_section_t magnetic_brake;
+	track_section_t magnetic_brake_diag;
+	track_section_t magnetic_brake_gentle;
+	track_section_t magnetic_brake_gentle_diag;
 	track_section_t block_brake;
 	track_section_t block_brake_diag;
 	track_section_t booster;
@@ -356,6 +363,7 @@ typedef struct
 	track_section_t vertical_twist_right_to_orthogonal_up;
 
 	track_section_t vertical_booster;
+	
 }track_list_t;
 
 extern track_list_t track_list_default;

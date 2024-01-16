@@ -9262,6 +9262,10 @@ const track_section_t brake={TRACK_SPECIAL_BRAKE,flat_curve,FLAT_LENGTH,{{0,1,NU
 const track_section_t brake_diag={TRACK_SPECIAL_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
 const track_section_t brake_gentle={TRACK_SPECIAL_BRAKE,gentle_curve,GENTLE_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
 const track_section_t brake_gentle_diag={TRACK_SPECIAL_BRAKE|TRACK_DIAGONAL|TRACK_EXTRUDE_BEHIND|TRACK_SUPPORT_BASE,gentle_diag_curve,GENTLE_DIAG_LENGTH,{{0,1,&diag_slope_mask},{0,1,&diag_slope_mask},{0,1,&diag_slope_mask},{0,1,&diag_slope_mask}}};
+const track_section_t magnetic_brake={TRACK_SPECIAL_MAGNETIC_BRAKE,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
+const track_section_t magnetic_brake_diag={TRACK_SPECIAL_MAGNETIC_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
+const track_section_t magnetic_brake_gentle={TRACK_SPECIAL_MAGNETIC_BRAKE,gentle_curve,GENTLE_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
+const track_section_t magnetic_brake_gentle_diag={TRACK_SPECIAL_MAGNETIC_BRAKE|TRACK_DIAGONAL|TRACK_EXTRUDE_BEHIND|TRACK_SUPPORT_BASE,gentle_diag_curve,GENTLE_DIAG_LENGTH,{{0,1,&diag_slope_mask},{0,1,&diag_slope_mask},{0,1,&diag_slope_mask},{0,1,&diag_slope_mask}}};
 const track_section_t block_brake={TRACK_SPECIAL_BLOCK_BRAKE,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
 const track_section_t block_brake_diag={TRACK_SPECIAL_BLOCK_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
 const track_section_t booster={TRACK_SPECIAL_BOOSTER,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
@@ -18735,6 +18739,10 @@ track_list_t track_list_default={
 	brake_diag,
 	brake_gentle,
 	brake_gentle_diag,
+	magnetic_brake,
+	magnetic_brake_diag,
+	magnetic_brake_gentle,
+	magnetic_brake_gentle_diag,
 	block_brake,
 	block_brake_diag,
 	booster,
@@ -18869,6 +18877,10 @@ track_list_t track_list_semi_split={
 	brake_diag,
 	brake_gentle,
 	brake_gentle_diag,
+	magnetic_brake,
+	magnetic_brake_diag,
+	magnetic_brake_gentle,
+	magnetic_brake_gentle_diag,
 	block_brake,
 	block_brake_diag,
 	booster,
@@ -19003,6 +19015,10 @@ track_list_t track_list_split={
 	brake_diag,
 	brake_gentle, 
 	brake_gentle_diag,
+	magnetic_brake,
+	magnetic_brake_diag,
+	magnetic_brake_gentle,
+	magnetic_brake_gentle_diag,
 	split_block_brake,
 	block_brake_diag,
 	split_booster,

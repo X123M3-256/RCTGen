@@ -375,7 +375,7 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 				mat.entries[8]*=-1;
 			}
 
-			if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BOOSTER)
+			if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BOOSTER || (track_section->flags & TRACK_SPECIAL_MASK) == TRACK_SPECIAL_LAUNCHED_LIFT)
 			{
 			float special_length=track_type->brake_length;
 				if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE)special_length=TILE_SIZE;
@@ -520,7 +520,7 @@ y        z
 
 /*
 float offset_tables[10][8]={
-    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},//Flat
     {0,0,0,0,0,0,0,0},//Gentle 1
     {0,0,0,0,0,0,0,0},//Steep 2
 
@@ -538,8 +538,9 @@ float offset_tables[10][8]={
 */
 
 //Giga
+/*
 float offset_tables[10][8]={
-    {0,-1,0,-1.5,0,-1,0,-1.5},
+    {0,-1,0,-1.5,0,-1,0,-1.5},		  //Flat
     {0,-1,0,-2,0,-2,0,-1},            //Gentle
     {1,-0.5,1,-0.5,0.5,-1,1,-0.5},    //Steep
     {0,-2,-1,-1.5,1,0,-1,0},          //Bank
@@ -550,20 +551,35 @@ float offset_tables[10][8]={
     {0,-1.5,0,-1.5,0,-1.5,0,-1.5},    //Diagonal gentle
     {0,0,0,0,0,0,0,0},                //Other
 };
+*/
+//BM
+
+float offset_tables[10][8] = {
+	{0,-1,0,-1.5,0,-1,0,-1.5},		  //Flat
+	{0,-1,0,-2,0,-2,0,-1},            //Gentle
+	{1,-0.5,1,-0.5,0.5,-1,1,-0.5},    //Steep
+	{0,-2,-1,-1.5,1,0,-1,0},          //Bank
+	{0.75,-2,-0.75,-2,1,-0.5,0,-0.5}, //Gentle Bank   -0.5,-1    0.5,0
+	{0,0,0,0,0,0,0,0},                //Inverted
+	{0,-1.25,0,-1.25,0,-1.25,0,-1.25},//Diagonal
+	{0,-1.75,-1,-0.25,0,-0.25,-1,-1.5},//Diagonal Bank
+	{0,-1.5,0,-1.5,0,-1.5,0,-1.5},    //Diagonal gentle
+	{0,0,0,0,0,0,0,0},                //Other
+};
 
 //LIM
 /*
 float offset_tables[10][8]={
-    {0,0.5,0,0,0,0.5,0,0},
-    {0,1.0,0,0,0,0,0,0},//Gentle
-    {-2.25,0,-2.0,0,-0.75,0,-1.5,-1.0},//Steep
-    {0,1.0,0,1.0,0,1.0,0,0},//Bank
-    {0,0,0,0,0,0,0,0},//Gentle Bank
-    {0,-0.5,0,0,0,-0.5,0,0},//Inverted
-    {0,0,0,0,0,0,0,0},//Diagonal
-    {0,0,0,0,0,0,0,0},//Diagonal Bank
-    {0,0.5,0,0,0,0.75,0,0},//Diagonal gentle
-    {0,0,0,0,0,0,0,0},//Other
+    {0,0.5,0,0,0,0.5,0,0},				//Flat
+    {0,1.0,0,0,0,0,0,0},				//Gentle
+    {-2.25,0,-2.0,0,-0.75,0,-1.5,-1.0},	//Steep
+    {0,1.0,0,1.0,0,1.0,0,0},//Bank		//Bank
+    {0,0,0,0,0,0,0,0},//Gentle Bank		//Gentle Bank
+    {0,-0.5,0,0,0,-0.5,0,0},//Inverted	//Inverted
+    {0,0,0,0,0,0,0,0},					//Diagonal
+    {0,0,0,0,0,0,0,0},					//Diagonal Bank
+    {0,0.5,0,0,0,0.75,0,0},				//Diagonal gentle
+    {0,0,0,0,0,0,0,0},					//Other
     };
 */
 
@@ -578,6 +594,7 @@ vector3_t get_offset(int table,int view_angle)
 
 	vector3_t offset=vector3(0,0,0);
 	if(table ==0xFF)return offset;
+
 
 	offset.x=0;
 	offset.z=offset_tables[index][2*rotated_view_angle]*TILE_SIZE/32.0;
@@ -875,6 +892,13 @@ int write_track_subtype(context_t* context,track_type_t* track_type,track_list_t
 		sprintf(output_path,"%.255svertical%s",output_dir,suffix);
 		write_track_section(context,&(track_list.vertical),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}
+
+	//very_small_Turns
+	if (groups & TRACK_GROUP_VERY_SMALL_TURNS)
+	{
+		sprintf(output_path, "%.255svery_small_turns%s", output_dir, suffix);
+		write_track_section(context, &(track_list.very_small_turn_left), track_type, base_dir, output_path, sprites, subtype, NULL);
+			}
 
 	//Turns
 	if(groups&TRACK_GROUP_TURNS)

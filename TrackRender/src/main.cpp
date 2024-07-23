@@ -42,7 +42,7 @@ int load_model(mesh_t* model,json_t* json,const char* name)
 int load_groups(json_t* json,uint64_t* out)
 {
 	//Load track sections
-	uint32_t groups=0;
+	uint64_t groups=0;
 	for(int i=0; i<json_array_size(json); i++)
 	{
 		json_t* group_name=json_array_get(json,i);

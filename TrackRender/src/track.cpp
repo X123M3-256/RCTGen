@@ -178,13 +178,23 @@ int get_special_index(int flags)
 	case TRACK_SPECIAL_BRAKE:
 		return MODEL_SPECIAL_BRAKE;
 		break;
+	case TRACK_SPECIAL_BRAKE_OPEN:
+		return MODEL_SPECIAL_BRAKE_OPEN;
+		break;
+	case TRACK_SPECIAL_BRAKE_CLOSED:
+		return MODEL_SPECIAL_BRAKE_CLOSED;
+		break;
 	case TRACK_SPECIAL_BLOCK_BRAKE:
 		return MODEL_SPECIAL_BLOCK_BRAKE;
 		break;
 	case TRACK_SPECIAL_BOOSTER:
-	case TRACK_SPECIAL_LAUNCHED_LIFT:
-	case TRACK_SPECIAL_VERTICAL_BOOSTER:
 		return MODEL_SPECIAL_BOOSTER;
+		break;
+	case TRACK_SPECIAL_LAUNCHED_LIFT:
+		return MODEL_SPECIAL_LAUNCHED_LIFT;
+		break;
+	case TRACK_SPECIAL_VERTICAL_BOOSTER:
+		return MODEL_SPECIAL_VERTICAL_BOOSTER;
 		break;
 	}
 	assert(0);
@@ -375,7 +385,13 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 				mat.entries[8]*=-1;
 			}
 
-			if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE || (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BOOSTER || (track_section->flags & TRACK_SPECIAL_MASK) == TRACK_SPECIAL_LAUNCHED_LIFT)
+			if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE ||
+			   (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE_OPEN ||
+			   (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE_CLOSED ||
+			   (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE ||
+			   (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BOOSTER ||
+			   (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_VERTICAL_BOOSTER ||
+			   (track_section->flags & TRACK_SPECIAL_MASK) == TRACK_SPECIAL_LAUNCHED_LIFT)
 			{
 			float special_length=track_type->brake_length;
 				if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE)special_length=TILE_SIZE;
@@ -830,6 +846,10 @@ int write_track_subtype(context_t* context,track_type_t* track_type,track_list_t
 	{
 		sprintf(output_path,"%.255sbrake%s",output_dir,suffix);
 		write_track_section(context,&(track_list.brake),track_type,base_dir,output_path,sprites,subtype,NULL);
+		sprintf(output_path, "%.255sbrake_open%s", output_dir, suffix);
+		write_track_section(context, &(track_list.brake_open), track_type, base_dir, output_path, sprites, subtype, NULL);
+		sprintf(output_path, "%.255sbrake_closed%s", output_dir, suffix);
+		write_track_section(context, &(track_list.brake_closed), track_type, base_dir, output_path, sprites, subtype, NULL);
 		sprintf(output_path,"%.255sblock_brake%s",output_dir,suffix);
 		write_track_section(context,&(track_list.block_brake),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}

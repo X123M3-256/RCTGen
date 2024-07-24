@@ -9281,6 +9281,8 @@ const track_section_t large_zero_g_roll_right={
 const track_section_t flat={0,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
 const track_section_t flat_asymmetric={0,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
 const track_section_t brake={TRACK_SPECIAL_BRAKE,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
+const track_section_t brake_open = {TRACK_SPECIAL_BRAKE_OPEN,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}} };
+const track_section_t brake_closed = {TRACK_SPECIAL_BRAKE_CLOSED,flat_curve,FLAT_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}} };
 const track_section_t brake_diag={TRACK_SPECIAL_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH,{{0,1,NULL},{0,1,NULL},{0,0,NULL},{0,0,NULL}}};
 const track_section_t brake_gentle={TRACK_SPECIAL_BRAKE,gentle_curve,GENTLE_LENGTH,{{0,1,NULL},{0,1,NULL},{0,1,NULL},{0,1,NULL}}};
 const track_section_t brake_gentle_diag={TRACK_SPECIAL_BRAKE|TRACK_DIAGONAL|TRACK_EXTRUDE_BEHIND|TRACK_SUPPORT_BASE,gentle_diag_curve,GENTLE_DIAG_LENGTH,{{0,1,&diag_slope_mask},{0,1,&diag_slope_mask},{0,1,&diag_slope_mask},{0,1,&diag_slope_mask}}};
@@ -18757,6 +18759,8 @@ track_list_t track_list_default={
 	flat,
 	flat_asymmetric,
 	brake,
+    brake_open,
+    brake_closed,
 	brake_diag,
 	brake_gentle,
 	brake_gentle_diag,
@@ -18892,6 +18896,8 @@ track_list_t track_list_semi_split={
 	flat,
 	flat_asymmetric,
 	brake,
+    brake_open,
+    brake_closed,
 	brake_diag,
 	brake_gentle,
 	brake_gentle_diag,

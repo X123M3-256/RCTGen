@@ -54,6 +54,8 @@ int load_groups(json_t* json,uint64_t* out)
 		}
 		if(strcmp(json_string_value(group_name),"flat") ==0)groups|=TRACK_GROUP_FLAT;
 		else if(strcmp(json_string_value(group_name),"brakes") ==0)groups|=TRACK_GROUP_BRAKES;
+		else if (strcmp(json_string_value(group_name), "brakes_open") == 0)groups |= TRACK_GROUP_BRAKES;
+		else if (strcmp(json_string_value(group_name), "brakes_closed") == 0)groups |= TRACK_GROUP_BRAKES;
 		else if(strcmp(json_string_value(group_name),"diagonal_brakes") ==0)groups|=TRACK_GROUP_DIAGONAL_BRAKES;
 		else if(strcmp(json_string_value(group_name),"sloped_brakes") ==0)groups|=TRACK_GROUP_SLOPED_BRAKES;
 		else if(strcmp(json_string_value(group_name),"very_small_turns") == 0)groups |=TRACK_GROUP_VERY_SMALL_TURNS;
@@ -295,9 +297,13 @@ int load_track_type(track_type_t* track_type,json_t* json)
 	    "support_bank",
 	    "support_base",
 	    "brake",
+		"brake_open",
+		"brake_closed",
 	    "block_brake",
 	    "booster",
-	    "support_steep_to_vertical",
+		"vertical_booster",
+		"launched_lift",
+		"support_steep_to_vertical",
 	    "support_vertical_to_steep",
 	    "support_vertical",
 	    "support_vertical_twist",

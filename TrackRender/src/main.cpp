@@ -54,6 +54,7 @@ int load_groups(json_t* json,uint64_t* out)
 		}
 		if(strcmp(json_string_value(group_name),"flat") ==0)groups|=TRACK_GROUP_FLAT;
 		else if(strcmp(json_string_value(group_name),"brakes") ==0)groups|=TRACK_GROUP_BRAKES;
+		else if(strcmp(json_string_value(group_name),"block_brakes") ==0)groups|=TRACK_GROUP_BLOCK_BRAKES;
 		else if(strcmp(json_string_value(group_name),"diagonal_brakes") ==0)groups|=TRACK_GROUP_DIAGONAL_BRAKES;
 		else if(strcmp(json_string_value(group_name),"sloped_brakes") ==0)groups|=TRACK_GROUP_SLOPED_BRAKES;
 		else if(strcmp(json_string_value(group_name),"magnetic_brakes") ==0)groups|=TRACK_GROUP_MAGNETIC_BRAKES;
@@ -69,6 +70,7 @@ int load_groups(json_t* json,uint64_t* out)
 		else if(strcmp(json_string_value(group_name),"large_sloped_turns") ==0)groups|=TRACK_GROUP_LARGE_SLOPED_TURNS;
 		else if(strcmp(json_string_value(group_name),"large_banked_sloped_turns") ==0)groups|=TRACK_GROUP_LARGE_BANKED_SLOPED_TURNS;
 		else if(strcmp(json_string_value(group_name),"s_bends") ==0)groups|=TRACK_GROUP_S_BENDS;
+		else if(strcmp(json_string_value(group_name),"banked_s_bends") ==0)groups|=TRACK_GROUP_BANKED_S_BENDS;
 		else if(strcmp(json_string_value(group_name),"helices") ==0)groups|=TRACK_GROUP_HELICES;
 		else if(strcmp(json_string_value(group_name),"small_slope_transitions") ==0)groups|=TRACK_GROUP_SMALL_SLOPE_TRANSITIONS;
 		else if(strcmp(json_string_value(group_name),"large_slope_transitions") ==0)groups|=TRACK_GROUP_LARGE_SLOPE_TRANSITIONS;

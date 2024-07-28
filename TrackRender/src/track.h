@@ -126,6 +126,9 @@ enum track_groups
 	TRACK_GROUP_DIAGONAL_BRAKES=0x80000000,
 	TRACK_GROUP_SLOPED_BRAKES=0x100000000,
 	TRACK_GROUP_MAGNETIC_BRAKES=0x200000000,
+	TRACK_GROUP_DIAGONAL_VERTICALS=0x400000000,
+	TRACK_GROUP_BANKED_S_BENDS=0x800000000,
+	TRACK_GROUP_BLOCK_BRAKES=0x1000000000,
 };
 
 enum models
@@ -190,10 +193,10 @@ typedef struct
 
 typedef struct
 {
-	int track_mask_op;
-	int num_rects;
-	int x_offset;
-	int y_offset;
+	int32_t track_mask_op;
+	uint32_t num_rects;
+	int32_t x_offset;
+	int32_t y_offset;
 	rect_t* rects;
 }mask_t;
 
@@ -295,6 +298,8 @@ typedef struct
 	track_section_t medium_turn_right_bank_gentle_up;
 	track_section_t s_bend_left;
 	track_section_t s_bend_right;
+	track_section_t s_bend_left_bank;
+	track_section_t s_bend_right_bank;
 	track_section_t small_helix_left_up;
 	track_section_t small_helix_right_up;
 	track_section_t medium_helix_left_up;

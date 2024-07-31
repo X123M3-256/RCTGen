@@ -177,6 +177,8 @@ int get_special_index(int flags)
 		break;
 	case TRACK_SPECIAL_BRAKE:
 		return MODEL_SPECIAL_BRAKE;
+	case TRACK_SPECIAL_SLOPED_BRAKE:
+		return MODEL_SPECIAL_SLOPED_BRAKE;
 		break;
 	case TRACK_SPECIAL_BRAKE_OPEN:
 		return MODEL_SPECIAL_BRAKE_OPEN;
@@ -386,15 +388,18 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 			}
 
 			if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE ||
+			   (track_section->flags & TRACK_SPECIAL_MASK) == TRACK_SPECIAL_SLOPED_BRAKE ||
 			   (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE_OPEN ||
 			   (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BRAKE_CLOSED ||
 			   (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE ||
 			   (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BOOSTER ||
 			   (track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_VERTICAL_BOOSTER ||
 			   (track_section->flags & TRACK_SPECIAL_MASK) == TRACK_SPECIAL_LAUNCHED_LIFT)
+
 			{
 			float special_length=track_type->brake_length;
 				if((track_section->flags&TRACK_SPECIAL_MASK) == TRACK_SPECIAL_BLOCK_BRAKE)special_length=TILE_SIZE;
+
 			int num_special_meshes=(int)floor(0.5+track_section->length/special_length);
 			float special_scale=track_section->length/(num_special_meshes*special_length);
 			special_length=special_scale*special_length;
@@ -533,7 +538,7 @@ y        z
 |   -
 |_
 */
-
+//normal Table for new tracks
 /*
 float offset_tables[10][8]={
     {0,0,0,0,0,0,0,0},//Flat
@@ -805,8 +810,8 @@ void write_track_section(context_t* context,track_section_t* track_section,track
 
 			json_t* sprite_entry=json_object();
 			json_object_set(sprite_entry,"path",json_string(relative_filename));
-			json_object_set(sprite_entry,"x_offset",json_integer(part_sprite.x_offset));
-			json_object_set(sprite_entry,"y_offset",json_integer(part_sprite.y_offset));
+			json_object_set(sprite_entry,"x",json_integer(part_sprite.x_offset));
+			json_object_set(sprite_entry,"y",json_integer(part_sprite.y_offset));
 			json_object_set(sprite_entry,"palette",json_string("keep"));
 			json_array_append(sprites,sprite_entry);
 			image_destroy(&part_sprite);
@@ -862,15 +867,11 @@ int write_track_subtype(context_t* context,track_type_t* track_type,track_list_t
 	}
 	if(groups&TRACK_GROUP_SLOPED_BRAKES)
 	{
-	printf("Test here\n");
 		sprintf(output_path,"%.255sbrake_gentle%s",output_dir,suffix);
 		write_track_section(context,&(track_list.brake_gentle),track_type,base_dir,output_path,sprites,subtype,NULL);
-	
-		if(groups&TRACK_GROUP_DIAGONAL_BRAKES)
-		{
-			sprintf(output_path,"%.255sbrake_gentle_diag%s",output_dir,suffix);
-			write_track_section(context,&(track_list.brake_gentle_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
-		}
+		sprintf(output_path,"%.255sbrake_gentle_diag%s",output_dir,suffix);
+		write_track_section(context,&(track_list.brake_gentle_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
+		
 	}
 	if(groups&TRACK_GROUP_BOOSTERS)
 	{

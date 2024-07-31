@@ -297,6 +297,7 @@ int load_track_type(track_type_t* track_type,json_t* json)
 	    "support_bank",
 	    "support_base",
 	    "brake",
+		"sloped_brake"
 		"brake_open",
 		"brake_closed",
 	    "block_brake",

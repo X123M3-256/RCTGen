@@ -54,11 +54,10 @@ int load_groups(json_t* json,uint64_t* out)
 		}
 		if(strcmp(json_string_value(group_name),"flat") ==0)groups|=TRACK_GROUP_FLAT;
 		else if(strcmp(json_string_value(group_name),"brakes") ==0)groups|=TRACK_GROUP_BRAKES;
-		else if (strcmp(json_string_value(group_name), "brakes_open") == 0)groups |= TRACK_GROUP_BRAKES;
-		else if (strcmp(json_string_value(group_name), "brakes_closed") == 0)groups |= TRACK_GROUP_BRAKES;
+		else if(strcmp(json_string_value(group_name),"block_brakes") ==0)groups|=TRACK_GROUP_BLOCK_BRAKES;
 		else if(strcmp(json_string_value(group_name),"diagonal_brakes") ==0)groups|=TRACK_GROUP_DIAGONAL_BRAKES;
 		else if(strcmp(json_string_value(group_name),"sloped_brakes") ==0)groups|=TRACK_GROUP_SLOPED_BRAKES;
-		else if(strcmp(json_string_value(group_name),"very_small_turns") == 0)groups |=TRACK_GROUP_VERY_SMALL_TURNS;
+		else if(strcmp(json_string_value(group_name),"magnetic_brakes") ==0)groups|=TRACK_GROUP_MAGNETIC_BRAKES;
 		else if(strcmp(json_string_value(group_name),"turns") ==0)groups|=TRACK_GROUP_TURNS;
 		else if(strcmp(json_string_value(group_name),"gentle_slopes") ==0)groups|=TRACK_GROUP_GENTLE_SLOPES;
 		else if(strcmp(json_string_value(group_name),"steep_slopes") ==0)groups|=TRACK_GROUP_STEEP_SLOPES;
@@ -71,6 +70,7 @@ int load_groups(json_t* json,uint64_t* out)
 		else if(strcmp(json_string_value(group_name),"large_sloped_turns") ==0)groups|=TRACK_GROUP_LARGE_SLOPED_TURNS;
 		else if(strcmp(json_string_value(group_name),"large_banked_sloped_turns") ==0)groups|=TRACK_GROUP_LARGE_BANKED_SLOPED_TURNS;
 		else if(strcmp(json_string_value(group_name),"s_bends") ==0)groups|=TRACK_GROUP_S_BENDS;
+		else if(strcmp(json_string_value(group_name),"banked_s_bends") ==0)groups|=TRACK_GROUP_BANKED_S_BENDS;
 		else if(strcmp(json_string_value(group_name),"helices") ==0)groups|=TRACK_GROUP_HELICES;
 		else if(strcmp(json_string_value(group_name),"small_slope_transitions") ==0)groups|=TRACK_GROUP_SMALL_SLOPE_TRANSITIONS;
 		else if(strcmp(json_string_value(group_name),"large_slope_transitions") ==0)groups|=TRACK_GROUP_LARGE_SLOPE_TRANSITIONS;
@@ -88,7 +88,6 @@ int load_groups(json_t* json,uint64_t* out)
 		else if(strcmp(json_string_value(group_name),"launched_lifts") ==0)groups|=TRACK_GROUP_LAUNCHED_LIFTS;
 		else if(strcmp(json_string_value(group_name),"turn_bank_transitions") ==0)groups|=TRACK_GROUP_TURN_BANK_TRANSITIONS;
 		else if(strcmp(json_string_value(group_name),"vertical_boosters") ==0)groups|=TRACK_GROUP_VERTICAL_BOOSTERS;
-		
 		else
 		{
 			printf("Error: Unrecognized section group \"%s\"\n",json_string_value(group_name));
@@ -283,11 +282,38 @@ int load_track_type(track_type_t* track_type,json_t* json)
 			printf("Error: separate tie mesh not found\n");
 			return 1;
 		}
+
+		if(track_type->flags&TRACK_TIE_AT_BOUNDARY)
+		{
+			if(load_model(&(track_type->mesh_tie),models,"track_tie"))
+			{
+				mesh_destroy(&(track_type->mesh));
+				mesh_destroy(&(track_type->mask));
+				mesh_destroy(&(track_type->tie_mesh));
+				if(track_type->flags&TRACK_HAS_LIFT)mesh_destroy(&(track_type->lift_mesh));
+				printf("Error: track_tie mesh not found\n");
+				return 1;
+			}
+			if(track_type->flags&TRACK_HAS_LIFT)
+			{
+				if(load_model(&(track_type->lift_mesh_tie),models,"lift_tie"))
+				{
+					mesh_destroy(&(track_type->mesh));
+					mesh_destroy(&(track_type->mask));
+					mesh_destroy(&(track_type->tie_mesh));
+					mesh_destroy(&(track_type->mesh_tie));
+					mesh_destroy(&(track_type->lift_mesh));
+					printf("Error: lift_tie mesh not found\n");
+					return 1;
+				}
+			}
+		}
+
+
 	}
 
 	const char* support_model_names[NUM_MODELS]={
 	    "track_alt",
-	    "track_tie",
 	    "support_flat",
 	    "support_bank_sixth",
 	    "support_bank_third",
@@ -297,14 +323,10 @@ int load_track_type(track_type_t* track_type,json_t* json)
 	    "support_bank",
 	    "support_base",
 	    "brake",
-		"sloped_brake"
-		"brake_open",
-		"brake_closed",
 	    "block_brake",
 	    "booster",
-		"vertical_booster",
-		"launched_lift",
-		"support_steep_to_vertical",
+	    "magnetic_brake",
+	    "support_steep_to_vertical",
 	    "support_vertical_to_steep",
 	    "support_vertical",
 	    "support_vertical_twist",

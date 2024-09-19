@@ -58,7 +58,8 @@ int load_groups(json_t* json,uint64_t* out)
 		else if(strcmp(json_string_value(group_name),"diagonal_brakes") ==0)groups|=TRACK_GROUP_DIAGONAL_BRAKES;
 		else if(strcmp(json_string_value(group_name),"sloped_brakes") ==0)groups|=TRACK_GROUP_SLOPED_BRAKES;
 		else if(strcmp(json_string_value(group_name),"magnetic_brakes") ==0)groups|=TRACK_GROUP_MAGNETIC_BRAKES;
-		else if(strcmp(json_string_value(group_name),"turns") ==0)groups|=TRACK_GROUP_TURNS;
+		else if (strcmp(json_string_value(group_name), "very_small_turns") == 0)groups |= TRACK_GROUP_VERY_SMALL_TURNS;
+		else if(strcmp(json_string_value(group_name),"turns") ==0)groups|=TRACK_GROUP_TURNS;		
 		else if(strcmp(json_string_value(group_name),"gentle_slopes") ==0)groups|=TRACK_GROUP_GENTLE_SLOPES;
 		else if(strcmp(json_string_value(group_name),"steep_slopes") ==0)groups|=TRACK_GROUP_STEEP_SLOPES;
 		else if(strcmp(json_string_value(group_name),"vertical_slopes") ==0)groups|=TRACK_GROUP_VERTICAL_SLOPES;

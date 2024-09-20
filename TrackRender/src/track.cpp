@@ -672,7 +672,7 @@ int extrude_in_front_odd=(track_section->flags&TRACK_EXIT_45_DEG_LEFT)&&(track_s
 		else
 		{
 			if(views&0x5)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,views&0x5,sprites,subtype);
-			if(views&0xA)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_odd,track_mask,views&0xA,sprites,subtype);
+			if(views&0xA)render_track_section(context,track_section,track_type,0,extrude_in_front_odd,track_mask,views&0xA,sprites,subtype);
 		}
 	}
 	else
@@ -984,7 +984,7 @@ uint64_t groups=0;
 	}
 
 
-/*
+
 	if((groups&TRACK_GROUP_DIAGONALS)&&(groups&TRACK_GROUP_VERTICAL_SLOPES))
 	{
 	sprintf(output_path,"%.255ssteep_to_vertical_up_diag%s",output_dir,suffix);
@@ -1002,7 +1002,7 @@ uint64_t groups=0;
 	sprintf(output_path,"%.255svertical_twist_right_to_orthogonal_up%s",output_dir,suffix);
 	write_track_section(context,&(track_list.vertical_twist_right_to_orthogonal_up),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}
-*/
+
 	//Banked turns
 	if(groups&TRACK_GROUP_BANKED_TURNS)
 	{

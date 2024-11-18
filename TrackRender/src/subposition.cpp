@@ -2184,6 +2184,7 @@ int main(int argc,const char** argv)
 	generate_subposition_data(&(track_list_default.large_turn_left_to_diag_gentle_up),"RightEighthToOrthogonalDown25",SPRITE_GROUP_BASE,17);
 	*/
 
+/*
 	generate_subposition_data(&(track_list_default.gentle_up_to_gentle_up_left_bank_diag),"DiagUp25ToLeftBankedUp25",SPRITE_GROUP_DIAGONAL,0);
 	generate_subposition_data(&(track_list_default.gentle_up_to_gentle_up_right_bank_diag),"DiagUp25ToRightBankedUp25",SPRITE_GROUP_DIAGONAL,0);
 	generate_subposition_data(&(track_list_default.gentle_up_left_bank_to_gentle_up_diag),"DiagLeftBankedUp25ToUp25",SPRITE_GROUP_DIAGONAL,0);
@@ -2224,6 +2225,30 @@ int main(int argc,const char** argv)
 	generate_subposition_data(&(track_list_default.large_turn_right_bank_to_orthogonal_gentle_up),"RightEighthBankToOrthogonalUp25",SPRITE_GROUP_BASE,0);
 	generate_subposition_data(&(track_list_default.large_turn_right_bank_to_diag_gentle_up),"LeftEighthBankToOrthogonalDown25",SPRITE_GROUP_BASE,17);
 	generate_subposition_data(&(track_list_default.large_turn_left_bank_to_diag_gentle_up),"RightEighthBankToOrthogonalDown25",SPRITE_GROUP_BASE,17);
+
+
+	generate_subposition_data(&(track_list_default.gentle_up_to_gentle_up_left_bank_diag),"DiagUp25ToLeftBankedUp25",SPRITE_GROUP_DIAGONAL,0);
+	generate_subposition_data(&(track_list_default.gentle_up_to_gentle_up_right_bank_diag),"DiagUp25ToRightBankedUp25",SPRITE_GROUP_DIAGONAL,0);
+	generate_subposition_data(&(track_list_default.gentle_up_right_bank_to_gentle_up_diag),"DiagDown25ToLeftBankedDown25",SPRITE_GROUP_DIAGONAL,17);
+	generate_subposition_data(&(track_list_default.gentle_up_left_bank_to_gentle_up_diag),"DiagDown25ToRightBankedDown25",SPRITE_GROUP_DIAGONAL,17);
+*/
+
+
+
+	generate_subposition_data(&(track_list_default.flat_to_steep_up_diag),"DiagFlatToUp60LongBase",SPRITE_GROUP_DIAGONAL,0);
+	generate_subposition_data(&(track_list_default.steep_to_flat_up_diag),"DiagUp60ToFlatLongBase",SPRITE_GROUP_DIAGONAL,0);
+	generate_subposition_data(&(track_list_default.steep_to_flat_up_diag),"DiagFlatToDown60LongBase",SPRITE_GROUP_DIAGONAL,9);
+	generate_subposition_data(&(track_list_default.flat_to_steep_up_diag),"DiagDown60ToFlatLongBase",SPRITE_GROUP_DIAGONAL,57);
+	
+	generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
+	generate_subposition_data(&(track_list_default.dive_loop_45_right),"RightEighthDiveLoopUpToOrthogonal",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
+	generate_subposition_data(&(track_list_default.dive_loop_45_right),"LeftEighthDiveLoopDownToOrthogonal",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,28);
+	generate_subposition_data(&(track_list_default.dive_loop_45_left),"RightEighthDiveLoopDownToOrthogonal",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,28);
+
+	//generate_subposition_data(&(),"LeftDiveLoopUp",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
+	//generate_subposition_data(&(),"RightDiveLoopUp",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
+	//generate_subposition_data(&(),"LeftDiveLoopDown",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
+	//generate_subposition_data(&(),"RightDiveLoopDown", SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
 
 	return 0;
 }

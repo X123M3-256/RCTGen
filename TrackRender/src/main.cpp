@@ -84,6 +84,7 @@ int load_groups(json_t* json,uint64_t* out)
 		else if(strcmp(json_string_value(group_name),"medium_half_loops") ==0)groups|=TRACK_GROUP_MEDIUM_HALF_LOOPS;
 		else if(strcmp(json_string_value(group_name),"large_half_loops") ==0)groups|=TRACK_GROUP_LARGE_HALF_LOOPS;
 		else if(strcmp(json_string_value(group_name),"zero_g_rolls") ==0)groups|=TRACK_GROUP_ZERO_G_ROLLS;
+		else if(strcmp(json_string_value(group_name),"dive_loops") ==0)groups|=TRACK_GROUP_DIVE_LOOPS;
 		else if(strcmp(json_string_value(group_name),"boosters") ==0)groups|=TRACK_GROUP_BOOSTERS;
 		else if(strcmp(json_string_value(group_name),"launched_lifts") ==0)groups|=TRACK_GROUP_LAUNCHED_LIFTS;
 		else if(strcmp(json_string_value(group_name),"turn_bank_transitions") ==0)groups|=TRACK_GROUP_TURN_BANK_TRANSITIONS;

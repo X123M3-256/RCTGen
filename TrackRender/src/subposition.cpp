@@ -28,7 +28,9 @@ enum
 	SPRITE_GROUP_TURN=4,
 	SPRITE_GROUP_INLINE_TWIST=8,
 	SPRITE_GROUP_CORKSCREW=16,
-	SPRITE_GROUP_ZERO_G_ROLLS=32,
+	SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL=32,
+	SPRITE_GROUP_ZERO_G_ROLLS_DIAGONAL=64,
+	SPRITE_GROUP_ZERO_G_ROLLS_OTHER=128,
 };
 
 #define SPRITE_GROUP_BASE (SPRITE_GROUP_ORTHOGONAL|SPRITE_GROUP_DIAGONAL|SPRITE_GROUP_TURN)
@@ -1672,7 +1674,7 @@ sprite_rotation_t corkscrew_sprite_rotations[80]={
     {24,32,0,Y(24)+CLY(-4*M_PI_6),CLP(-4*M_PI_6),CLR(-4*M_PI_6)},{0,33,0,Y(0)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)},  {8,33,0,Y(8)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)},
     {16,33,0,Y(16)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)},{24,33,0,Y(24)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)}};
 
-sprite_rotation_t zero_g_sprite_rotations[160]={
+sprite_rotation_t zero_g_orthogonal_sprite_rotations[160]={
     //Gentle up roll sprites
     {0,2,5,Y(0),G,3*M_PI_8},
     {8,2,5,Y(8),G,3*M_PI_8},
@@ -1842,9 +1844,520 @@ sprite_rotation_t zero_g_sprite_rotations[160]={
     {24,8,3,Y(24),-S,-M_PI_8},
 };
 
-#define NUM_SPRITE_GROUPS 6
-int sprite_group_counts[NUM_SPRITE_GROUPS]={176,172,408,40,80,160};
-const sprite_rotation_t* sprite_group_rotations[NUM_SPRITE_GROUPS]={orthogonal_sprite_rotations,diagonal_sprite_rotations,turn_sprite_rotations,inline_twist_sprite_rotations,corkscrew_sprite_rotations,zero_g_sprite_rotations};
+sprite_rotation_t zero_g_diagonal_sprite_rotations[160]={
+    //Gentle up roll sprites
+    {4,2,5,Y(4),G,3*M_PI_8},
+    {12,2,5,Y(12),G,3*M_PI_8},
+    {20,2,5,Y(20),G,3*M_PI_8},
+    {28,2,5,Y(28),G,3*M_PI_8},
+    {4,2,10,Y(4),G,-3*M_PI_8},
+    {12,2,10,Y(12),G,-3*M_PI_8},
+    {20,2,10,Y(20),G,-3*M_PI_8},
+    {28,2,10,Y(28),G,-3*M_PI_8},
+    {4,2,6,Y(4),G,4*M_PI_8},
+    {12,2,6,Y(12),G,4*M_PI_8},
+    {20,2,6,Y(20),G,4*M_PI_8},
+    {28,2,6,Y(28),G,4*M_PI_8},
+    {4,2,11,Y(4),G,-4*M_PI_8},
+    {12,2,11,Y(12),G,-4*M_PI_8},
+    {20,2,11,Y(20),G,-4*M_PI_8},
+    {28,2,11,Y(28),G,-4*M_PI_8},
+    {4,2,7,Y(4),G,5*M_PI_8},
+    {12,2,7,Y(12),G,5*M_PI_8},
+    {20,2,7,Y(20),G,5*M_PI_8},
+    {28,2,7,Y(28),G,5*M_PI_8},
+    {4,2,12,Y(4),G,-5*M_PI_8},
+    {12,2,12,Y(12),G,-5*M_PI_8},
+    {20,2,12,Y(20),G,-5*M_PI_8},
+    {28,2,12,Y(28),G,-5*M_PI_8},
+    {4,2,8,Y(4),G,6*M_PI_8},
+    {12,2,8,Y(12),G,6*M_PI_8},
+    {20,2,8,Y(20),G,6*M_PI_8},
+    {28,2,8,Y(28),G,6*M_PI_8},
+    {4,2,13,Y(4),G,-6*M_PI_8},
+    {12,2,13,Y(12),G,-6*M_PI_8},
+    {20,2,13,Y(20),G,-6*M_PI_8},
+    {28,2,13,Y(28),G,-6*M_PI_8},
+    {4,2,9,Y(4),G,7*M_PI_8},
+    {12,2,9,Y(12),G,7*M_PI_8},
+    {20,2,9,Y(20),G,7*M_PI_8},
+    {28,2,9,Y(28),G,7*M_PI_8},
+    {4,2,14,Y(4),G,-7*M_PI_8},
+    {12,2,14,Y(12),G,-7*M_PI_8},
+    {20,2,14,Y(20),G,-7*M_PI_8},
+    {28,2,14,Y(28),G,-7*M_PI_8},
+    //Gentle down roll sprites
+    {4,6,5,Y(4),-G,3*M_PI_8},
+    {12,6,5,Y(12),-G,3*M_PI_8},
+    {20,6,5,Y(20),-G,3*M_PI_8},
+    {28,6,5,Y(28),-G,3*M_PI_8},
+    {4,6,10,Y(4),-G,-3*M_PI_8},
+    {12,6,10,Y(12),-G,-3*M_PI_8},
+    {20,6,10,Y(20),-G,-3*M_PI_8},
+    {28,6,10,Y(28),-G,-3*M_PI_8},
+    {4,6,6,Y(4),-G,4*M_PI_8},
+    {12,6,6,Y(12),-G,4*M_PI_8},
+    {20,6,6,Y(20),-G,4*M_PI_8},
+    {28,6,6,Y(28),-G,4*M_PI_8},
+    {4,6,11,Y(4),-G,-4*M_PI_8},
+    {12,6,11,Y(12),-G,-4*M_PI_8},
+    {20,6,11,Y(20),-G,-4*M_PI_8},
+    {28,6,11,Y(28),-G,-4*M_PI_8},
+    {4,6,7,Y(4),-G,5*M_PI_8},
+    {12,6,7,Y(12),-G,5*M_PI_8},
+    {20,6,7,Y(20),-G,5*M_PI_8},
+    {28,6,7,Y(28),-G,5*M_PI_8},
+    {4,6,12,Y(4),-G,-5*M_PI_8},
+    {12,6,12,Y(12),-G,-5*M_PI_8},
+    {20,6,12,Y(20),-G,-5*M_PI_8},
+    {28,6,12,Y(28),-G,-5*M_PI_8},
+    {4,6,8,Y(4),-G,6*M_PI_8},
+    {12,6,8,Y(12),-G,6*M_PI_8},
+    {20,6,8,Y(20),-G,6*M_PI_8},
+    {28,6,8,Y(28),-G,6*M_PI_8},
+    {4,6,13,Y(4),-G,-6*M_PI_8},
+    {12,6,13,Y(12),-G,-6*M_PI_8},
+    {20,6,13,Y(20),-G,-6*M_PI_8},
+    {28,6,13,Y(28),-G,-6*M_PI_8},
+    {4,6,9,Y(4),-G,7*M_PI_8},
+    {12,6,9,Y(12),-G,7*M_PI_8},
+    {20,6,9,Y(20),-G,7*M_PI_8},
+    {28,6,9,Y(28),-G,7*M_PI_8},
+    {4,6,14,Y(4),-G,-7*M_PI_8},
+    {12,6,14,Y(12),-G,-7*M_PI_8},
+    {20,6,14,Y(20),-G,-7*M_PI_8},
+    {28,6,14,Y(28),-G,-7*M_PI_8},
+
+    //Steep to gentle up roll sprites
+    {4,3,1,Y(4),GS,M_PI_8},
+    {12,3,1,Y(12),GS,M_PI_8},
+    {20,3,1,Y(20),GS,M_PI_8},
+    {28,3,1,Y(28),GS,M_PI_8},
+    {4,3,3,Y(4),GS,-M_PI_8},
+    {12,3,3,Y(12),GS,-M_PI_8},
+    {20,3,3,Y(20),GS,-M_PI_8},
+    {28,3,3,Y(28),GS,-M_PI_8},
+    {4,3,2,Y(4),GS,M_PI_4},
+    {12,3,2,Y(12),GS,M_PI_4},
+    {20,3,2,Y(20),GS,M_PI_4},
+    {28,3,2,Y(28),GS,M_PI_4},
+    {4,3,4,Y(4),GS,-M_PI_4},
+    {12,3,4,Y(12),GS,-M_PI_4},
+    {20,3,4,Y(20),GS,-M_PI_4},
+    {28,3,4,Y(28),GS,-M_PI_4},
+    {4,3,5,Y(4),GS,3*M_PI_8},
+    {12,3,5,Y(12),GS,3*M_PI_8},
+    {20,3,5,Y(20),GS,3*M_PI_8},
+    {28,3,5,Y(28),GS,3*M_PI_8},
+    {4,3,10,Y(4),GS,-3*M_PI_8},
+    {12,3,10,Y(12),GS,-3*M_PI_8},
+    {20,3,10,Y(20),GS,-3*M_PI_8},
+    {28,3,10,Y(28),GS,-3*M_PI_8},
+    {4,3,6,Y(4),GS,4*M_PI_8},
+    {12,3,6,Y(12),GS,4*M_PI_8},
+    {20,3,6,Y(20),GS,4*M_PI_8},
+    {28,3,6,Y(28),GS,4*M_PI_8},
+    {4,3,11,Y(4),GS,-4*M_PI_8},
+    {12,3,11,Y(12),GS,-4*M_PI_8},
+    {20,3,11,Y(20),GS,-4*M_PI_8},
+    {28,3,11,Y(28),GS,-4*M_PI_8},
+    //Steep to gentle down roll sprites
+    {4,7,1,Y(4),-GS,M_PI_8},
+    {12,7,1,Y(12),-GS,M_PI_8},
+    {20,7,1,Y(20),-GS,M_PI_8},
+    {28,7,1,Y(28),-GS,M_PI_8},
+    {4,7,3,Y(4),-GS,-M_PI_8},
+    {12,7,3,Y(12),-GS,-M_PI_8},
+    {20,7,3,Y(20),-GS,-M_PI_8},
+    {28,7,3,Y(28),-GS,-M_PI_8},
+    {4,7,2,Y(4),-GS,M_PI_4},
+    {12,7,2,Y(12),-GS,M_PI_4},
+    {20,7,2,Y(20),-GS,M_PI_4},
+    {28,7,2,Y(28),-GS,M_PI_4},
+    {4,7,4,Y(4),-GS,-M_PI_4},
+    {12,7,4,Y(12),-GS,-M_PI_4},
+    {20,7,4,Y(20),-GS,-M_PI_4},
+    {28,7,4,Y(28),-GS,-M_PI_4},
+    {4,7,5,Y(4),-GS,3*M_PI_8},
+    {12,7,5,Y(12),-GS,3*M_PI_8},
+    {20,7,5,Y(20),-GS,3*M_PI_8},
+    {28,7,5,Y(28),-GS,3*M_PI_8},
+    {4,7,10,Y(4),-GS,-3*M_PI_8},
+    {12,7,10,Y(12),-GS,-3*M_PI_8},
+    {20,7,10,Y(20),-GS,-3*M_PI_8},
+    {28,7,10,Y(28),-GS,-3*M_PI_8},
+    {4,7,6,Y(4),-GS,4*M_PI_8},
+    {12,7,6,Y(12),-GS,4*M_PI_8},
+    {20,7,6,Y(20),-GS,4*M_PI_8},
+    {28,7,6,Y(28),-GS,4*M_PI_8},
+    {4,7,11,Y(4),-GS,-4*M_PI_8},
+    {12,7,11,Y(12),-GS,-4*M_PI_8},
+    {20,7,11,Y(20),-GS,-4*M_PI_8},
+    {28,7,11,Y(28),-GS,-4*M_PI_8},
+    //Steep up roll sprites
+    {4,4,1,Y(4),S,M_PI_8},
+    {12,4,1,Y(12),S,M_PI_8},
+    {20,4,1,Y(20),S,M_PI_8},
+    {28,4,1,Y(28),S,M_PI_8},
+    {4,4,3,Y(4),S,-M_PI_8},
+    {12,4,3,Y(12),S,-M_PI_8},
+    {20,4,3,Y(20),S,-M_PI_8},
+    {28,4,3,Y(28),S,-M_PI_8},
+    //Steep down roll sprites
+    {4,8,1,Y(4),-S,M_PI_8},
+    {12,8,1,Y(12),-S,M_PI_8},
+    {20,8,1,Y(20),-S,M_PI_8},
+    {28,8,1,Y(28),-S,M_PI_8},
+    {4,8,3,Y(4),-S,-M_PI_8},
+    {12,8,3,Y(12),-S,-M_PI_8},
+    {20,8,3,Y(20),-S,-M_PI_8},
+    {28,8,3,Y(28),-S,-M_PI_8},
+};
+
+
+sprite_rotation_t zero_g_other_sprite_rotations[320]={
+    //Gentle up roll sprites
+    {2,2,5,Y(2),G,3*M_PI_8},
+    {10,2,5,Y(10),G,3*M_PI_8},
+    {18,2,5,Y(18),G,3*M_PI_8},
+    {26,2,5,Y(26),G,3*M_PI_8},
+    {2,2,10,Y(2),G,-3*M_PI_8},
+    {10,2,10,Y(10),G,-3*M_PI_8},
+    {18,2,10,Y(18),G,-3*M_PI_8},
+    {26,2,10,Y(26),G,-3*M_PI_8},
+    {2,2,6,Y(2),G,4*M_PI_8},
+    {10,2,6,Y(10),G,4*M_PI_8},
+    {18,2,6,Y(18),G,4*M_PI_8},
+    {26,2,6,Y(26),G,4*M_PI_8},
+    {2,2,11,Y(2),G,-4*M_PI_8},
+    {10,2,11,Y(10),G,-4*M_PI_8},
+    {18,2,11,Y(18),G,-4*M_PI_8},
+    {26,2,11,Y(26),G,-4*M_PI_8},
+    {2,2,7,Y(2),G,5*M_PI_8},
+    {10,2,7,Y(10),G,5*M_PI_8},
+    {18,2,7,Y(18),G,5*M_PI_8},
+    {26,2,7,Y(26),G,5*M_PI_8},
+    {2,2,12,Y(2),G,-5*M_PI_8},
+    {10,2,12,Y(10),G,-5*M_PI_8},
+    {18,2,12,Y(18),G,-5*M_PI_8},
+    {26,2,12,Y(26),G,-5*M_PI_8},
+    {2,2,8,Y(2),G,6*M_PI_8},
+    {10,2,8,Y(10),G,6*M_PI_8},
+    {18,2,8,Y(18),G,6*M_PI_8},
+    {26,2,8,Y(26),G,6*M_PI_8},
+    {2,2,13,Y(2),G,-6*M_PI_8},
+    {10,2,13,Y(10),G,-6*M_PI_8},
+    {18,2,13,Y(18),G,-6*M_PI_8},
+    {26,2,13,Y(26),G,-6*M_PI_8},
+    {2,2,9,Y(2),G,7*M_PI_8},
+    {10,2,9,Y(10),G,7*M_PI_8},
+    {18,2,9,Y(18),G,7*M_PI_8},
+    {26,2,9,Y(26),G,7*M_PI_8},
+    {2,2,14,Y(2),G,-7*M_PI_8},
+    {10,2,14,Y(10),G,-7*M_PI_8},
+    {18,2,14,Y(18),G,-7*M_PI_8},
+    {26,2,14,Y(26),G,-7*M_PI_8},
+    //Gentle down roll sprites
+    {2,6,5,Y(2),-G,3*M_PI_8},
+    {10,6,5,Y(10),-G,3*M_PI_8},
+    {18,6,5,Y(18),-G,3*M_PI_8},
+    {26,6,5,Y(26),-G,3*M_PI_8},
+    {2,6,10,Y(2),-G,-3*M_PI_8},
+    {10,6,10,Y(10),-G,-3*M_PI_8},
+    {18,6,10,Y(18),-G,-3*M_PI_8},
+    {26,6,10,Y(26),-G,-3*M_PI_8},
+    {2,6,6,Y(2),-G,4*M_PI_8},
+    {10,6,6,Y(10),-G,4*M_PI_8},
+    {18,6,6,Y(18),-G,4*M_PI_8},
+    {26,6,6,Y(26),-G,4*M_PI_8},
+    {2,6,11,Y(2),-G,-4*M_PI_8},
+    {10,6,11,Y(10),-G,-4*M_PI_8},
+    {18,6,11,Y(18),-G,-4*M_PI_8},
+    {26,6,11,Y(26),-G,-4*M_PI_8},
+    {2,6,7,Y(2),-G,5*M_PI_8},
+    {10,6,7,Y(10),-G,5*M_PI_8},
+    {18,6,7,Y(18),-G,5*M_PI_8},
+    {26,6,7,Y(26),-G,5*M_PI_8},
+    {2,6,12,Y(2),-G,-5*M_PI_8},
+    {10,6,12,Y(10),-G,-5*M_PI_8},
+    {18,6,12,Y(18),-G,-5*M_PI_8},
+    {26,6,12,Y(26),-G,-5*M_PI_8},
+    {2,6,8,Y(2),-G,6*M_PI_8},
+    {10,6,8,Y(10),-G,6*M_PI_8},
+    {18,6,8,Y(18),-G,6*M_PI_8},
+    {26,6,8,Y(26),-G,6*M_PI_8},
+    {2,6,13,Y(2),-G,-6*M_PI_8},
+    {10,6,13,Y(10),-G,-6*M_PI_8},
+    {18,6,13,Y(18),-G,-6*M_PI_8},
+    {26,6,13,Y(26),-G,-6*M_PI_8},
+    {2,6,9,Y(2),-G,7*M_PI_8},
+    {10,6,9,Y(10),-G,7*M_PI_8},
+    {18,6,9,Y(18),-G,7*M_PI_8},
+    {26,6,9,Y(26),-G,7*M_PI_8},
+    {2,6,14,Y(2),-G,-7*M_PI_8},
+    {10,6,14,Y(10),-G,-7*M_PI_8},
+    {18,6,14,Y(18),-G,-7*M_PI_8},
+    {26,6,14,Y(26),-G,-7*M_PI_8},
+
+    //Steep to gentle up roll sprites
+    {2,3,1,Y(2),GS,M_PI_8},
+    {10,3,1,Y(10),GS,M_PI_8},
+    {18,3,1,Y(18),GS,M_PI_8},
+    {26,3,1,Y(26),GS,M_PI_8},
+    {2,3,3,Y(2),GS,-M_PI_8},
+    {10,3,3,Y(10),GS,-M_PI_8},
+    {18,3,3,Y(18),GS,-M_PI_8},
+    {26,3,3,Y(26),GS,-M_PI_8},
+    {2,3,2,Y(2),GS,M_PI_4},
+    {10,3,2,Y(10),GS,M_PI_4},
+    {18,3,2,Y(18),GS,M_PI_4},
+    {26,3,2,Y(26),GS,M_PI_4},
+    {2,3,4,Y(2),GS,-M_PI_4},
+    {10,3,4,Y(10),GS,-M_PI_4},
+    {18,3,4,Y(18),GS,-M_PI_4},
+    {26,3,4,Y(26),GS,-M_PI_4},
+    {2,3,5,Y(2),GS,3*M_PI_8},
+    {10,3,5,Y(10),GS,3*M_PI_8},
+    {18,3,5,Y(18),GS,3*M_PI_8},
+    {26,3,5,Y(26),GS,3*M_PI_8},
+    {2,3,10,Y(2),GS,-3*M_PI_8},
+    {10,3,10,Y(10),GS,-3*M_PI_8},
+    {18,3,10,Y(18),GS,-3*M_PI_8},
+    {26,3,10,Y(26),GS,-3*M_PI_8},
+    {2,3,6,Y(2),GS,4*M_PI_8},
+    {10,3,6,Y(10),GS,4*M_PI_8},
+    {18,3,6,Y(18),GS,4*M_PI_8},
+    {26,3,6,Y(26),GS,4*M_PI_8},
+    {2,3,11,Y(2),GS,-4*M_PI_8},
+    {10,3,11,Y(10),GS,-4*M_PI_8},
+    {18,3,11,Y(18),GS,-4*M_PI_8},
+    {26,3,11,Y(26),GS,-4*M_PI_8},
+    //Steep to gentle down roll sprites
+    {2,7,1,Y(2),-GS,M_PI_8},
+    {10,7,1,Y(10),-GS,M_PI_8},
+    {18,7,1,Y(18),-GS,M_PI_8},
+    {26,7,1,Y(26),-GS,M_PI_8},
+    {2,7,3,Y(2),-GS,-M_PI_8},
+    {10,7,3,Y(10),-GS,-M_PI_8},
+    {18,7,3,Y(18),-GS,-M_PI_8},
+    {26,7,3,Y(26),-GS,-M_PI_8},
+    {2,7,2,Y(2),-GS,M_PI_4},
+    {10,7,2,Y(10),-GS,M_PI_4},
+    {18,7,2,Y(18),-GS,M_PI_4},
+    {26,7,2,Y(26),-GS,M_PI_4},
+    {2,7,4,Y(2),-GS,-M_PI_4},
+    {10,7,4,Y(10),-GS,-M_PI_4},
+    {18,7,4,Y(18),-GS,-M_PI_4},
+    {26,7,4,Y(26),-GS,-M_PI_4},
+    {2,7,5,Y(2),-GS,3*M_PI_8},
+    {10,7,5,Y(10),-GS,3*M_PI_8},
+    {18,7,5,Y(18),-GS,3*M_PI_8},
+    {26,7,5,Y(26),-GS,3*M_PI_8},
+    {2,7,10,Y(2),-GS,-3*M_PI_8},
+    {10,7,10,Y(10),-GS,-3*M_PI_8},
+    {18,7,10,Y(18),-GS,-3*M_PI_8},
+    {26,7,10,Y(26),-GS,-3*M_PI_8},
+    {2,7,6,Y(2),-GS,4*M_PI_8},
+    {10,7,6,Y(10),-GS,4*M_PI_8},
+    {18,7,6,Y(18),-GS,4*M_PI_8},
+    {26,7,6,Y(26),-GS,4*M_PI_8},
+    {2,7,11,Y(2),-GS,-4*M_PI_8},
+    {10,7,11,Y(10),-GS,-4*M_PI_8},
+    {18,7,11,Y(18),-GS,-4*M_PI_8},
+    {26,7,11,Y(26),-GS,-4*M_PI_8},
+    //Steep up roll sprites
+    {2,4,1,Y(2),S,M_PI_8},
+    {10,4,1,Y(10),S,M_PI_8},
+    {18,4,1,Y(18),S,M_PI_8},
+    {26,4,1,Y(26),S,M_PI_8},
+    {2,4,3,Y(2),S,-M_PI_8},
+    {10,4,3,Y(10),S,-M_PI_8},
+    {18,4,3,Y(18),S,-M_PI_8},
+    {26,4,3,Y(26),S,-M_PI_8},
+    //Steep down roll sprites
+    {2,8,1,Y(2),-S,M_PI_8},
+    {10,8,1,Y(10),-S,M_PI_8},
+    {18,8,1,Y(18),-S,M_PI_8},
+    {26,8,1,Y(26),-S,M_PI_8},
+    {2,8,3,Y(2),-S,-M_PI_8},
+    {10,8,3,Y(10),-S,-M_PI_8},
+    {18,8,3,Y(18),-S,-M_PI_8},
+    {26,8,3,Y(26),-S,-M_PI_8},
+    //Gentle up roll sprites
+    {6,2,5,Y(6),G,3*M_PI_8},
+    {14,2,5,Y(14),G,3*M_PI_8},
+    {22,2,5,Y(22),G,3*M_PI_8},
+    {30,2,5,Y(30),G,3*M_PI_8},
+    {6,2,10,Y(6),G,-3*M_PI_8},
+    {14,2,10,Y(14),G,-3*M_PI_8},
+    {22,2,10,Y(22),G,-3*M_PI_8},
+    {30,2,10,Y(30),G,-3*M_PI_8},
+    {6,2,6,Y(6),G,4*M_PI_8},
+    {14,2,6,Y(14),G,4*M_PI_8},
+    {22,2,6,Y(22),G,4*M_PI_8},
+    {30,2,6,Y(30),G,4*M_PI_8},
+    {6,2,11,Y(6),G,-4*M_PI_8},
+    {14,2,11,Y(14),G,-4*M_PI_8},
+    {22,2,11,Y(22),G,-4*M_PI_8},
+    {30,2,11,Y(30),G,-4*M_PI_8},
+    {6,2,7,Y(6),G,5*M_PI_8},
+    {14,2,7,Y(14),G,5*M_PI_8},
+    {22,2,7,Y(22),G,5*M_PI_8},
+    {30,2,7,Y(30),G,5*M_PI_8},
+    {6,2,12,Y(6),G,-5*M_PI_8},
+    {14,2,12,Y(14),G,-5*M_PI_8},
+    {22,2,12,Y(22),G,-5*M_PI_8},
+    {30,2,12,Y(30),G,-5*M_PI_8},
+    {6,2,8,Y(6),G,6*M_PI_8},
+    {14,2,8,Y(14),G,6*M_PI_8},
+    {22,2,8,Y(22),G,6*M_PI_8},
+    {30,2,8,Y(30),G,6*M_PI_8},
+    {6,2,13,Y(6),G,-6*M_PI_8},
+    {14,2,13,Y(14),G,-6*M_PI_8},
+    {22,2,13,Y(22),G,-6*M_PI_8},
+    {30,2,13,Y(30),G,-6*M_PI_8},
+    {6,2,9,Y(6),G,7*M_PI_8},
+    {14,2,9,Y(14),G,7*M_PI_8},
+    {22,2,9,Y(22),G,7*M_PI_8},
+    {30,2,9,Y(30),G,7*M_PI_8},
+    {6,2,14,Y(6),G,-7*M_PI_8},
+    {14,2,14,Y(14),G,-7*M_PI_8},
+    {22,2,14,Y(22),G,-7*M_PI_8},
+    {30,2,14,Y(30),G,-7*M_PI_8},
+    //Gentle down roll sprites
+    {6,6,5,Y(6),-G,3*M_PI_8},
+    {14,6,5,Y(14),-G,3*M_PI_8},
+    {22,6,5,Y(22),-G,3*M_PI_8},
+    {30,6,5,Y(30),-G,3*M_PI_8},
+    {6,6,10,Y(6),-G,-3*M_PI_8},
+    {14,6,10,Y(14),-G,-3*M_PI_8},
+    {22,6,10,Y(22),-G,-3*M_PI_8},
+    {30,6,10,Y(30),-G,-3*M_PI_8},
+    {6,6,6,Y(6),-G,4*M_PI_8},
+    {14,6,6,Y(14),-G,4*M_PI_8},
+    {22,6,6,Y(22),-G,4*M_PI_8},
+    {30,6,6,Y(30),-G,4*M_PI_8},
+    {6,6,11,Y(6),-G,-4*M_PI_8},
+    {14,6,11,Y(14),-G,-4*M_PI_8},
+    {22,6,11,Y(22),-G,-4*M_PI_8},
+    {30,6,11,Y(30),-G,-4*M_PI_8},
+    {6,6,7,Y(6),-G,5*M_PI_8},
+    {14,6,7,Y(14),-G,5*M_PI_8},
+    {22,6,7,Y(22),-G,5*M_PI_8},
+    {30,6,7,Y(30),-G,5*M_PI_8},
+    {6,6,12,Y(6),-G,-5*M_PI_8},
+    {14,6,12,Y(14),-G,-5*M_PI_8},
+    {22,6,12,Y(22),-G,-5*M_PI_8},
+    {30,6,12,Y(30),-G,-5*M_PI_8},
+    {6,6,8,Y(6),-G,6*M_PI_8},
+    {14,6,8,Y(14),-G,6*M_PI_8},
+    {22,6,8,Y(22),-G,6*M_PI_8},
+    {30,6,8,Y(30),-G,6*M_PI_8},
+    {6,6,13,Y(6),-G,-6*M_PI_8},
+    {14,6,13,Y(14),-G,-6*M_PI_8},
+    {22,6,13,Y(22),-G,-6*M_PI_8},
+    {30,6,13,Y(30),-G,-6*M_PI_8},
+    {6,6,9,Y(6),-G,7*M_PI_8},
+    {14,6,9,Y(14),-G,7*M_PI_8},
+    {22,6,9,Y(22),-G,7*M_PI_8},
+    {30,6,9,Y(30),-G,7*M_PI_8},
+    {6,6,14,Y(6),-G,-7*M_PI_8},
+    {14,6,14,Y(14),-G,-7*M_PI_8},
+    {22,6,14,Y(22),-G,-7*M_PI_8},
+    {30,6,14,Y(30),-G,-7*M_PI_8},
+
+    //Steep to gentle up roll sprites
+    {6,3,1,Y(6),GS,M_PI_8},
+    {14,3,1,Y(14),GS,M_PI_8},
+    {22,3,1,Y(22),GS,M_PI_8},
+    {30,3,1,Y(30),GS,M_PI_8},
+    {6,3,3,Y(6),GS,-M_PI_8},
+    {14,3,3,Y(14),GS,-M_PI_8},
+    {22,3,3,Y(22),GS,-M_PI_8},
+    {30,3,3,Y(30),GS,-M_PI_8},
+    {6,3,2,Y(6),GS,M_PI_4},
+    {14,3,2,Y(14),GS,M_PI_4},
+    {22,3,2,Y(22),GS,M_PI_4},
+    {30,3,2,Y(30),GS,M_PI_4},
+    {6,3,4,Y(6),GS,-M_PI_4},
+    {14,3,4,Y(14),GS,-M_PI_4},
+    {22,3,4,Y(22),GS,-M_PI_4},
+    {30,3,4,Y(30),GS,-M_PI_4},
+    {6,3,5,Y(6),GS,3*M_PI_8},
+    {14,3,5,Y(14),GS,3*M_PI_8},
+    {22,3,5,Y(22),GS,3*M_PI_8},
+    {30,3,5,Y(30),GS,3*M_PI_8},
+    {6,3,10,Y(6),GS,-3*M_PI_8},
+    {14,3,10,Y(14),GS,-3*M_PI_8},
+    {22,3,10,Y(22),GS,-3*M_PI_8},
+    {30,3,10,Y(30),GS,-3*M_PI_8},
+    {6,3,6,Y(6),GS,4*M_PI_8},
+    {14,3,6,Y(14),GS,4*M_PI_8},
+    {22,3,6,Y(22),GS,4*M_PI_8},
+    {30,3,6,Y(30),GS,4*M_PI_8},
+    {6,3,11,Y(6),GS,-4*M_PI_8},
+    {14,3,11,Y(14),GS,-4*M_PI_8},
+    {22,3,11,Y(22),GS,-4*M_PI_8},
+    {30,3,11,Y(30),GS,-4*M_PI_8},
+    //Steep to gentle down roll sprites
+    {6,7,1,Y(6),-GS,M_PI_8},
+    {14,7,1,Y(14),-GS,M_PI_8},
+    {22,7,1,Y(22),-GS,M_PI_8},
+    {30,7,1,Y(30),-GS,M_PI_8},
+    {6,7,3,Y(6),-GS,-M_PI_8},
+    {14,7,3,Y(14),-GS,-M_PI_8},
+    {22,7,3,Y(22),-GS,-M_PI_8},
+    {30,7,3,Y(30),-GS,-M_PI_8},
+    {6,7,2,Y(6),-GS,M_PI_4},
+    {14,7,2,Y(14),-GS,M_PI_4},
+    {22,7,2,Y(22),-GS,M_PI_4},
+    {30,7,2,Y(30),-GS,M_PI_4},
+    {6,7,4,Y(6),-GS,-M_PI_4},
+    {14,7,4,Y(14),-GS,-M_PI_4},
+    {22,7,4,Y(22),-GS,-M_PI_4},
+    {30,7,4,Y(30),-GS,-M_PI_4},
+    {6,7,5,Y(6),-GS,3*M_PI_8},
+    {14,7,5,Y(14),-GS,3*M_PI_8},
+    {22,7,5,Y(22),-GS,3*M_PI_8},
+    {30,7,5,Y(30),-GS,3*M_PI_8},
+    {6,7,10,Y(6),-GS,-3*M_PI_8},
+    {14,7,10,Y(14),-GS,-3*M_PI_8},
+    {22,7,10,Y(22),-GS,-3*M_PI_8},
+    {30,7,10,Y(30),-GS,-3*M_PI_8},
+    {6,7,6,Y(6),-GS,4*M_PI_8},
+    {14,7,6,Y(14),-GS,4*M_PI_8},
+    {22,7,6,Y(22),-GS,4*M_PI_8},
+    {30,7,6,Y(30),-GS,4*M_PI_8},
+    {6,7,11,Y(6),-GS,-4*M_PI_8},
+    {14,7,11,Y(14),-GS,-4*M_PI_8},
+    {22,7,11,Y(22),-GS,-4*M_PI_8},
+    {30,7,11,Y(30),-GS,-4*M_PI_8},
+    //Steep up roll sprites
+    {6,4,1,Y(6),S,M_PI_8},
+    {14,4,1,Y(14),S,M_PI_8},
+    {22,4,1,Y(22),S,M_PI_8},
+    {30,4,1,Y(30),S,M_PI_8},
+    {6,4,3,Y(6),S,-M_PI_8},
+    {14,4,3,Y(14),S,-M_PI_8},
+    {22,4,3,Y(22),S,-M_PI_8},
+    {30,4,3,Y(30),S,-M_PI_8},
+    //Steep down roll sprites
+    {6,8,1,Y(6),-S,M_PI_8},
+    {14,8,1,Y(14),-S,M_PI_8},
+    {22,8,1,Y(22),-S,M_PI_8},
+    {30,8,1,Y(30),-S,M_PI_8},
+    {6,8,3,Y(6),-S,-M_PI_8},
+    {14,8,3,Y(14),-S,-M_PI_8},
+    {22,8,3,Y(22),-S,-M_PI_8},
+    {30,8,3,Y(30),-S,-M_PI_8},
+};
+
+
+
+
+#define NUM_SPRITE_GROUPS 8
+int sprite_group_counts[NUM_SPRITE_GROUPS]={176,172,408,40,80,160,160,320};
+const sprite_rotation_t* sprite_group_rotations[NUM_SPRITE_GROUPS]={orthogonal_sprite_rotations,diagonal_sprite_rotations,turn_sprite_rotations,inline_twist_sprite_rotations,corkscrew_sprite_rotations,zero_g_orthogonal_sprite_rotations,zero_g_diagonal_sprite_rotations,zero_g_other_sprite_rotations};
 
 matrix_t track_point_get_rotation(track_point_t point)
 {
@@ -1869,6 +2382,7 @@ sprite_rotation_t get_closest_rotation(matrix_t rotation,int groups)
 	{
 		if(!(groups&(1<<j)))continue;
 		const sprite_rotation_t* sprite_rotations=sprite_group_rotations[j];
+		//printf("Sprite group %d\n",j)
 		for(int i=0; i<sprite_group_counts[j]; i++)
 		{
 			matrix_t candidate_rotation=matrix_mult(matrix_mult(rotate_y(sprite_rotations[i].yaw),rotate_z(sprite_rotations[i].pitch)),rotate_x(sprite_rotations[i].roll));
@@ -1877,9 +2391,10 @@ sprite_rotation_t get_closest_rotation(matrix_t rotation,int groups)
 			//printf("%.2f\t%.2f %.2f\n\n",candidate_rotation.entries[6],candidate_rotation.entries[7],candidate_rotation.entries[8]);
 			float dist=get_rotation_distance(rotation,candidate_rotation);
 			//printf("Candidate rotation %f %f %f\n",sprite_rotations[i].yaw,sprite_rotations[i].pitch,sprite_rotations[i].roll);
-			//printf("Candidate sprites %d %d %d Dist %f\n\n",sprite_rotations[i].yaw_sprite,sprite_rotations[i].pitch_sprite,sprite_rotations[i].bank_sprite,dist);
 			if(dist<min_dist)
 			{
+			//printf("Updated\n");
+			//printf("Candidate sprites %d %d %d Dist %f\n\n",sprite_rotations[i].yaw_sprite,sprite_rotations[i].pitch_sprite,sprite_rotations[i].bank_sprite,dist);
 				min_dist=dist;
 				min_group=j;
 				min_index=i;
@@ -2036,7 +2551,7 @@ void generate_view_subposition_data(track_section_t* track_section,const char* n
 		//printf("%.2f\t%.2f %.2f\n",r.entries[0],r.entries[1],r.entries[2]);
 		//printf("%.2f\t%.2f %.2f\n",r.entries[3],r.entries[4],r.entries[5]);
 		//printf("%.2f\t%.2f %.2f\n\n",r.entries[6],r.entries[7],r.entries[8]);
-		matrix_t r=track_point_get_rotation(point);
+		//matrix_t r=track_point_get_rotation(point);
 		/*printf("%.2f\t%.2f %.2f\n",r.entries[0],r.entries[1],r.entries[2]);
 		printf("%.2f\t%.2f %.2f\n",r.entries[3],r.entries[4],r.entries[5]);
 		printf("%.2f\t%.2f %.2f\n\n",r.entries[6],r.entries[7],r.entries[8]);*/
@@ -2156,15 +2671,15 @@ int main(int argc,const char** argv)
 	//calc_g_forces(&(track_list_default.zero_g_roll_left));
 
 	/*
-	generate_subposition_data(&(track_list_default.zero_g_roll_left),"LeftZeroGRollUp",SPRITE_GROUP_ZERO_G_ROLLS|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
-	generate_subposition_data(&(track_list_default.zero_g_roll_right),"RightZeroGRollUp",SPRITE_GROUP_ZERO_G_ROLLS|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_BASE,0);
-	generate_subposition_data(&(track_list_default.zero_g_roll_left),"LeftZeroGRollDown",SPRITE_GROUP_ZERO_G_ROLLS|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_BASE,20);
-	generate_subposition_data(&(track_list_default.zero_g_roll_right),"RightZeroGRollDown",SPRITE_GROUP_ZERO_G_ROLLS|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_BASE,20);
+	generate_subposition_data(&(track_list_default.zero_g_roll_left),"LeftZeroGRollUp",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
+	generate_subposition_data(&(track_list_default.zero_g_roll_right),"RightZeroGRollUp",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_BASE,0);
+	generate_subposition_data(&(track_list_default.zero_g_roll_left),"LeftZeroGRollDown",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_BASE,20);
+	generate_subposition_data(&(track_list_default.zero_g_roll_right),"RightZeroGRollDown",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_BASE,20);
 
-	generate_subposition_data(&(track_list_default.large_zero_g_roll_left),"LeftLargeZeroGRollUp",SPRITE_GROUP_ZERO_G_ROLLS|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
-	generate_subposition_data(&(track_list_default.large_zero_g_roll_right),"RightLargeZeroGRollUp",SPRITE_GROUP_ZERO_G_ROLLS|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
-	generate_subposition_data(&(track_list_default.large_zero_g_roll_left),"LeftLargeZeroGRollDown",SPRITE_GROUP_ZERO_G_ROLLS|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,20);
-	generate_subposition_data(&(track_list_default.large_zero_g_roll_right),"RightLargeZeroGRollDown",SPRITE_GROUP_ZERO_G_ROLLS|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,20);
+	generate_subposition_data(&(track_list_default.large_zero_g_roll_left),"LeftLargeZeroGRollUp",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
+	generate_subposition_data(&(track_list_default.large_zero_g_roll_right),"RightLargeZeroGRollUp",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
+	generate_subposition_data(&(track_list_default.large_zero_g_roll_left),"LeftLargeZeroGRollDown",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,20);
+	generate_subposition_data(&(track_list_default.large_zero_g_roll_right),"RightLargeZeroGRollDown",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,20);
 
 
 	generate_subposition_data(&(track_list_default.medium_half_loop_left),"LeftMediumHalfLoopUp",SPRITE_GROUP_BASE,0);
@@ -2235,20 +2750,20 @@ int main(int argc,const char** argv)
 
 
 
-	generate_subposition_data(&(track_list_default.flat_to_steep_up_diag),"DiagFlatToUp60LongBase",SPRITE_GROUP_DIAGONAL,0);
-	generate_subposition_data(&(track_list_default.steep_to_flat_up_diag),"DiagUp60ToFlatLongBase",SPRITE_GROUP_DIAGONAL,0);
-	generate_subposition_data(&(track_list_default.steep_to_flat_up_diag),"DiagFlatToDown60LongBase",SPRITE_GROUP_DIAGONAL,9);
-	generate_subposition_data(&(track_list_default.flat_to_steep_up_diag),"DiagDown60ToFlatLongBase",SPRITE_GROUP_DIAGONAL,57);
+	//generate_subposition_data(&(track_list_default.flat_to_steep_up_diag),"DiagFlatToUp60LongBase",SPRITE_GROUP_DIAGONAL,0);
+	//generate_subposition_data(&(track_list_default.steep_to_flat_up_diag),"DiagUp60ToFlatLongBase",SPRITE_GROUP_DIAGONAL,0);
+	//generate_subposition_data(&(track_list_default.steep_to_flat_up_diag),"DiagFlatToDown60LongBase",SPRITE_GROUP_DIAGONAL,9);
+	//generate_subposition_data(&(track_list_default.flat_to_steep_up_diag),"DiagDown60ToFlatLongBase",SPRITE_GROUP_DIAGONAL,49);
 	
-	generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
-	generate_subposition_data(&(track_list_default.dive_loop_45_right),"RightEighthDiveLoopUpToOrthogonal",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
-	generate_subposition_data(&(track_list_default.dive_loop_45_right),"LeftEighthDiveLoopDownToOrthogonal",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,28);
-	generate_subposition_data(&(track_list_default.dive_loop_45_left),"RightEighthDiveLoopDownToOrthogonal",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,28);
+	generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",  SPRITE_GROUP_DIAGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_ZERO_G_ROLLS_DIAGONAL|SPRITE_GROUP_ZERO_G_ROLLS_OTHER,0);
+	generate_subposition_data(&(track_list_default.dive_loop_45_right),"RightEighthDiveLoopUpToOrthogonal",SPRITE_GROUP_DIAGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_ZERO_G_ROLLS_DIAGONAL|SPRITE_GROUP_ZERO_G_ROLLS_OTHER,0);
+	generate_subposition_data(&(track_list_default.dive_loop_45_right),"LeftEighthDiveLoopDownToOrthogonal",SPRITE_GROUP_DIAGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_ZERO_G_ROLLS_DIAGONAL|SPRITE_GROUP_ZERO_G_ROLLS_OTHER,28);
+	generate_subposition_data(&(track_list_default.dive_loop_45_left),"RightEighthDiveLoopDownToOrthogonal",SPRITE_GROUP_DIAGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_ZERO_G_ROLLS_DIAGONAL|SPRITE_GROUP_ZERO_G_ROLLS_OTHER,28);
 
-	//generate_subposition_data(&(),"LeftDiveLoopUp",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
-	//generate_subposition_data(&(),"RightDiveLoopUp",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
-	//generate_subposition_data(&(),"LeftDiveLoopDown",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
-	//generate_subposition_data(&(),"RightDiveLoopDown", SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS,0);
+	//generate_subposition_data(&(),"LeftDiveLoopUp",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL,0);
+	//generate_subposition_data(&(),"RightDiveLoopUp",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL,0);
+	//generate_subposition_data(&(),"LeftDiveLoopDown",SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL,0);
+	//generate_subposition_data(&(),"RightDiveLoopDown", SPRITE_GROUP_BASE|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL,0);
 
 	return 0;
 }

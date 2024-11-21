@@ -927,6 +927,15 @@ uint64_t groups=0;
 	write_track_section(context,&(track_list.large_turn_right_to_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}
 
+
+	//very_small_Turns
+	if (groups & TRACK_GROUP_VERY_SMALL_TURNS)
+	{
+		sprintf(output_path, "%.255svery_small_turn_left%s", output_dir, suffix);
+		write_track_section(context, &(track_list.very_small_turn_left), track_type, base_dir, output_path, sprites, subtype, NULL);
+	}
+
+
 	//Diagonals
 	if(groups&TRACK_GROUP_DIAGONALS)
 	{

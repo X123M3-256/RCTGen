@@ -335,6 +335,8 @@ typedef struct
 	track_section_t large_zero_g_roll_right;
 	track_section_t dive_loop_45_left;
 	track_section_t dive_loop_45_right;
+	track_section_t dive_loop_90_left;
+	track_section_t dive_loop_90_right;
 	track_section_t small_turn_left_bank_to_gentle_up;
 	track_section_t small_turn_right_bank_to_gentle_up;
 	track_section_t launched_lift;

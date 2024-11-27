@@ -992,13 +992,12 @@ track_point_t large_zero_g_roll_right_curve(float distance)
 }
 
 
-#define DIVE_LOOP_LENGTH 5.335896*TILE_SIZE
+#define DIVE_LOOP_45_LENGTH 5.335896*TILE_SIZE
 
 track_point_t dive_loop_45_left_curve(float distance)
 {
 return bezier3d(-3.30000000e+00,9.90000000e+00,-9.90000000e+00,0.00000000e+00,-7.18516991e+00,2.69443872e+00,1.61666323e+01,0.00000000e+00,1.65000000e+00,0.00000000e+00,9.90000000e+00,0.00000000e+00,-2.29510887e+00,3.70037965e+00,-6.23809670e-01,-7.81461115e-01,-1.45512874e-09,6.16508770e-08,-1.00546234e-06,9.05852906e-06,-3.03257464e-05,3.23153975e-04,4.67191926e-02,distance);
 }
-
 
 track_point_t dive_loop_45_right_curve(float distance)
 {
@@ -1020,6 +1019,40 @@ track_point_t dive_loop_45_right_curve(float distance)
 
 	return point;
 }
+
+
+#define DIVE_LOOP_90_LENGTH_1 2.750480*TILE_SIZE
+#define DIVE_LOOP_90_LENGTH_2 2.807694*TILE_SIZE
+#define DIVE_LOOP_90_LENGTH (DIVE_LOOP_90_LENGTH_1+DIVE_LOOP_90_LENGTH_2)
+
+
+
+
+track_point_t dive_loop_90_left_curve(float distance)
+{
+	if(distance<DIVE_LOOP_90_LENGTH_1)
+	{
+	return bezier3d(-3.91450098e-01,1.87645010e+00,0.00000000e+00,0.00000000e+00,-9.46309551e-01,2.72699871e-01,8.08331615e+00,0.00000000e+00,-1.08217515e+00,1.08217515e+00,4.95000000e+00,0.00000000e+00,-1.65025882e+00,2.82179838e+00,3.62411285e-01,-1.96495837e+00,1.42815860e-08,-3.21294537e-07,3.52440906e-06,-1.89558976e-05,1.89930228e-04,-9.84287017e-04,1.05521597e-01,distance);
+	}
+	else
+	{
+	return bezier3d(9.28549902e-01,3.25790020e+00,2.57854990e+00,1.48500000e+00,-2.74260203e+00,1.21900942e+00,5.78978724e+00,7.40970647e+00,-2.73217515e+00,2.16435029e+00,3.86782485e+00,4.95000000e+00,4.17501528e-01,-1.04488076e+00,2.42867153e+00,-1.09064332e+00,2.95651968e-08,-8.80696817e-07,1.32599214e-05,-1.61724858e-04,1.32924137e-03,-7.37584669e-03,1.34503671e-01,distance-DIVE_LOOP_90_LENGTH_1);
+	}
+
+}
+
+
+track_point_t dive_loop_90_right_curve(float distance)
+{
+	track_point_t point=dive_loop_90_left_curve(distance);
+	point.position.x*=-1;
+	point.normal.x*=-1;
+	point.tangent.x*=-1;
+	point.binormal.y*=-1;
+	point.binormal.z*=-1;
+	return point;
+}
+
 
 
 
@@ -9325,10 +9358,36 @@ mask_t dive_loop_45_right_masks[]={
 {0,1,0,0,dive_loop_45_right_rects+104},{TRACK_MASK_TRANSFER_NEXT,1,0,64,dive_loop_45_right_rects+105},{TRACK_MASK_DIFFERENCE,34,-32,128,dive_loop_45_right_rects+106},{0,33,-64,176,dive_loop_45_right_rects+140},
 };
 
-const track_section_t dive_loop_45_left={TRACK_DIAGONAL|TRACK_NO_SUPPORTS|TRACK_OFFSET_SPRITE_MASK|TRACK_EXIT_45_DEG_LEFT|TRACK_EXTRUDE_BEHIND,dive_loop_45_left_curve,DIVE_LOOP_LENGTH,{{VIEW_NEEDS_TRACK_MASK,4,dive_loop_45_left_masks+0},{0,3,dive_loop_45_left_masks+4},{VIEW_NEEDS_TRACK_MASK,3,dive_loop_45_left_masks+7},{VIEW_NEEDS_TRACK_MASK,4,dive_loop_45_left_masks+10}}};
 
-const track_section_t dive_loop_45_right={TRACK_DIAGONAL|TRACK_NO_SUPPORTS|TRACK_OFFSET_SPRITE_MASK|TRACK_EXIT_45_DEG_RIGHT|TRACK_EXTRUDE_BEHIND,dive_loop_45_right_curve,DIVE_LOOP_LENGTH,{{VIEW_NEEDS_TRACK_MASK,3,dive_loop_45_right_masks+0},{0,3,dive_loop_45_right_masks+3},{VIEW_NEEDS_TRACK_MASK,4,dive_loop_45_right_masks+6},{VIEW_NEEDS_TRACK_MASK,4,dive_loop_45_right_masks+10}}};
 
+const track_section_t dive_loop_45_left={TRACK_DIAGONAL|TRACK_NO_SUPPORTS|TRACK_OFFSET_SPRITE_MASK|TRACK_EXIT_45_DEG_LEFT|TRACK_EXTRUDE_BEHIND,dive_loop_45_left_curve,DIVE_LOOP_45_LENGTH,{{VIEW_NEEDS_TRACK_MASK,4,dive_loop_45_left_masks+0},{0,3,dive_loop_45_left_masks+4},{VIEW_NEEDS_TRACK_MASK,3,dive_loop_45_left_masks+7},{VIEW_NEEDS_TRACK_MASK,4,dive_loop_45_left_masks+10}}};
+
+
+
+const track_section_t dive_loop_45_right={TRACK_DIAGONAL|TRACK_NO_SUPPORTS|TRACK_OFFSET_SPRITE_MASK|TRACK_EXIT_45_DEG_RIGHT|TRACK_EXTRUDE_BEHIND,dive_loop_45_right_curve,DIVE_LOOP_45_LENGTH,{{VIEW_NEEDS_TRACK_MASK,3,dive_loop_45_right_masks+0},{0,3,dive_loop_45_right_masks+3},{VIEW_NEEDS_TRACK_MASK,4,dive_loop_45_right_masks+6},{VIEW_NEEDS_TRACK_MASK,4,dive_loop_45_right_masks+10}}};
+
+
+
+rect_t dive_loop_rect={INT32_MIN,INT32_MIN,INT32_MAX,INT32_MAX};
+
+mask_t dive_loop_90_left_masks[]={
+{0,1,0,0,&dive_loop_rect},{0,1,0,32,&dive_loop_rect},{0,1,32,48,&dive_loop_rect},
+{0,1,0,0,&dive_loop_rect},{0,1,-64,0,&dive_loop_rect},{0,1,-96,16,&dive_loop_rect},
+{0,1,0,0,&dive_loop_rect},{0,1,0,-32,&dive_loop_rect},{0,1,-32,-48,&dive_loop_rect},
+{0,1,0,0,&dive_loop_rect},{0,1,64,0,&dive_loop_rect},{0,1,96,-16,&dive_loop_rect},
+};
+
+
+const track_section_t dive_loop_90_left={TRACK_NO_SUPPORTS|TRACK_OFFSET_SPRITE_MASK|TRACK_EXIT_90_DEG_LEFT,dive_loop_90_left_curve,DIVE_LOOP_90_LENGTH,{{0,3,dive_loop_90_left_masks+0},{0,3,dive_loop_90_left_masks+3},{0,3,dive_loop_90_left_masks+6},{0,3,dive_loop_90_left_masks+9}}};
+
+mask_t dive_loop_90_right_masks[]={
+{0,1,0,0,&dive_loop_rect},{0,1,-64,0,&dive_loop_rect},{0,1,-96,-16,&dive_loop_rect},
+{0,1,0,0,&dive_loop_rect},{0,1,0,-32,&dive_loop_rect},{0,1,32,-48,&dive_loop_rect},
+{0,1,0,0,&dive_loop_rect},{0,1,64,0,&dive_loop_rect},{0,1,96,16,&dive_loop_rect},
+{0,1,0,0,&dive_loop_rect},{0,1,0,32,&dive_loop_rect},{0,1,-32,48,&dive_loop_rect},
+};
+
+const track_section_t dive_loop_90_right={TRACK_NO_SUPPORTS|TRACK_OFFSET_SPRITE_MASK|TRACK_EXIT_90_DEG_RIGHT,dive_loop_90_right_curve,DIVE_LOOP_90_LENGTH,{{0,3,dive_loop_90_right_masks+0},{0,3,dive_loop_90_right_masks+3},{0,3,dive_loop_90_right_masks+6},{0,3,dive_loop_90_right_masks+9}}};
 
 
 
@@ -18284,6 +18343,8 @@ track_list_t track_list_default={
 	large_zero_g_roll_right,
 	dive_loop_45_left,
 	dive_loop_45_right,
+	dive_loop_90_left,
+	dive_loop_90_right,
 	small_turn_left_bank_to_gentle_up,
 	small_turn_right_bank_to_gentle_up,
 	launched_lift,
@@ -18435,6 +18496,8 @@ track_list_t track_list_semi_split={
 	semi_split_large_zero_g_roll_right,
 	dive_loop_45_left,
 	dive_loop_45_right,
+	dive_loop_90_left,
+	dive_loop_90_right,
 	small_turn_left_bank_to_gentle_up,
 	small_turn_right_bank_to_gentle_up,
 	launched_lift,
@@ -18586,6 +18649,8 @@ track_list_t track_list_split={
 	large_zero_g_roll_right,//TODO
 	dive_loop_45_left,
 	dive_loop_45_right,
+	dive_loop_90_left,
+	dive_loop_90_right,
 	split_small_turn_left_bank_to_gentle_up,
 	split_small_turn_right_bank_to_gentle_up,
 	launched_lift,//TODO

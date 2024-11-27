@@ -1254,6 +1254,10 @@ uint64_t groups=0;
 		write_track_section(context,&(track_list.dive_loop_45_left),track_type,base_dir,output_path,sprites,subtype,NULL);
 		sprintf(output_path,"%.255sdive_loop_45_right%s",output_dir,suffix);
 		write_track_section(context,&(track_list.dive_loop_45_right),track_type,base_dir,output_path,sprites,subtype,NULL);
+		sprintf(output_path,"%.255sdive_loop_90_left%s",output_dir,suffix);
+		write_track_section(context,&(track_list.dive_loop_90_left),track_type,base_dir,output_path,sprites,subtype,NULL);
+		sprintf(output_path,"%.255sdive_loop_90_right%s",output_dir,suffix);
+		write_track_section(context,&(track_list.dive_loop_90_right),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}
 
 	if(groups&TRACK_GROUP_SMALL_SLOPE_TRANSITIONS)

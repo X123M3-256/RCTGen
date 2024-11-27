@@ -120,6 +120,7 @@ material_t material_color(vector3_t color, vector3_t specular_color, float specu
     material.color = color;
     material.specular_color = specular_color;
     material.specular_exponent = specular_exponent;
+    material.ambient_color = vector3(0.0, 0.0, 0.0);
     return material;
 }
 
@@ -135,6 +136,7 @@ material_t material_texture(const char* filename, vector3_t specular_color, floa
     else material.flags = flags | MATERIAL_HAS_TEXTURE;
     material.specular_color = specular_color;
     material.specular_exponent = specular_exponent;
+    material.ambient_color = vector3(0.0, 0.0, 0.0);
     return material;
 }
 
@@ -165,6 +167,7 @@ int mesh_load_transform(mesh_t* output, const char* filename, matrix_t matrix)
         output->materials[i].color = vector3(0.5, 0.5, 0.5);
         output->materials[i].specular_color = vector3(0.5, 0.5, 0.5);
         output->materials[i].specular_exponent = 50;
+        output->materials[i].ambient_color = vector3(0.0, 0.0, 0.0);
 
         const struct aiMaterial* mat = scene->mMaterials[i];
 
@@ -198,6 +201,7 @@ int mesh_load_transform(mesh_t* output, const char* filename, matrix_t matrix)
             if (strstr(name.data, "Edge") != NULL)output->materials[i].flags |= MATERIAL_BACKGROUND_AA;
             if (strstr(name.data, "DarkEdge") != NULL)output->materials[i].flags |= MATERIAL_BACKGROUND_AA_DARK;
             if (strstr(name.data, "NoBleed") != NULL)output->materials[i].flags |= MATERIAL_NO_BLEED;
+            if (strstr(name.data, "FlatShaded") != NULL)output->materials[i].flags |= MATERIAL_IS_FLAT_SHADED;
         }
 
         aiColor4D diffuse;
@@ -241,6 +245,12 @@ int mesh_load_transform(mesh_t* output, const char* filename, matrix_t matrix)
         {
             output->materials[i].specular_exponent = specular_exponent;
             //printf("%d\n",output->materials[i].specular_hardness);
+        }
+
+        aiColor4D ambient_color;
+        if (aiGetMaterialColor(mat, AI_MATKEY_COLOR_AMBIENT, &ambient_color) == AI_SUCCESS)
+        {
+            output->materials[i].ambient_color = vector3(ambient_color.r, ambient_color.g, ambient_color.b);
         }
     }
     //Count vertices and faces in scene

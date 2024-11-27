@@ -125,7 +125,7 @@ void occlusionFilter(const struct RTCFilterFunctionNArguments* args)
 
 }
 
-void scene_add_model(scene_t* scene, mesh_t* mesh, vertex_t(*transform)(vector3_t, vector3_t, void*), void* data, int flags)
+void scene_add_model(scene_t* scene, mesh_t* mesh, vertex_t(*transform)(vector3_t, vector3_t, bool, void*), void* data, int flags)
 {
     //Add mesh to list of meshes
     assert(scene->num_meshes < MAX_MESHES);
@@ -155,7 +155,16 @@ void scene_add_model(scene_t* scene, mesh_t* mesh, vertex_t(*transform)(vector3_
 
     for (uint32_t i = 0; i < mesh->num_vertices; i++)
     {
-        vertex_t transformed_vertex = transform(mesh->vertices[i], mesh->normals[i], data);
+        bool flat_shaded = false;
+        for (uint32_t face_index = 0; face_index < mesh->num_faces; face_index++)
+        {
+            if (mesh->materials[mesh->faces[face_index].material].flags & MATERIAL_IS_FLAT_SHADED) {
+                flat_shaded = true;
+                break;
+            }
+        }
+
+        vertex_t transformed_vertex = transform(mesh->vertices[i], mesh->normals[i], flat_shaded, data);
         vertices[3 * i + 0] = transformed_vertex.vertex.x;
         vertices[3 * i + 1] = transformed_vertex.vertex.y;
         vertices[3 * i + 2] = transformed_vertex.vertex.z;

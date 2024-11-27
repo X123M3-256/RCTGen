@@ -71,7 +71,7 @@ void context_init(context_t* context, light_t* lights, uint32_t num_lights, pale
 void context_destroy(context_t* context);
 void context_begin_render(context_t* context);
 void context_add_model(context_t* context, mesh_t* mesh, transform_t transform, int mask);
-void context_add_model_transformed(context_t* context, mesh_t* mesh, vertex_t(*transform)(vector3_t, vector3_t, void*), void* data, int mask);
+void context_add_model_transformed(context_t* context, mesh_t* mesh, vertex_t(*transform)(vector3_t, vector3_t, bool, void*), void* data, int mask);
 void context_render_view(context_t* context, matrix_t view_matrix, image_t* image);
 void context_render_silhouette(context_t* context, matrix_t view, image_t* image);
 void context_finalize_render(context_t* context);

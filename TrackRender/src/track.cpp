@@ -26,6 +26,7 @@ typedef struct
 	float z_offset;
 	float length;
 	int flags;
+	float track_length;
 }track_transform_args_t;
 
 track_point_t get_track_point(track_point_t (*curve)(float distance),int flags,float z_offset,float length,float u)
@@ -70,7 +71,7 @@ track_point_t only_yaw(track_point_t input)
 	return output;
 }
 
-vertex_t track_transform(vector3_t vertex,vector3_t normal,void* data)
+vertex_t track_transform(vector3_t vertex,vector3_t normal,const bool flat_shaded,void* data)
 {
 	track_transform_args_t args=*((track_transform_args_t*)data);
 
@@ -80,11 +81,20 @@ vertex_t track_transform(vector3_t vertex,vector3_t normal,void* data)
 
 	vertex_t out;
 	out.vertex=change_coordinates(vector3_add(track_point.position,vector3_add(vector3_mult(track_point.normal,vertex.y),vector3_mult(track_point.binormal,vertex.x))));
-	out.normal=change_coordinates(vector3_add(vector3_mult(track_point.tangent,normal.z),vector3_add(vector3_mult(track_point.normal,normal.y),vector3_mult(track_point.binormal,normal.x))));
+
+	if (flat_shaded)
+	{
+		track_point_t central_track_point = get_track_point(args.track_curve, args.flags, args.z_offset, args.length, args.offset + (args.track_length / 2));
+		out.normal = change_coordinates(vector3_add(vector3_mult(central_track_point.tangent, normal.z), vector3_add(vector3_mult(central_track_point.normal, normal.y), vector3_mult(central_track_point.binormal, normal.x))));
+	}
+	else
+	{
+		out.normal = change_coordinates(vector3_add(vector3_mult(track_point.tangent, normal.z), vector3_add(vector3_mult(track_point.normal, normal.y), vector3_mult(track_point.binormal, normal.x))));
+	}
 	return out;
 }
 
-vertex_t base_transform(vector3_t vertex,vector3_t normal,void* data)
+vertex_t base_transform(vector3_t vertex,vector3_t normal,const bool flat_shaded,void* data)
 {
 	track_transform_args_t args=*((track_transform_args_t*)data);
 
@@ -242,6 +252,7 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 	args.track_curve=track_section->curve;
 	args.flags=track_section->flags;
 	args.length=track_section->length;
+	args.track_length = track_type->length;
 	if(track_mask)context_add_model_transformed(context,&(track_type->mask),track_transform,&args,0);//);
 	else if(!extrude_behind)context_add_model_transformed(context,mesh,track_transform,&args,MESH_GHOST);
 	args.offset=track_section->length;
@@ -294,6 +305,7 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 			args.track_curve=track_section->curve;
 			args.flags=track_section->flags;
 			args.length=track_section->length;
+			args.track_length = track_type->length;
 			if((!(i&1))&&(i !=0||start_tie)&&(i !=2*num_meshes||end_tie))
 			{
 				track_point_t track_point=get_track_point(track_section->curve,track_section->flags,z_offset,args.length,args.offset+track_type->tie_length/2);
@@ -344,6 +356,7 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 			args.track_curve=track_section->curve;
 			args.flags=track_section->flags;
 			args.length=track_section->length;
+			args.track_length = track_type->length;
 
 			int alt_available=track_type->models_loaded&(1<<MODEL_TRACK_ALT);
 			int use_alt=alt_available&&(i&1);
@@ -401,6 +414,7 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 				args.track_curve=track_section->curve;
 				args.flags=track_section->flags;
 				args.length=track_section->length;
+				args.track_length = track_type->length;
 
 				context_add_model_transformed(context,&(track_type->models[index]),track_transform,&args,track_mask);
 				}

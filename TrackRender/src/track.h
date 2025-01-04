@@ -159,6 +159,21 @@ enum models
 	MODEL_SPECIAL_LARGE_ZERO_G_ROLL
 };
 
+enum offsets
+{
+OFFSET_FLAT=0,
+OFFSET_GENTLE=1,
+OFFSET_STEEP=2,
+OFFSET_BANK=3,
+OFFSET_GENTLE_BANK=4,
+OFFSET_INVERTED=5,
+OFFSET_DIAGONAL=6,
+OFFSET_DIAGONAL_BANK=7,
+OFFSET_DIAGONAL_GENTLE=8,
+OFFSET_DIAGONAL_STEEP=9
+};
+
+
 #define NUM_MODELS 23
 #define SUPPORT_SPECIAL_START SUPPORT_SPECIAL_STEEP_TO_VERTICAL
 
@@ -182,6 +197,7 @@ typedef struct
 	float pivot;
 	float z_offset;
 	float support_spacing;
+	float offset_table[88];
 }track_type_t;
 
 typedef struct

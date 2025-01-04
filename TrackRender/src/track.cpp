@@ -493,33 +493,33 @@ int offset_table_index_with_rot(track_point_t track,int rot)
 	if(compare_vec(track.tangent,vector3(0,0,TILE_SIZE),rot))
 	{
 		//Inverted
-		if(track.normal.y<-0.9)return 5;
+		if(track.normal.y<-0.9)return OFFSET_INVERTED;
 		//Banked
-		else if(banked)return right|3;
+		else if(banked)return right|OFFSET_BANK;
 		//Unbanked
-		else return 0;
+		else return OFFSET_FLAT;
 	}
 	//Gentle
 	else if(compare_vec(track.tangent,vector3(0,2*CLEARANCE_HEIGHT,TILE_SIZE),rot))
 	{
-		if(banked)return right|4;
-		else return 1;
+		if(banked)return right|OFFSET_GENTLE_BANK;
+		else return OFFSET_GENTLE;
 	}
 	//Steep
-	else if(compare_vec(track.tangent,vector3(0,8*CLEARANCE_HEIGHT,TILE_SIZE),rot))return 2;
+	else if(compare_vec(track.tangent,vector3(0,8*CLEARANCE_HEIGHT,TILE_SIZE),rot))return OFFSET_STEEP;
 	//Diagonal flat
 	else if(compare_vec(track.tangent,vector3(-TILE_SIZE,0,TILE_SIZE),rot))
 	{
-		if(banked)return right|7;
-		return 6;
+		if(banked)return right|OFFSET_DIAGONAL_BANK;
+		return OFFSET_DIAGONAL;
 	}
 	//Diagonal gentle
 	else if(compare_vec(track.tangent,vector3(-TILE_SIZE,2*CLEARANCE_HEIGHT,TILE_SIZE),rot)&&!banked)
 	{
-	return 8;
+	return OFFSET_DIAGONAL_GENTLE;
 	}
 	//Diagonal steep
-	else if(compare_vec(track.tangent,vector3(-TILE_SIZE,8*CLEARANCE_HEIGHT,TILE_SIZE),rot))return 9;//Banked is true even for unbanked track; TODO fix this
+	else if(compare_vec(track.tangent,vector3(-TILE_SIZE,8*CLEARANCE_HEIGHT,TILE_SIZE),rot))return OFFSET_DIAGONAL_STEEP;//Banked is true even for unbanked track; TODO fix this
 	return 0xFF;
 }
 
@@ -548,44 +548,6 @@ y        z
 |_
 */
 
-/*
-float offset_tables[10][8]={
-    {0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0},//Gentle 1
-    {0,0,0,0,0,0,0,0},//Steep 2
-
-    {1,-1.5,-1,-1.5,1,0,-1,0},//Bank
-    {0,0,0,0,0,0,0,0},//Gentle Bank 4
-
-    {0,0,0,0,0,0,0,0},//Inverted 5
-    {0,0,0,0,0,0,0,0},//Diagonal 6
-
-    {0,0,0,0,0,0,0,0},//Diagonal Bank 7
-
-    {0,0,0,0,0,0,0,0},//Diagonal gentle 8
-    {0,0,0,0,0,0,0,0},//Other
-    };
-*/
-
-//Giga
-
-float offset_tables[11][8]={
-    {0,-1,0,-1.5,0,-1,0,-1.5},
-    {0,-1,0,-2,0,-2,0,-1},            //Gentle
-    {1,-0.5,1,-0.5,0.5,-1,1,-0.5},    //Steep
-    {0,-2,-1,-1.5,1,0,-1,0},          //Bank
-    {0.75,-2,-0.75,-2,1,-0.5,0,-0.5}, //Gentle Bank   -0.5,-1    0.5,0
-    {0,0,0,0,0,0,0,0},                //Inverted
-    {0,-1.25,0,-1.25,0,-1.25,0,-1.25},//Diagonal
-    {0,-1.75,-1,-0.25,0,-0.25,-1,-1.5},//Diagonal Bank
-    {0,-1.5,0,-1.5,0,-1.5,0,-1.5},    //Diagonal gentle
-    {0,-1.5,0,-1.5,0,-1.5,0,-1.5},    //Diagonal steep
-    {0,0,0,0,0,0,0,0},                //Other
-};
-
-
-
-
 //Mini
 /*
 float offset_tables[11][8]={
@@ -603,22 +565,6 @@ float offset_tables[11][8]={
 };
 */
 
-//Twister
-/*
-float offset_tables[11][8]={
-    {0,-1,0,-1.5,0,-1,0,-1.5},
-    {0,-1,0,-2,0,-2,0,-1},            //Gentle TODO
-    {1,-0.5,1,-0.5,0.5,-1,1,-0.5},    //Steep TODO
-    {0,-2,-1,-1.5,1,0,-1,0},          //Bank TODO
-    {0.75,-2,-0.75,-2,1,-0.5,0,-0.5}, //Gentle Bank TODO
-    {-1,0.5, 1,0.5, 1.75,1,0,0},                //Inverted
-    {0,0,-0.5,0,0,0,0.5,0},//Diagonal
-    {0,-1.75,-1,-0.25,0,-0.25,-1,-1.5},//Diagonal Bank TODO
-    {0,-1.5,0,-1.5,0,-1.5,0,-1.5},    //Diagonal gentle TODO
-    {0,-0.5, -0.75,-1.5, 0,-1.5, 0.75,-0.5},    //Diagonal steep
-    {0,0,0,0,0,0,0,0},                //Other
-};
-*/
 //LIM
 /*
 float offset_tables[10][8]={
@@ -635,7 +581,7 @@ float offset_tables[10][8]={
     };
 */
 
-vector3_t get_offset(int table,int view_angle)
+vector3_t get_offset(int table,int view_angle,float* offset_table)
 {
 	int index=table&0xF;
 	int end_angle=table>>5;
@@ -648,8 +594,8 @@ vector3_t get_offset(int table,int view_angle)
 	if(table ==0xFF)return offset;
 
 	offset.x=0;
-	offset.z=offset_tables[index][2*rotated_view_angle]*TILE_SIZE/32.0;
-	offset.y=offset_tables[index][2*rotated_view_angle+1]*CLEARANCE_HEIGHT/8.0;
+	offset.z=offset_table[8*index+2*rotated_view_angle]*TILE_SIZE/32.0;
+	offset.y=offset_table[8*index+2*rotated_view_angle+1]*CLEARANCE_HEIGHT/8.0;
 
 	//Check if right banked
 	if(right)
@@ -671,13 +617,13 @@ vector3_t get_offset(int table,int view_angle)
 	return offset;
 }
 
-void set_offset(int view_angle,track_section_t* track_section)
+void set_offset(int view_angle,track_section_t* track_section,float* offset_table)
 {
 	int start_table=offset_table_index(track_section->curve(0));
 	int end_table=offset_table_index(track_section->curve(track_section->length));
 
-	start_offset=get_offset(start_table,view_angle);
-	end_offset=get_offset(end_table,view_angle);
+	start_offset=get_offset(start_table,view_angle,offset_table);
+	end_offset=get_offset(end_table,view_angle,offset_table);
 }
 
 void render_track_sections(context_t* context,track_section_t* track_section,track_type_t* track_type,int track_mask,int subtype,int views,image_t* sprites)
@@ -688,13 +634,13 @@ int extrude_in_front_odd=(track_section->flags&TRACK_EXIT_45_DEG_LEFT)&&(track_s
 
 	if(track_type->flags&TRACK_SPECIAL_OFFSETS)
 	{
-	set_offset(0,track_section);
+	set_offset(0,track_section,track_type->offset_table);
 		if(views&0x1)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,0x1,sprites,subtype);
-	set_offset(1,track_section);
+	set_offset(1,track_section,track_type->offset_table);
 		if(views&0x2)render_track_section(context,track_section,track_type,0,extrude_in_front_odd,track_mask,0x2,sprites,subtype);
-	set_offset(2,track_section);
+	set_offset(2,track_section,track_type->offset_table);
 		if(views&0x4)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,0x4,sprites,subtype);
-	set_offset(3,track_section);
+	set_offset(3,track_section,track_type->offset_table);
 		if(views&0x8)render_track_section(context,track_section,track_type,0,extrude_in_front_odd,track_mask,0x8,sprites,subtype);
 	return;
 	}

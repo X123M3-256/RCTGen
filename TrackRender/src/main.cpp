@@ -99,6 +99,38 @@ int load_groups(json_t* json,uint64_t* out)
 	return 0;
 }
 
+int load_offsets(json_t* json,float* offsets)
+{
+const char* row_names[10]={"flat","gentle","steep","flat_banked","gentle_banked","inverted","diagonal","diagonal_banked","diagonal_gentle","diagonal_steep"};
+
+//Zero offset array
+memset(offsets,0,88*sizeof(float));
+
+//Load offsets
+	for(int i=0;i<10;i++)
+	{
+	json_t* row=json_object_get(json,row_names[i]);
+		if(row == NULL)continue;
+
+		if(!json_is_array(row) || json_array_size(row) != 8)
+		{
+		printf("Property \"%s\" is not an array of length 8\n",row_names[i]);
+		return 1;
+		}
+		for(int j=0;j<8;j++)
+		{
+		json_t* value=json_array_get(row,j);
+			if(!json_is_number(value))
+			{
+			printf("Array \"%s\" contains non numeric value\n",row_names[i]);
+			return 1;
+			}
+		offsets[8*i+j]=json_real_value(value);
+		}
+	}
+return 0;
+}
+
 int load_track_type(track_type_t* track_type,json_t* json)
 {
 	//Load track flags
@@ -241,6 +273,18 @@ int load_track_type(track_type_t* track_type,json_t* json)
 		}
 	}
 	else track_type->pivot=0;
+
+	//Load offset table
+	if(track_type->flags & TRACK_SPECIAL_OFFSETS)
+	{
+	json_t* offsets=json_object_get(json,"offsets");
+		if(offsets ==NULL || !json_is_object(offsets))
+		{
+		printf("Error: Property \"offsets\" not found or is not an object\n");
+		return 1;
+		}
+		if(load_offsets(offsets,track_type->offset_table))return 1;
+	}
 
 	//Load models
 	json_t* models=json_object_get(json,"models");

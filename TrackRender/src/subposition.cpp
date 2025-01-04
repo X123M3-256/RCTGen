@@ -3075,7 +3075,7 @@ void calc_g_forces(track_section_t* track_section)
 
 		total_lat+=lateral_factor;
 		total_vert+=vertical_factor;
-		printf("%d:\t%d %d\n",i,fabs(vertical_factor)<0.0001 ? 0 : (int)round(98.0*reference/vertical_factor),fabs(lateral_factor)<0.0001 ? 0 : (int)round(98.0*reference/lateral_factor));
+		printf("%d:\t%d %d %f\n",i,fabs(vertical_factor)<0.0001 ? 0 : (int)round(98.0*reference/vertical_factor),fabs(lateral_factor)<0.0001 ? 0 : (int)round(98.0*reference/lateral_factor),vertical_factor+0.0001*(318-i)-0.273);
 
 		int t=70;
 		int c=67+2*(152);
@@ -3090,7 +3090,8 @@ void calc_g_forces(track_section_t* track_section)
 int main(int argc,const char** argv)
 {
 	//get_angle();
-	//calc_g_forces(&(track_list_default.zero_g_roll_left));
+	calc_g_forces(&(track_list_default.zero_g_roll_left));
+	calc_g_forces(&(track_list_default.large_half_loop_left));
 
 	/*
 	generate_subposition_data(&(track_list_default.zero_g_roll_left),"LeftZeroGRollUp",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
@@ -3185,12 +3186,12 @@ int main(int argc,const char** argv)
 	//generate_subposition_data(&(track_list_default.dive_loop_90_left),"LeftDiveLoop90Up",  SPRITE_GROUP_CORKSCREW,0);
 
 	int sprites=SPRITE_GROUP_ORTHOGONAL|SPRITE_GROUP_DIAGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_DIVE_LOOP;//|SPRITE_GROUP_ZERO_G_ROLLS_DIAGONAL|SPRITE_GROUP_ZERO_G_ROLLS_OTHER;//;//|SPRITE_GROUP_CORKSCREW;//
-	generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",sprites,0);
+	//generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",sprites,0);
 	//generate_subposition_data(&(track_list_default.dive_loop_45_right),"RightEighthDiveLoopUpToOrthogonal",sprites,0);
 	//generate_subposition_data(&(track_list_default.dive_loop_45_right),"LeftEighthDiveLoopDownToOrthogonal",sprites,28);
 	//generate_subposition_data(&(track_list_default.dive_loop_45_left),"RightEighthDiveLoopDownToOrthogonal",sprites,28);
 
-	generate_subposition_data(&(track_list_default.dive_loop_90_left),"LeftDiveLoopUp",sprites,0);
+	//generate_subposition_data(&(track_list_default.dive_loop_90_left),"LeftDiveLoopUp",sprites,0);
 	//generate_subposition_data(&(track_list_default.dive_loop_90_right),"RightDiveLoopUp",sprites,0);
 	//generate_subposition_data(&(track_list_default.dive_loop_90_right),"LeftDiveLoopDown",sprites,28);
 	//generate_subposition_data(&(track_list_default.dive_loop_90_left),"RightDiveLoopDown", sprites,28);

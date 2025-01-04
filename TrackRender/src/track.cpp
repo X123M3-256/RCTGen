@@ -516,7 +516,6 @@ int offset_table_index_with_rot(track_point_t track,int rot)
 	//Diagonal gentle
 	else if(compare_vec(track.tangent,vector3(-TILE_SIZE,2*CLEARANCE_HEIGHT,TILE_SIZE),rot)&&!banked)
 	{
-	printf("Not\n");
 	return 8;
 	}
 	//Diagonal steep
@@ -529,7 +528,7 @@ int offset_table_index(track_point_t track)
 	//Check straight
 	int index=offset_table_index_with_rot(track,0);
 	if(index !=0xFF)return index;
-/*
+
 	//Check left
 	index=offset_table_index_with_rot(track,1);
 	if(index !=0xFF)return 0x60|index;
@@ -538,7 +537,7 @@ int offset_table_index(track_point_t track)
 	index=offset_table_index_with_rot(track,3);
 	if(index !=0xFF)return 0x20|index;
 	return 0xFF;
-*/
+
 return 0xFF;
 }
 
@@ -585,6 +584,8 @@ float offset_tables[11][8]={
 };
 
 
+
+
 //Mini
 /*
 float offset_tables[11][8]={
@@ -602,8 +603,22 @@ float offset_tables[11][8]={
 };
 */
 
-
-
+//Twister
+/*
+float offset_tables[11][8]={
+    {0,-1,0,-1.5,0,-1,0,-1.5},
+    {0,-1,0,-2,0,-2,0,-1},            //Gentle TODO
+    {1,-0.5,1,-0.5,0.5,-1,1,-0.5},    //Steep TODO
+    {0,-2,-1,-1.5,1,0,-1,0},          //Bank TODO
+    {0.75,-2,-0.75,-2,1,-0.5,0,-0.5}, //Gentle Bank TODO
+    {-1,0.5, 1,0.5, 1.75,1,0,0},                //Inverted
+    {0,0,-0.5,0,0,0,0.5,0},//Diagonal
+    {0,-1.75,-1,-0.25,0,-0.25,-1,-1.5},//Diagonal Bank TODO
+    {0,-1.5,0,-1.5,0,-1.5,0,-1.5},    //Diagonal gentle TODO
+    {0,-0.5, -0.75,-1.5, 0,-1.5, 0.75,-0.5},    //Diagonal steep
+    {0,0,0,0,0,0,0,0},                //Other
+};
+*/
 //LIM
 /*
 float offset_tables[10][8]={
@@ -1008,7 +1023,7 @@ uint64_t groups=0;
 	}
 
 
-
+/*
 	if((groups&TRACK_GROUP_DIAGONALS)&&(groups&TRACK_GROUP_VERTICAL_SLOPES))
 	{
 	sprintf(output_path,"%.255ssteep_to_vertical_up_diag%s",output_dir,suffix);
@@ -1026,7 +1041,7 @@ uint64_t groups=0;
 	sprintf(output_path,"%.255svertical_twist_right_to_orthogonal_up%s",output_dir,suffix);
 	write_track_section(context,&(track_list.vertical_twist_right_to_orthogonal_up),track_type,base_dir,output_path,sprites,subtype,NULL);
 	}
-
+*/
 	//Banked turns
 	if(groups&TRACK_GROUP_BANKED_TURNS)
 	{
@@ -1201,10 +1216,11 @@ uint64_t groups=0;
 	}
 	if(groups&TRACK_GROUP_LARGE_SLOPE_TRANSITIONS)
 	{
-		//sprintf(output_path,"%.255sflat_to_steep_up%s",output_dir,suffix);
-		//write_track_section(context,&(track_list.flat_to_steep_up),track_type,base_dir,output_path,sprites,subtype,NULL);
-		//sprintf(output_path,"%.255ssteep_to_flat_up%s",output_dir,suffix);
-		//write_track_section(context,&(track_list.steep_to_flat_up),track_type,base_dir,output_path,sprites,subtype,NULL);
+/*
+		sprintf(output_path,"%.255sflat_to_steep_up%s",output_dir,suffix);
+		write_track_section(context,&(track_list.flat_to_steep_up),track_type,base_dir,output_path,sprites,subtype,NULL);
+		sprintf(output_path,"%.255ssteep_to_flat_up%s",output_dir,suffix);
+		write_track_section(context,&(track_list.steep_to_flat_up),track_type,base_dir,output_path,sprites,subtype,NULL);*/
 		sprintf(output_path,"%.255sflat_to_steep_up_diag%s",output_dir,suffix);
 		write_track_section(context,&(track_list.flat_to_steep_up_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
 		sprintf(output_path,"%.255ssteep_to_flat_up_diag%s",output_dir,suffix);

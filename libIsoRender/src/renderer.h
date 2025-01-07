@@ -58,6 +58,7 @@ typedef struct
 typedef struct
 {
     uint32_t num_lights;
+    uint32_t dither;
     light_t* lights;
     matrix_t projection;
     device_t rt_device;
@@ -67,7 +68,7 @@ typedef struct
 
 extern matrix_t views[4];
 
-void context_init(context_t* context, light_t* lights, uint32_t num_lights, palette_t palette, float upt);
+void context_init(context_t* context, light_t* lights, uint32_t num_lights, uint32_t dither, palette_t palette, float upt);
 void context_destroy(context_t* context);
 void context_begin_render(context_t* context);
 void context_add_model(context_t* context, mesh_t* mesh, transform_t transform, int mask);

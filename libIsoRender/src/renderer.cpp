@@ -30,11 +30,12 @@ matrix_t views[4] = { {1,0,0,0,1,0,0,0,1},{0,0,1,0,1,0,-1,0,0},{-1,0,0,0,1,0,0,0
 #define AA_NUM_SAMPLES_V 4
 #define AA_SAMPLE_WEIGHT (1.0/(AA_NUM_SAMPLES_U*AA_NUM_SAMPLES_V))
 
-void context_init(context_t* context, light_t* lights, uint32_t num_lights, palette_t palette, float upt)
+void context_init(context_t* context, light_t* lights, uint32_t num_lights, uint32_t dither, palette_t palette, float upt)
 {
     context->rt_device = device_init();
     context->lights = lights;
     context->num_lights = num_lights;
+    context->dither = dither;
     //Dimetric projection
     const matrix_t projection = {
         32.0f / upt ,0.0f ,-32.0f / upt,
@@ -334,42 +335,44 @@ rect_t framebuffer_get_bounds(framebuffer_t* framebuffer)
         return bounds;
 }
 
-void image_from_framebuffer(image_t* image, framebuffer_t* framebuffer, palette_t* palette)
+void image_from_framebuffer(image_t* image, framebuffer_t* framebuffer, palette_t* palette,uint32_t dither)
 {
-    rect_t bounding_box = framebuffer_get_bounds(framebuffer);
-    image->width = 1 + bounding_box.x_upper - bounding_box.x_lower;
-    image->height = 1 + bounding_box.y_upper - bounding_box.y_lower;
-    image->x_offset = bounding_box.x_lower + floor(framebuffer->offset.x);
-    image->y_offset = bounding_box.y_lower + floor(framebuffer->offset.y) - 1;//1 compensates for error not sure why it's needed TODO work out why it's needed
-    image->pixels = (uint8_t*)calloc(image->width * image->height, sizeof(uint8_t));
+rect_t bounding_box = framebuffer_get_bounds(framebuffer);
+image->width = 1 + bounding_box.x_upper - bounding_box.x_lower;
+image->height = 1 + bounding_box.y_upper - bounding_box.y_lower;
+image->x_offset = bounding_box.x_lower + floor(framebuffer->offset.x);
+image->y_offset = bounding_box.y_lower + floor(framebuffer->offset.y) - 1;//1 compensates for error not sure why it's needed TODO work out why it's needed
+image->pixels = (uint8_t*)calloc(image->width * image->height, sizeof(uint8_t));
 
-    for (int y = bounding_box.y_lower; y <= bounding_box.y_upper; y++)
-    {
-        int start = (1 & 1) ? (bounding_box.x_upper) : bounding_box.x_lower;
-        int stop = (1 & 1) ? (bounding_box.x_lower - 1) : bounding_box.x_upper + 1;
-        int step = (1 & 1) ? -1 : 1;
-
-        for (int x = start; x != stop; x += step)
-        {
-            fragment_t fragment = FRAMEBUFFER_INDEX(framebuffer, x, y);
-            fragment.color = vector_from_color(color_from_vector(fragment.color));
-            if (fragment.region != FRAGMENT_UNUSED)
-            {
-                vector3_t error;
-                image->pixels[(x - bounding_box.x_lower) + (y - bounding_box.y_lower) * image->width] = palette_get_nearest(palette, fragment.region & REGION_MASK, fragment.color, &error);
-
-                //Distribute error onto neighbouring points
-                int points[4][2] = { {x + step,y},{x - step,y + 1},{x,y + 1},{x + step,y + 1} };
-                float weights[4] = { 7.0 / 16.0,3.0 / 16.0,5.0 / 16.0,1.0 / 16.0 };
-                for (int i = 0; i < 4; i++)
-                    if (points[i][0] >= 0 && points[i][0] < framebuffer->width - 1 && points[i][1] >= 0 && points[i][1] < framebuffer->height - 1 && (!(fragment.flags & MATERIAL_NO_BLEED) || (FRAMEBUFFER_INDEX(framebuffer, points[i][0], points[i][1]).flags & MATERIAL_NO_BLEED)))
-                    {
-                        FRAMEBUFFER_INDEX(framebuffer, points[i][0], points[i][1]).color = vector3_add(vector3_mult(error, 0.3 * weights[i]), FRAMEBUFFER_INDEX(framebuffer, points[i][0], points[i][1]).color);
-                    }
-            }
-        }
-    }
-    free(framebuffer->fragments);
+	for (int y = bounding_box.y_lower; y <= bounding_box.y_upper; y++)
+	{
+	int start = (1 & 1) ? (bounding_box.x_upper) : bounding_box.x_lower;
+	int stop = (1 & 1) ? (bounding_box.x_lower - 1) : bounding_box.x_upper + 1;
+	int step = (1 & 1) ? -1 : 1;
+	
+		for (int x = start; x != stop; x += step)
+		{
+		fragment_t fragment = FRAMEBUFFER_INDEX(framebuffer, x, y);
+		fragment.color = vector_from_color(color_from_vector(fragment.color));
+			if (fragment.region != FRAGMENT_UNUSED)
+			{
+			vector3_t error;
+			image->pixels[(x - bounding_box.x_lower) + (y - bounding_box.y_lower) * image->width] = palette_get_nearest(palette, fragment.region & REGION_MASK, fragment.color, &error);
+				if(dither)
+				{
+				//Distribute error onto neighbouring points
+				int points[4][2] = { {x + step,y},{x - step,y + 1},{x,y + 1},{x + step,y + 1} };
+				float weights[4] = { 7.0 / 16.0,3.0 / 16.0,5.0 / 16.0,1.0 / 16.0 };
+					for (int i = 0; i < 4; i++)
+				    	if (points[i][0] >= 0 && points[i][0] < framebuffer->width - 1 && points[i][1] >= 0 && points[i][1] < framebuffer->height - 1 && (!(fragment.flags & MATERIAL_NO_BLEED) || (FRAMEBUFFER_INDEX(framebuffer, points[i][0], points[i][1]).flags & MATERIAL_NO_BLEED)))
+				 	{
+					FRAMEBUFFER_INDEX(framebuffer, points[i][0], points[i][1]).color = vector3_add(vector3_mult(error, 0.3 * weights[i]), FRAMEBUFFER_INDEX(framebuffer, points[i][0], points[i][1]).color);
+				   	}
+				}
+			}
+		}
+	}
+free(framebuffer->fragments);
 }
 
 void context_render_view_internal(context_t* context, matrix_t view, image_t* image, uint32_t silhouette)
@@ -537,7 +540,7 @@ void context_render_view_internal(context_t* context, matrix_t view, image_t* im
         }
 
     //Convert to indexed color
-    image_from_framebuffer(image, &framebuffer, &(context->palette));
+    image_from_framebuffer(image, &framebuffer, &(context->palette),context->dither);
     free(transformed_lights);
 }
 

@@ -9,10 +9,10 @@
 
 #include "track.h"
 
-context_t get_context(light_t* lights,uint32_t num_lights)
+context_t get_context(light_t* lights,uint32_t num_lights,uint32_t dither)
 {
 	context_t context;
-	context_init(&context,lights,num_lights,palette_rct2(),TILE_SIZE);
+	context_init(&context,lights,num_lights,dither,palette_rct2(),TILE_SIZE);
 	//context.palette.colors[0].r=0;
 	//context.palette.colors[0].g=0;
 	//context.palette.colors[0].b=0;
@@ -111,7 +111,6 @@ memset(offsets,0,88*sizeof(float));
 	{
 	json_t* row=json_object_get(json,row_names[i]);
 		if(row == NULL)continue;
-
 		if(!json_is_array(row) || json_array_size(row) != 8)
 		{
 		printf("Property \"%s\" is not an array of length 8\n",row_names[i]);
@@ -125,7 +124,7 @@ memset(offsets,0,88*sizeof(float));
 			printf("Array \"%s\" contains non numeric value\n",row_names[i]);
 			return 1;
 			}
-		offsets[8*i+j]=json_real_value(value);
+		offsets[8*i+j]=json_number_value(value);
 		}
 	}
 return 0;
@@ -551,6 +550,19 @@ int main(int argc,char** argv)
 		if(load_lights(lights,&num_lights,light_array))return 1;
 	}
 
+	int dither=1;
+	json_t* dither_json=json_object_get(track,"dither");
+	if(dither_json !=NULL)
+	{
+		if(!json_is_true(dither_json) && !json_is_false(dither_json))
+		{
+			printf("Error: Property \"dither\" is not a boolean\n");
+			return 1;
+		}
+	dither=json_is_true(dither_json);
+	}
+
+
 	track_type_t track_type;
 	if(load_track_type(&track_type,track))
 	{
@@ -567,7 +579,7 @@ int main(int argc,char** argv)
 		return 1;
 	}
 
-	context_t context=get_context(lights,num_lights);
+	context_t context=get_context(lights,num_lights,dither);
 
 	write_track_type(&context,&track_type,sprites,base_dir,sprite_dir);
 

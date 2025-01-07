@@ -685,7 +685,7 @@ int main(int argc, char** argv)
     if (load_project(&project, project_json))return 1;
 
     context_t context;
-    context_init(&context, lights, num_lights, palette_rct2(), (mode == 2) ? 0.125 * TILE_SIZE : TILE_SIZE);
+    context_init(&context, lights, num_lights, 1, palette_rct2(), (mode == 2) ? 0.125 * TILE_SIZE : TILE_SIZE);
     if (mode == 2)
     {
         if (project_export_test(&project, &context))return 1;

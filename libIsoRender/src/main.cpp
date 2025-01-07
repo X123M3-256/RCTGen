@@ -505,7 +505,7 @@ json_t* light_array=json_object_get(project_json,"lights");
 	}
 
 context_t context;
-context_init(&context,lights,num_lights,palette_rct2(),TILE_SIZE);
+context_init(&context,lights,num_lights,1,palette_rct2(),TILE_SIZE);
 
         if(project_export(&project,&context,sprites,base_dir,sprite_dir))return 1;
 

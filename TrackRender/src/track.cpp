@@ -613,7 +613,7 @@ vector3_t get_offset(int table,int view_angle,float* offset_table)
 	//Correct for end rotation
 	if(end_angle !=0)offset=matrix_vector(rotate_y(-0.5*M_PI*end_angle),offset);
 
-	//printf("Offset %d %d %.2f\n",index,rotated_view_angle,offset_tables[index][2*rotated_view_angle+1]);
+	//printf("Offset %d Rotation %d x %.2f y %.2f\n",index,rotated_view_angle,offset_table[8*index+2*rotated_view_angle],offset_table[8*index+2*rotated_view_angle+1]);
 	return offset;
 }
 
@@ -1162,11 +1162,10 @@ uint64_t groups=0;
 	}
 	if(groups&TRACK_GROUP_LARGE_SLOPE_TRANSITIONS)
 	{
-/*
 		sprintf(output_path,"%.255sflat_to_steep_up%s",output_dir,suffix);
 		write_track_section(context,&(track_list.flat_to_steep_up),track_type,base_dir,output_path,sprites,subtype,NULL);
 		sprintf(output_path,"%.255ssteep_to_flat_up%s",output_dir,suffix);
-		write_track_section(context,&(track_list.steep_to_flat_up),track_type,base_dir,output_path,sprites,subtype,NULL);*/
+		write_track_section(context,&(track_list.steep_to_flat_up),track_type,base_dir,output_path,sprites,subtype,NULL);
 		sprintf(output_path,"%.255sflat_to_steep_up_diag%s",output_dir,suffix);
 		write_track_section(context,&(track_list.flat_to_steep_up_diag),track_type,base_dir,output_path,sprites,subtype,NULL);
 		sprintf(output_path,"%.255ssteep_to_flat_up_diag%s",output_dir,suffix);
@@ -1230,10 +1229,11 @@ uint64_t groups=0;
 		write_track_section(context,&(track_list.dive_loop_45_left),track_type,base_dir,output_path,sprites,subtype,NULL);
 		sprintf(output_path,"%.255sdive_loop_45_right%s",output_dir,suffix);
 		write_track_section(context,&(track_list.dive_loop_45_right),track_type,base_dir,output_path,sprites,subtype,NULL);
+/*
 		sprintf(output_path,"%.255sdive_loop_90_left%s",output_dir,suffix);
 		write_track_section(context,&(track_list.dive_loop_90_left),track_type,base_dir,output_path,sprites,subtype,NULL);
 		sprintf(output_path,"%.255sdive_loop_90_right%s",output_dir,suffix);
-		write_track_section(context,&(track_list.dive_loop_90_right),track_type,base_dir,output_path,sprites,subtype,NULL);
+		write_track_section(context,&(track_list.dive_loop_90_right),track_type,base_dir,output_path,sprites,subtype,NULL);*/
 	}
 
 	if(groups&TRACK_GROUP_SMALL_SLOPE_TRANSITIONS)

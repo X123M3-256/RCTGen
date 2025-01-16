@@ -52,7 +52,7 @@ void print_msg(const char* fmt, ...);
 #define CORKSCREW_LEFT_ROLL(angle) (-CORKSCREW_RIGHT_ROLL((angle)))
 
 
-const char* sprite_group_names[NUM_SPRITE_GROUPS] = { "flat","gentle_slopes","steep_slopes","vertical_slopes","diagonals","banked_turns","inline_twists","slope_bank_transition","diagonal_bank_transition","sloped_bank_transition","banked_sloped_turns","banked_slope_transition","corkscrews","zero_g_rolls","diagonal_sloped_bank_transition" };
+const char* sprite_group_names[NUM_SPRITE_GROUPS] = { "flat","gentle_slopes","steep_slopes","vertical_slopes","diagonals","banked_turns","inline_twists","slope_bank_transition","diagonal_bank_transition","sloped_bank_transition","banked_sloped_turns","banked_slope_transition","corkscrews","zero_g_rolls","diagonal_sloped_bank_transition","dive_loops" };
 const char* flag_names[NUM_FLAGS] = { "no_collision_crashes","rider_controls_speed" };
 const char* vehicle_flag_names[NUM_VEHICLE_FLAGS] = { "secondary_remap","tertiary_remap","riders_scream","restraint_animation" };
 const char* running_sounds[NUM_RUNNING_SOUNDS] = { "wooden_old","wooden","steel","steel_smooth","train","engine" };
@@ -387,25 +387,73 @@ int render_vehicle(context_t* context, project_t* project, int i, image_t* image
         base += 4;
 
         //Gentle-to-steep bank 90
-        render_rotation(context, 4, GS_TRANSITION, M_PI_2, 0, images + base);
-        base += 4;
-        render_rotation(context, 4, GS_TRANSITION, -M_PI_2, 0, images + base);
-        base += 4;
-        render_rotation(context, 4, -GS_TRANSITION, M_PI_2, 0, images + base);
-        base += 4;
-        render_rotation(context, 4, -GS_TRANSITION, -M_PI_2, 0, images + base);
-        base += 4;
+	render_rotation(context, 4, GS_TRANSITION, M_PI_2, 0, images + base);
+	base += 4;
+	render_rotation(context, 4, GS_TRANSITION, -M_PI_2, 0, images + base);
+	base += 4;
+	render_rotation(context, 4, -GS_TRANSITION, M_PI_2, 0, images + base);
+	base += 4;
+	render_rotation(context, 4, -GS_TRANSITION, -M_PI_2, 0, images + base);
+	base += 4;
 
         //Steep bank 22.5
-        render_rotation(context, 4, STEEP, M_PI_8, 0, images + base);
-        base += 4;
-        render_rotation(context, 4, STEEP, -M_PI_8, 0, images + base);
-        base += 4;
-        render_rotation(context, 4, -STEEP, M_PI_8, 0, images + base);
-        base += 4;
-        render_rotation(context, 4, -STEEP, -M_PI_8, 0, images + base);
-        base += 4;
+		if (sprite_flags & SPRITE_DIVE_LOOP)
+		{
+		render_rotation(context, 8, STEEP, M_PI_8, 0, images + base);
+		base += 8;
+		render_rotation(context, 8, STEEP, -M_PI_8, 0, images + base);
+		base += 8;
+		render_rotation(context, 8, -STEEP, M_PI_8, 0, images + base);
+		base += 8;
+		render_rotation(context, 8, -STEEP, -M_PI_8, 0, images + base);
+		base += 8;
+		}
+		else
+		{
+		render_rotation(context, 4, STEEP, M_PI_8, 0, images + base);
+		base += 4;
+		render_rotation(context, 4, STEEP, -M_PI_8, 0, images + base);
+		base += 4;
+		render_rotation(context, 4, -STEEP, M_PI_8, 0, images + base);
+		base += 4;
+		render_rotation(context, 4, -STEEP, -M_PI_8, 0, images + base);
+		base += 4;
+		}
     }
+    if (sprite_flags & SPRITE_DIVE_LOOP)
+    {
+        print_msg("Rendering dive loop sprites");
+        //Steep bank 45
+        render_rotation(context, 8, STEEP_DIAGONAL, M_PI_4, M_PI_8, images + base);
+        base += 8;
+        render_rotation(context, 8, STEEP_DIAGONAL, -M_PI_4, M_PI_8, images + base);
+        base += 8;
+        render_rotation(context, 8, -STEEP_DIAGONAL, M_PI_4, M_PI_8, images + base);
+        base += 8;
+        render_rotation(context, 8, -STEEP_DIAGONAL, -M_PI_4, M_PI_8, images + base);
+        base += 8;
+
+        //Steep bank 67.5
+        render_rotation(context, 8, STEEP_DIAGONAL, 3*M_PI_8, M_PI_8, images + base);
+        base += 8;
+        render_rotation(context, 8, STEEP_DIAGONAL, -3*M_PI_8, M_PI_8, images + base);
+        base += 8;
+        render_rotation(context, 8, -STEEP_DIAGONAL, 3*M_PI_8, M_PI_8, images + base);
+        base += 8;
+        render_rotation(context, 8, -STEEP_DIAGONAL, -3*M_PI_8, M_PI_8, images + base);
+        base += 8;
+
+        //Diagonal steep bank 90
+        render_rotation(context, 8, STEEP_DIAGONAL, M_PI_2, M_PI_8, images + base);
+        base += 8;
+        render_rotation(context, 8, STEEP_DIAGONAL, -M_PI_2, M_PI_8, images + base);
+        base += 8;
+        render_rotation(context, 8, -STEEP_DIAGONAL, M_PI_2, M_PI_8, images + base);
+        base += 8;
+        render_rotation(context, 8, -STEEP_DIAGONAL, -M_PI_2, M_PI_8, images + base);
+        base += 8;
+    }
+
     if (sprite_flags & SPRITE_CORKSCREW)
     {
         print_msg("Rendering corkscrew sprites");
@@ -485,6 +533,7 @@ int count_sprites_from_flags(uint16_t sprites, int flags)
     if (sprites & SPRITE_BANKED_SLOPE_TRANSITION)count += 16;
     if (sprites & SPRITE_CORKSCREW)count += 80;
     if (sprites & SPRITE_ZERO_G_ROLL)count += 160;
+    if (sprites & SPRITE_DIVE_LOOP)count += 112;
     if (flags & VEHICLE_RESTRAINT_ANIMATION)count += 12;
     return count;
 }
@@ -544,178 +593,191 @@ void project_clean_working_dir(project_t* project)
 
 json_t* project_generate_json(project_t* project)
 {
-    //Create JSON file
-    json_t* json = json_object();
-    json_object_set_new(json, "id", json_string((char*)project->id));
-    if (project->original_id)json_object_set_new(json, "originalId", json_string((char*)project->original_id));
-    json_object_set_new(json, "version", json_string((char*)project->version));
-    json_t* authors = json_array();
-    if (project->author != NULL)json_array_append_new(authors, json_string((char*)project->author));
-    json_object_set_new(json, "authors", authors);
-
-    json_object_set_new(json, "objectType", json_string("ride"));
-
-    //Ride header
-    json_t* properties = json_object();
-    json_t* types = json_array();
-    json_array_append_new(types, json_string((char*)project->ride_type));
-    json_object_set_new(properties, "type", types);
-    json_object_set_new(properties, "category", json_string(category_names[project->category]));
-    json_object_set_new(properties, "minCarsPerTrain", json_integer(project->min_cars_per_train));
-    json_object_set_new(properties, "maxCarsPerTrain", json_integer(project->max_cars_per_train));
-    json_object_set_new(properties, "numEmptyCars", json_integer(project->zero_cars));
-    json_object_set_new(properties, "tabCar", json_integer(project->tab_car));
-    json_object_set_new(properties, "defaultCar", json_integer(project->configuration[CAR_INDEX_DEFAULT]));
-    if (project->configuration[CAR_INDEX_FRONT] != 0xFF)json_object_set_new(properties, "headCars", json_integer(project->configuration[CAR_INDEX_FRONT]));//TODO support multiple head cars
-    if (project->configuration[CAR_INDEX_REAR] != 0xFF)json_object_set_new(properties, "tailCars", json_integer(project->configuration[CAR_INDEX_REAR]));
-    json_object_set_new(properties, "buildMenuPriority", json_integer(project->build_menu_priority));
-
-
-    if (project->flags & RIDE_NO_COLLISION_CRASHES)json_object_set_new(properties, "noCollisionCrashes", json_true());
-    if (project->flags & RIDE_RIDER_CONTROLS_SPEED)json_object_set_new(properties, "riderControlsSpeed", json_true());
-
-    //Color presets
-    json_t* car_color_presets = json_array();
-    for (int i = 0; i < project->num_colors; i++)
-    {
-        json_t* car_color_preset = json_array();
-        json_array_append_new(car_color_preset, json_string(color_names[project->colors[i][0]]));
-        json_array_append_new(car_color_preset, json_string(color_names[project->colors[i][1]]));
-        json_array_append_new(car_color_preset, json_string(color_names[project->colors[i][2]]));
-        json_t* arr = json_array();
-        json_array_append_new(arr, car_color_preset);//Presets are arrays of arrays for some reason?
-        json_array_append_new(car_color_presets, arr);
-    }
-    json_object_set_new(properties, "carColours", car_color_presets);
-
-    json_t* cars = json_array();
-    for (int i = 0; i < project->num_vehicles; i++)
-    {
-        json_t* car = json_object();
-        json_object_set_new(car, "rotationFrameMask", json_integer(31));
-        json_object_set_new(car, "spacing", json_integer((project->vehicles[i].spacing * 278912) / TILE_SIZE));
-        json_object_set_new(car, "mass", json_integer(project->vehicles[i].mass));
-        json_object_set_new(car, "numSeats", json_integer(project->vehicles[i].num_riders));
-        json_object_set_new(car, "numSeatRows", json_integer(project->vehicles[i].num_rider_models));
-        int friction_sound_ids[] = { RUNNING_SOUND_WOODEN_OLD,RUNNING_SOUND_WOODEN_MODERN,RUNNING_SOUND_STEEL,RUNNING_SOUND_STEEL_SMOOTH,RUNNING_SOUND_WATERSLIDE,RUNNING_SOUND_TRAIN,RUNNING_SOUND_ENGINE };
-        json_object_set_new(car, "frictionSoundId", json_integer(friction_sound_ids[project->running_sound]));
-        json_object_set_new(car, "soundRange", json_integer(project->secondary_sound));
-        json_object_set_new(car, "drawOrder", json_integer(project->vehicles[i].draw_order));
-        /*Legacy sprite groups
-        json_t* frames=json_object();
-            if(project->sprite_flags&SPRITE_FLAT_SLOPE)json_object_set_new(frames,"flat",json_true());
-            if(project->sprite_flags&SPRITE_GENTLE_SLOPE)json_object_set_new(frames,"gentleSlopes",json_true());
-            if(project->sprite_flags&SPRITE_STEEP_SLOPE)json_object_set_new(frames,"steepSlopes",json_true());
-            if(project->sprite_flags&SPRITE_VERTICAL_SLOPE)json_object_set_new(frames,"verticalSlopes",json_true());
-            if(project->sprite_flags&SPRITE_DIAGONAL_SLOPE)json_object_set_new(frames,"diagonalSlopes",json_true());
-            if(project->sprite_flags&SPRITE_BANKING)json_object_set_new(frames,"flatBanked",json_true());
-            if(project->sprite_flags&SPRITE_INLINE_TWIST)json_object_set_new(frames,"inlineTwists",json_true());
-            if(project->sprite_flags&SPRITE_SLOPE_BANK_TRANSITION)json_object_set_new(frames,"flatToGentleSlopeBankedTransitions",json_true());
-            if(project->sprite_flags&SPRITE_DIAGONAL_BANK_TRANSITION)json_object_set_new(frames,"diagonalGentleSlopeBankedTransitions",json_true());
-            if(project->sprite_flags&SPRITE_SLOPED_BANK_TRANSITION)json_object_set_new(frames,"gentleSlopeBankedTransitions",json_true());
-            if(project->sprite_flags&SPRITE_SLOPED_BANKED_TURN)json_object_set_new(frames,"gentleSlopeBankedTurns",json_true());
-            if(project->sprite_flags&SPRITE_BANKED_SLOPE_TRANSITION)json_object_set_new(frames,"flatToGentleSlopeWhileBankedTransitions",json_true());
-            if(project->sprite_flags&SPRITE_CORKSCREW)json_object_set_new(frames,"corkscrews",json_true());
-            if(project->sprite_flags&SPRITE_ZERO_G_ROLL)json_object_set_new(frames,"zeroGRolls",json_true());
-            if(project->vehicles[i].flags&VEHICLE_RESTRAINT_ANIMATION)json_object_set_new(frames,"restraintAnimation",json_true());
-        json_object_set_new(car,"frames",frames);
-        */
-        json_t* sprite_groups = json_object();
-        if (project->sprite_flags & SPRITE_FLAT_SLOPE)json_object_set_new(sprite_groups, "slopeFlat", json_integer(32));
-        if (project->sprite_flags & SPRITE_GENTLE_SLOPE)
-        {
-            json_object_set_new(sprite_groups, "slopes12", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes25", json_integer(32));
-        }
-        if (project->sprite_flags & SPRITE_STEEP_SLOPE)
-        {
-            json_object_set_new(sprite_groups, "slopes42", json_integer(8));
-            json_object_set_new(sprite_groups, "slopes60", json_integer(32));
-        }
-        if (project->sprite_flags & SPRITE_VERTICAL_SLOPE)
-        {
-            json_object_set_new(sprite_groups, "slopes75", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes90", json_integer(32));
-            json_object_set_new(sprite_groups, "slopesLoop", json_integer(4));
-            json_object_set_new(sprite_groups, "slopeInverted", json_integer(4));
-        }
-        if (project->sprite_flags & SPRITE_DIAGONAL_SLOPE)
-        {
-            json_object_set_new(sprite_groups, "slopes8", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes16", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes50", json_integer(4));
-        }
-        if (project->sprite_flags & SPRITE_BANKING)
-        {
-            json_object_set_new(sprite_groups, "flatBanked22", json_integer(8));
-            json_object_set_new(sprite_groups, "flatBanked45", json_integer(32));
-        }
-        if (project->sprite_flags & SPRITE_INLINE_TWIST)
-        {
-            json_object_set_new(sprite_groups, "flatBanked67", json_integer(4));
-            json_object_set_new(sprite_groups, "flatBanked90", json_integer(4));
-            json_object_set_new(sprite_groups, "inlineTwists", json_integer(4));
-        }
-        if (project->sprite_flags & SPRITE_SLOPE_BANK_TRANSITION)json_object_set_new(sprite_groups, "slopes12Banked22", json_integer(32));
-        if (project->sprite_flags & SPRITE_DIAGONAL_BANK_TRANSITION)json_object_set_new(sprite_groups, "slopes8Banked22", json_integer(4));
-        if (project->sprite_flags & SPRITE_SLOPED_BANK_TRANSITION)json_object_set_new(sprite_groups, "slopes25Banked22", json_integer(4));
-        if (project->sprite_flags & SPRITE_DIAGONAL_SLOPED_BANK_TRANSITION)
-        {
-            json_object_set_new(sprite_groups, "slopes8Banked45", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes16Banked22", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes16Banked45", json_integer(4));
-        }
-        if (project->sprite_flags & SPRITE_SLOPED_BANKED_TURN)json_object_set_new(sprite_groups, "slopes25Banked45", json_integer(32));
-        if (project->sprite_flags & SPRITE_BANKED_SLOPE_TRANSITION)json_object_set_new(sprite_groups, "slopes12Banked45", json_integer(4));
-        if (project->sprite_flags & SPRITE_ZERO_G_ROLL)
-        {
-            json_object_set_new(sprite_groups, "slopes25Banked67", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes25Banked90", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes25InlineTwists", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes42Banked22", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes42Banked45", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes42Banked67", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes42Banked90", json_integer(4));
-            json_object_set_new(sprite_groups, "slopes60Banked22", json_integer(4));
-        }
-        if (project->sprite_flags & SPRITE_CORKSCREW)json_object_set_new(sprite_groups, "corkscrews", json_integer(4));
-        if (project->vehicles[i].flags & VEHICLE_RESTRAINT_ANIMATION)json_object_set_new(sprite_groups, "restraintAnimation", json_integer(4));
-        json_object_set_new(car, "spriteGroups", sprite_groups);
-
-        if (project->vehicles[i].flags & VEHICLE_SECONDARY_REMAP)json_object_set_new(car, "hasAdditionalColour1", json_true());
-        if (project->vehicles[i].flags & VEHICLE_TERTIARY_REMAP)json_object_set_new(car, "hasAdditionalColour2", json_true());
-        if (project->vehicles[i].flags & VEHICLE_RIDERS_SCREAM)json_object_set_new(car, "hasScreamingRiders", json_true());
-        json_t* loading_positions = json_array();
-        for (int j = 0; j < project->vehicles[i].num_rider_models; j++)
-        {
-            int position = round(32.0 * project->vehicles[i].riders[j].position[0][0].x / TILE_SIZE);
-            if (project->vehicles[i].num_riders > 1)
-            {
-                json_array_append_new(loading_positions, json_integer(position - 1));
-                json_array_append_new(loading_positions, json_integer(position + 1));
-            }
-            else json_array_append_new(loading_positions, json_integer(position));
-        }
-        json_object_set_new(car, "loadingPositions", loading_positions);
-        json_array_append_new(cars, car);
-    }
-    json_object_set_new(properties, "cars", cars);
-    json_object_set_new(json, "properties", properties);
-
-    //String tables
-    json_t* strings = json_object();
-    json_t* name = json_object();
-    json_object_set_new(name, "en-GB", json_string((char*)project->name));
-    json_object_set_new(strings, "name", name);
-    json_t* description = json_object();
-    json_object_set_new(description, "en-GB", json_string((char*)project->description));
-    json_object_set_new(strings, "description", description);
-    json_t* capacity = json_object();
-    json_object_set_new(capacity, "en-GB", json_string((char*)project->capacity));
-    json_object_set_new(strings, "capacity", capacity);
-    json_object_set_new(json, "strings", strings);
-
-    return json;
+	//Create JSON file
+	json_t* json = json_object();
+	json_object_set_new(json, "id", json_string((char*)project->id));
+	if (project->original_id)json_object_set_new(json, "originalId", json_string((char*)project->original_id));
+	json_object_set_new(json, "version", json_string((char*)project->version));
+	json_t* authors = json_array();
+	if (project->author != NULL)json_array_append_new(authors, json_string((char*)project->author));
+	json_object_set_new(json, "authors", authors);
+	
+	json_object_set_new(json, "objectType", json_string("ride"));
+	
+	//Ride header
+	json_t* properties = json_object();
+	json_t* types = json_array();
+	json_array_append_new(types, json_string((char*)project->ride_type));
+	json_object_set_new(properties, "type", types);
+	json_object_set_new(properties, "category", json_string(category_names[project->category]));
+	json_object_set_new(properties, "minCarsPerTrain", json_integer(project->min_cars_per_train));
+	json_object_set_new(properties, "maxCarsPerTrain", json_integer(project->max_cars_per_train));
+	json_object_set_new(properties, "numEmptyCars", json_integer(project->zero_cars));
+	json_object_set_new(properties, "tabCar", json_integer(project->tab_car));
+	json_object_set_new(properties, "defaultCar", json_integer(project->configuration[CAR_INDEX_DEFAULT]));
+	if (project->configuration[CAR_INDEX_FRONT] != 0xFF)json_object_set_new(properties, "headCars", json_integer(project->configuration[CAR_INDEX_FRONT]));//TODO support multiple head cars
+	if (project->configuration[CAR_INDEX_REAR] != 0xFF)json_object_set_new(properties, "tailCars", json_integer(project->configuration[CAR_INDEX_REAR]));
+	json_object_set_new(properties, "buildMenuPriority", json_integer(project->build_menu_priority));
+	
+	
+	if (project->flags & RIDE_NO_COLLISION_CRASHES)json_object_set_new(properties, "noCollisionCrashes", json_true());
+	if (project->flags & RIDE_RIDER_CONTROLS_SPEED)json_object_set_new(properties, "riderControlsSpeed", json_true());
+	
+	//Color presets
+	json_t* car_color_presets = json_array();
+		for (int i = 0; i < project->num_colors; i++)
+		{
+		json_t* car_color_preset = json_array();
+		json_array_append_new(car_color_preset, json_string(color_names[project->colors[i][0]]));
+		json_array_append_new(car_color_preset, json_string(color_names[project->colors[i][1]]));
+		json_array_append_new(car_color_preset, json_string(color_names[project->colors[i][2]]));
+		json_t* arr = json_array();
+		json_array_append_new(arr, car_color_preset);//Presets are arrays of arrays for some reason?
+		json_array_append_new(car_color_presets, arr);
+		}
+	json_object_set_new(properties, "carColours", car_color_presets);
+	
+	json_t* cars = json_array();
+	for (int i = 0; i < project->num_vehicles; i++)
+	{
+		json_t* car = json_object();
+		json_object_set_new(car, "rotationFrameMask", json_integer(31));
+		json_object_set_new(car, "spacing", json_integer((project->vehicles[i].spacing * 278912) / TILE_SIZE));
+		json_object_set_new(car, "mass", json_integer(project->vehicles[i].mass));
+		json_object_set_new(car, "numSeats", json_integer(project->vehicles[i].num_riders));
+		json_object_set_new(car, "numSeatRows", json_integer(project->vehicles[i].num_rider_models));
+		int friction_sound_ids[] = { RUNNING_SOUND_WOODEN_OLD,RUNNING_SOUND_WOODEN_MODERN,RUNNING_SOUND_STEEL,RUNNING_SOUND_STEEL_SMOOTH,RUNNING_SOUND_WATERSLIDE,RUNNING_SOUND_TRAIN,RUNNING_SOUND_ENGINE };
+		json_object_set_new(car, "frictionSoundId", json_integer(friction_sound_ids[project->running_sound]));
+		json_object_set_new(car, "soundRange", json_integer(project->secondary_sound));
+		json_object_set_new(car, "drawOrder", json_integer(project->vehicles[i].draw_order));
+		/*Legacy sprite groups
+		json_t* frames=json_object();
+		    if(project->sprite_flags&SPRITE_FLAT_SLOPE)json_object_set_new(frames,"flat",json_true());
+		    if(project->sprite_flags&SPRITE_GENTLE_SLOPE)json_object_set_new(frames,"gentleSlopes",json_true());
+		    if(project->sprite_flags&SPRITE_STEEP_SLOPE)json_object_set_new(frames,"steepSlopes",json_true());
+		    if(project->sprite_flags&SPRITE_VERTICAL_SLOPE)json_object_set_new(frames,"verticalSlopes",json_true());
+		    if(project->sprite_flags&SPRITE_DIAGONAL_SLOPE)json_object_set_new(frames,"diagonalSlopes",json_true());
+		    if(project->sprite_flags&SPRITE_BANKING)json_object_set_new(frames,"flatBanked",json_true());
+		    if(project->sprite_flags&SPRITE_INLINE_TWIST)json_object_set_new(frames,"inlineTwists",json_true());
+		    if(project->sprite_flags&SPRITE_SLOPE_BANK_TRANSITION)json_object_set_new(frames,"flatToGentleSlopeBankedTransitions",json_true());
+		    if(project->sprite_flags&SPRITE_DIAGONAL_BANK_TRANSITION)json_object_set_new(frames,"diagonalGentleSlopeBankedTransitions",json_true());
+		    if(project->sprite_flags&SPRITE_SLOPED_BANK_TRANSITION)json_object_set_new(frames,"gentleSlopeBankedTransitions",json_true());
+		    if(project->sprite_flags&SPRITE_SLOPED_BANKED_TURN)json_object_set_new(frames,"gentleSlopeBankedTurns",json_true());
+		    if(project->sprite_flags&SPRITE_BANKED_SLOPE_TRANSITION)json_object_set_new(frames,"flatToGentleSlopeWhileBankedTransitions",json_true());
+		    if(project->sprite_flags&SPRITE_CORKSCREW)json_object_set_new(frames,"corkscrews",json_true());
+		    if(project->sprite_flags&SPRITE_ZERO_G_ROLL)json_object_set_new(frames,"zeroGRolls",json_true());
+		    if(project->vehicles[i].flags&VEHICLE_RESTRAINT_ANIMATION)json_object_set_new(frames,"restraintAnimation",json_true());
+		json_object_set_new(car,"frames",frames);
+		*/
+		json_t* sprite_groups = json_object();
+		if (project->sprite_flags & SPRITE_FLAT_SLOPE)json_object_set_new(sprite_groups, "slopeFlat", json_integer(32));
+		if (project->sprite_flags & SPRITE_GENTLE_SLOPE)
+		{
+		json_object_set_new(sprite_groups, "slopes12", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes25", json_integer(32));
+		}
+		if (project->sprite_flags & SPRITE_STEEP_SLOPE)
+		{
+		json_object_set_new(sprite_groups, "slopes42", json_integer(8));
+		json_object_set_new(sprite_groups, "slopes60", json_integer(32));
+		}
+		if (project->sprite_flags & SPRITE_VERTICAL_SLOPE)
+		{
+		json_object_set_new(sprite_groups, "slopes75", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes90", json_integer(32));
+		json_object_set_new(sprite_groups, "slopesLoop", json_integer(4));
+		json_object_set_new(sprite_groups, "slopeInverted", json_integer(4));
+		}
+		if (project->sprite_flags & SPRITE_DIAGONAL_SLOPE)
+		{
+		json_object_set_new(sprite_groups, "slopes8", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes16", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes50", json_integer(4));
+		}
+		if (project->sprite_flags & SPRITE_BANKING)
+		{
+		json_object_set_new(sprite_groups, "flatBanked22", json_integer(8));
+		json_object_set_new(sprite_groups, "flatBanked45", json_integer(32));
+		}
+		if (project->sprite_flags & SPRITE_INLINE_TWIST)
+		{
+		json_object_set_new(sprite_groups, "flatBanked67", json_integer(4));
+		json_object_set_new(sprite_groups, "flatBanked90", json_integer(4));
+		json_object_set_new(sprite_groups, "inlineTwists", json_integer(4));
+		}
+		if (project->sprite_flags & SPRITE_SLOPE_BANK_TRANSITION)json_object_set_new(sprite_groups, "slopes12Banked22", json_integer(32));
+		if (project->sprite_flags & SPRITE_DIAGONAL_BANK_TRANSITION)json_object_set_new(sprite_groups, "slopes8Banked22", json_integer(4));
+		if (project->sprite_flags & SPRITE_SLOPED_BANK_TRANSITION)json_object_set_new(sprite_groups, "slopes25Banked22", json_integer(4));
+		if (project->sprite_flags & SPRITE_DIAGONAL_SLOPED_BANK_TRANSITION)
+		{
+		json_object_set_new(sprite_groups, "slopes8Banked45", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes16Banked22", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes16Banked45", json_integer(4));
+		}
+		if (project->sprite_flags & SPRITE_SLOPED_BANKED_TURN)json_object_set_new(sprite_groups, "slopes25Banked45", json_integer(32));
+		if (project->sprite_flags & SPRITE_BANKED_SLOPE_TRANSITION)json_object_set_new(sprite_groups, "slopes12Banked45", json_integer(4));
+		if (project->sprite_flags & SPRITE_ZERO_G_ROLL)
+		{
+		json_object_set_new(sprite_groups, "slopes25Banked67", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes25Banked90", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes25InlineTwists", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes42Banked22", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes42Banked45", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes42Banked67", json_integer(4));
+		json_object_set_new(sprite_groups, "slopes42Banked90", json_integer(4));
+			if (project->sprite_flags & SPRITE_DIVE_LOOP)
+			{
+			json_object_set_new(sprite_groups, "slopes60Banked22", json_integer(8));
+			}
+			else
+			{
+			json_object_set_new(sprite_groups, "slopes60Banked22", json_integer(4));
+			}
+		}
+		if (project->sprite_flags & SPRITE_DIVE_LOOP)
+		{
+		json_object_set_new(sprite_groups, "slopes50Banked45", json_integer(8));
+		json_object_set_new(sprite_groups, "slopes50Banked67", json_integer(8));
+		json_object_set_new(sprite_groups, "slopes50Banked90", json_integer(8));
+		}
+		if (project->sprite_flags & SPRITE_CORKSCREW)json_object_set_new(sprite_groups, "corkscrews", json_integer(4));
+		if (project->vehicles[i].flags & VEHICLE_RESTRAINT_ANIMATION)json_object_set_new(sprite_groups, "restraintAnimation", json_integer(4));
+		json_object_set_new(car, "spriteGroups", sprite_groups);
+		
+		if (project->vehicles[i].flags & VEHICLE_SECONDARY_REMAP)json_object_set_new(car, "hasAdditionalColour1", json_true());
+		if (project->vehicles[i].flags & VEHICLE_TERTIARY_REMAP)json_object_set_new(car, "hasAdditionalColour2", json_true());
+		if (project->vehicles[i].flags & VEHICLE_RIDERS_SCREAM)json_object_set_new(car, "hasScreamingRiders", json_true());
+		json_t* loading_positions = json_array();
+		for (int j = 0; j < project->vehicles[i].num_rider_models; j++)
+		{
+		    int position = round(32.0 * project->vehicles[i].riders[j].position[0][0].x / TILE_SIZE);
+		    if (project->vehicles[i].num_riders > 1)
+		    {
+		        json_array_append_new(loading_positions, json_integer(position - 1));
+		        json_array_append_new(loading_positions, json_integer(position + 1));
+		    }
+		    else json_array_append_new(loading_positions, json_integer(position));
+		}
+		json_object_set_new(car, "loadingPositions", loading_positions);
+		json_array_append_new(cars, car);
+	}
+	json_object_set_new(properties, "cars", cars);
+	json_object_set_new(json, "properties", properties);
+	
+	//String tables
+	json_t* strings = json_object();
+	json_t* name = json_object();
+	json_object_set_new(name, "en-GB", json_string((char*)project->name));
+	json_object_set_new(strings, "name", name);
+	json_t* description = json_object();
+	json_object_set_new(description, "en-GB", json_string((char*)project->description));
+	json_object_set_new(strings, "description", description);
+	json_t* capacity = json_object();
+	json_object_set_new(capacity, "en-GB", json_string((char*)project->capacity));
+	json_object_set_new(strings, "capacity", capacity);
+	json_object_set_new(json, "strings", strings);
+	
+	return json;
 }
 
 json_t* project_render_sprites(project_t* project, context_t* context)

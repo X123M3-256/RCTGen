@@ -210,6 +210,13 @@ typedef struct
 
 typedef struct
 {
+	unsigned int flags;
+	track_point_t (*curve)(float distance);
+	float length;
+}track_section_t;
+
+typedef struct
+{
 	int32_t track_mask_op;
 	uint32_t num_rects;
 	int32_t x_offset;
@@ -224,174 +231,168 @@ typedef struct
 	mask_t* masks;
 }view_t;
 
-typedef struct
-{
-	unsigned int flags;
-	track_point_t (*curve)(float distance);
-	float length;
-	view_t views[4];
-}track_section_t;
+enum track_section_id {
+	FLAT,
+	FLAT_ASYMMETRIC,
+	BRAKE,
+	BRAKE_DIAG,
+	BRAKE_GENTLE,
+	BRAKE_GENTLE_DIAG,
+	MAGNETIC_BRAKE,
+	MAGNETIC_BRAKE_DIAG,
+	MAGNETIC_BRAKE_GENTLE,
+	MAGNETIC_BRAKE_GENTLE_DIAG,
+	BLOCK_BRAKE,
+	BLOCK_BRAKE_DIAG,
+	BOOSTER,
+	FLAT_TO_GENTLE_UP,
+	GENTLE_UP_TO_FLAT,
+	GENTLE,
+	GENTLE_TO_STEEP_UP,
+	STEEP_TO_GENTLE_UP,
+	STEEP,
+	STEEP_TO_VERTICAL_UP,
+	VERTICAL_TO_STEEP_UP,
+	VERTICAL,
+	SMALL_TURN_LEFT,
+	MEDIUM_TURN_LEFT,
+	LARGE_TURN_LEFT_TO_DIAG,
+	LARGE_TURN_RIGHT_TO_DIAG,
+	FLAT_DIAG,
+	FLAT_TO_GENTLE_UP_DIAG,
+	GENTLE_TO_FLAT_UP_DIAG,
+	GENTLE_DIAG,
+	GENTLE_TO_STEEP_UP_DIAG,
+	STEEP_TO_GENTLE_UP_DIAG,
+	STEEP_DIAG,
+	FLAT_TO_LEFT_BANK,
+	FLAT_TO_RIGHT_BANK,
+	LEFT_BANK_TO_GENTLE_UP,
+	RIGHT_BANK_TO_GENTLE_UP,
+	GENTLE_UP_TO_LEFT_BANK,
+	GENTLE_UP_TO_RIGHT_BANK,
+	LEFT_BANK,
+	FLAT_TO_LEFT_BANK_DIAG,
+	FLAT_TO_RIGHT_BANK_DIAG,
+	LEFT_BANK_TO_GENTLE_UP_DIAG,
+	RIGHT_BANK_TO_GENTLE_UP_DIAG,
+	GENTLE_UP_TO_LEFT_BANK_DIAG,
+	GENTLE_UP_TO_RIGHT_BANK_DIAG,
+	LEFT_BANK_DIAG,
+	SMALL_TURN_LEFT_BANK,
+	MEDIUM_TURN_LEFT_BANK,
+	LARGE_TURN_LEFT_TO_DIAG_BANK,
+	LARGE_TURN_RIGHT_TO_DIAG_BANK,
+	SMALL_TURN_LEFT_GENTLE_UP,
+	SMALL_TURN_RIGHT_GENTLE_UP,
+	MEDIUM_TURN_LEFT_GENTLE_UP,
+	MEDIUM_TURN_RIGHT_GENTLE_UP,
+	VERY_SMALL_TURN_LEFT_STEEP_UP,
+	VERY_SMALL_TURN_RIGHT_STEEP_UP,
+	VERTICAL_TWIST_LEFT_UP,
+	VERTICAL_TWIST_RIGHT_UP,
+	GENTLE_UP_TO_GENTLE_UP_LEFT_BANK,
+	GENTLE_UP_TO_GENTLE_UP_RIGHT_BANK,
+	GENTLE_UP_LEFT_BANK_TO_GENTLE_UP,
+	GENTLE_UP_RIGHT_BANK_TO_GENTLE_UP,
+	LEFT_BANK_TO_GENTLE_UP_LEFT_BANK,
+	GENTLE_UP_LEFT_BANK_TO_LEFT_BANK,
+	RIGHT_BANK_TO_GENTLE_UP_RIGHT_BANK,
+	GENTLE_UP_RIGHT_BANK_TO_RIGHT_BANK,
+	GENTLE_UP_LEFT_BANK,
+	GENTLE_UP_RIGHT_BANK,
+	FLAT_TO_GENTLE_UP_LEFT_BANK,
+	FLAT_TO_GENTLE_UP_RIGHT_BANK,
+	GENTLE_UP_LEFT_BANK_TO_FLAT,
+	GENTLE_UP_RIGHT_BANK_TO_FLAT,
+	SMALL_TURN_LEFT_BANK_GENTLE_UP,
+	SMALL_TURN_RIGHT_BANK_GENTLE_UP,
+	MEDIUM_TURN_LEFT_BANK_GENTLE_UP,
+	MEDIUM_TURN_RIGHT_BANK_GENTLE_UP,
+	S_BEND_LEFT,
+	S_BEND_RIGHT,
+	S_BEND_LEFT_BANK,
+	S_BEND_RIGHT_BANK,
+	SMALL_HELIX_LEFT_UP,
+	SMALL_HELIX_RIGHT_UP,
+	MEDIUM_HELIX_LEFT_UP,
+	MEDIUM_HELIX_RIGHT_UP,
+	BARREL_ROLL_LEFT,
+	BARREL_ROLL_RIGHT,
+	INLINE_TWIST_LEFT,
+	INLINE_TWIST_RIGHT,
+	HALF_LOOP,
+	VERTICAL_LOOP_LEFT,
+	VERTICAL_LOOP_RIGHT,
+	MEDIUM_HALF_LOOP_LEFT,
+	MEDIUM_HALF_LOOP_RIGHT,
+	LARGE_HALF_LOOP_LEFT,
+	LARGE_HALF_LOOP_RIGHT,
+	FLAT_TO_STEEP_UP,
+	STEEP_TO_FLAT_UP,
+	FLAT_TO_STEEP_UP_DIAG,
+	STEEP_TO_FLAT_UP_DIAG,
+	SMALL_FLAT_TO_STEEP_UP,
+	SMALL_STEEP_TO_FLAT_UP,
+	SMALL_FLAT_TO_STEEP_UP_DIAG,
+	SMALL_STEEP_TO_FLAT_UP_DIAG,
+	QUARTER_LOOP_UP,
+	CORKSCREW_LEFT,
+	CORKSCREW_RIGHT,
+	LARGE_CORKSCREW_LEFT,
+	LARGE_CORKSCREW_RIGHT,
+	ZERO_G_ROLL_LEFT,
+	ZERO_G_ROLL_RIGHT,
+	LARGE_ZERO_G_ROLL_LEFT,
+	LARGE_ZERO_G_ROLL_RIGHT,
+	DIVE_LOOP_45_LEFT,
+	DIVE_LOOP_45_RIGHT,
+	DIVE_LOOP_90_LEFT,
+	DIVE_LOOP_90_RIGHT,
+	SMALL_TURN_LEFT_BANK_TO_GENTLE_UP,
+	SMALL_TURN_RIGHT_BANK_TO_GENTLE_UP,
+	LAUNCHED_LIFT,
+	LARGE_TURN_LEFT_TO_DIAG_GENTLE_UP,
+	LARGE_TURN_RIGHT_TO_DIAG_GENTLE_UP,
+	LARGE_TURN_LEFT_TO_ORTHOGONAL_GENTLE_UP,
+	LARGE_TURN_RIGHT_TO_ORTHOGONAL_GENTLE_UP,
+	GENTLE_UP_TO_GENTLE_UP_LEFT_BANK_DIAG,
+	GENTLE_UP_TO_GENTLE_UP_RIGHT_BANK_DIAG,
+	GENTLE_UP_LEFT_BANK_TO_GENTLE_UP_DIAG,
+	GENTLE_UP_RIGHT_BANK_TO_GENTLE_UP_DIAG,
+	LEFT_BANK_TO_GENTLE_UP_LEFT_BANK_DIAG,
+	RIGHT_BANK_TO_GENTLE_UP_RIGHT_BANK_DIAG,
+	GENTLE_UP_LEFT_BANK_TO_LEFT_BANK_DIAG,
+	GENTLE_UP_RIGHT_BANK_TO_RIGHT_BANK_DIAG,
+	GENTLE_UP_LEFT_BANK_DIAG,
+	GENTLE_UP_RIGHT_BANK_DIAG,
+	FLAT_TO_GENTLE_UP_LEFT_BANK_DIAG,
+	FLAT_TO_GENTLE_UP_RIGHT_BANK_DIAG,
+	GENTLE_UP_LEFT_BANK_TO_FLAT_DIAG,
+	GENTLE_UP_RIGHT_BANK_TO_FLAT_DIAG,
+	LARGE_TURN_LEFT_BANK_TO_DIAG_GENTLE_UP,
+	LARGE_TURN_RIGHT_BANK_TO_DIAG_GENTLE_UP,
+	LARGE_TURN_LEFT_BANK_TO_ORTHOGONAL_GENTLE_UP,
+	LARGE_TURN_RIGHT_BANK_TO_ORTHOGONAL_GENTLE_UP,
+	STEEP_TO_VERTICAL_UP_DIAG,
+	VERTICAL_TO_STEEP_UP_DIAG,
+	VERTICAL_DIAG,
+	VERTICAL_TWIST_LEFT_TO_DIAG_UP,
+	VERTICAL_TWIST_RIGHT_TO_DIAG_UP,
+	VERTICAL_TWIST_LEFT_TO_ORTHOGONAL_UP,
+	VERTICAL_TWIST_RIGHT_TO_ORTHOGONAL_UP,
+	VERTICAL_BOOSTER,
+	NUM_TRACK_SECTIONS 
+};
+
+extern track_section_t track_sections[NUM_TRACK_SECTIONS];
+
+
+extern view_t default_masks[NUM_TRACK_SECTIONS][4];
+//extern view_t semi_split_masks[NUM_TRACK_SECTIONS][4];
+//extern view_t split_masks[NUM_TRACK_SECTIONS][4];
+
+
+
 
 int write_track_type(context_t* context,track_type_t* track_type,json_t* sprites,const char* base_dir,const char* output_dir);
-
-typedef struct
-{
-	track_section_t flat;
-	track_section_t flat_asymmetric;
-	track_section_t brake;
-	track_section_t brake_diag;
-	track_section_t brake_gentle;
-	track_section_t brake_gentle_diag;
-	track_section_t magnetic_brake;
-	track_section_t magnetic_brake_diag;
-	track_section_t magnetic_brake_gentle;
-	track_section_t magnetic_brake_gentle_diag;
-	track_section_t block_brake;
-	track_section_t block_brake_diag;
-	track_section_t booster;
-	track_section_t flat_to_gentle_up;
-	track_section_t gentle_up_to_flat;
-	track_section_t gentle;
-	track_section_t gentle_to_steep_up;
-	track_section_t steep_to_gentle_up;
-	track_section_t steep;
-	track_section_t steep_to_vertical_up;
-	track_section_t vertical_to_steep_up;
-	track_section_t vertical;
-	track_section_t small_turn_left;
-	track_section_t medium_turn_left;
-	track_section_t large_turn_left_to_diag;
-	track_section_t large_turn_right_to_diag;
-	track_section_t flat_diag;
-	track_section_t flat_to_gentle_up_diag;
-	track_section_t gentle_to_flat_up_diag;
-	track_section_t gentle_diag;
-	track_section_t gentle_to_steep_up_diag;
-	track_section_t steep_to_gentle_up_diag;
-	track_section_t steep_diag;
-	track_section_t flat_to_left_bank;
-	track_section_t flat_to_right_bank;
-	track_section_t left_bank_to_gentle_up;
-	track_section_t right_bank_to_gentle_up;
-	track_section_t gentle_up_to_left_bank;
-	track_section_t gentle_up_to_right_bank;
-	track_section_t left_bank;
-	track_section_t flat_to_left_bank_diag;
-	track_section_t flat_to_right_bank_diag;
-	track_section_t left_bank_to_gentle_up_diag;
-	track_section_t right_bank_to_gentle_up_diag;
-	track_section_t gentle_up_to_left_bank_diag;
-	track_section_t gentle_up_to_right_bank_diag;
-	track_section_t left_bank_diag;
-	track_section_t small_turn_left_bank;
-	track_section_t medium_turn_left_bank;
-	track_section_t large_turn_left_to_diag_bank;
-	track_section_t large_turn_right_to_diag_bank;
-	track_section_t small_turn_left_gentle_up;
-	track_section_t small_turn_right_gentle_up;
-	track_section_t medium_turn_left_gentle_up;
-	track_section_t medium_turn_right_gentle_up;
-	track_section_t very_small_turn_left_steep_up;
-	track_section_t very_small_turn_right_steep_up;
-	track_section_t vertical_twist_left_up;
-	track_section_t vertical_twist_right_up;
-	track_section_t gentle_up_to_gentle_up_left_bank;
-	track_section_t gentle_up_to_gentle_up_right_bank;
-	track_section_t gentle_up_left_bank_to_gentle_up;
-	track_section_t gentle_up_right_bank_to_gentle_up;
-	track_section_t left_bank_to_gentle_up_left_bank;
-	track_section_t gentle_up_left_bank_to_left_bank;
-	track_section_t right_bank_to_gentle_up_right_bank;
-	track_section_t gentle_up_right_bank_to_right_bank;
-	track_section_t gentle_up_left_bank;
-	track_section_t gentle_up_right_bank;
-	track_section_t flat_to_gentle_up_left_bank;
-	track_section_t flat_to_gentle_up_right_bank;
-	track_section_t gentle_up_left_bank_to_flat;
-	track_section_t gentle_up_right_bank_to_flat;
-	track_section_t small_turn_left_bank_gentle_up;
-	track_section_t small_turn_right_bank_gentle_up;
-	track_section_t medium_turn_left_bank_gentle_up;
-	track_section_t medium_turn_right_bank_gentle_up;
-	track_section_t s_bend_left;
-	track_section_t s_bend_right;
-	track_section_t s_bend_left_bank;
-	track_section_t s_bend_right_bank;
-	track_section_t small_helix_left_up;
-	track_section_t small_helix_right_up;
-	track_section_t medium_helix_left_up;
-	track_section_t medium_helix_right_up;
-	track_section_t barrel_roll_left;
-	track_section_t barrel_roll_right;
-	track_section_t inline_twist_left;
-	track_section_t inline_twist_right;
-	track_section_t half_loop;
-	track_section_t left_vertical_loop;
-	track_section_t right_vertical_loop;
-	track_section_t medium_half_loop_left;
-	track_section_t medium_half_loop_right;
-	track_section_t large_half_loop_left;
-	track_section_t large_half_loop_right;
-	track_section_t flat_to_steep_up;
-	track_section_t steep_to_flat_up;
-	track_section_t flat_to_steep_up_diag;
-	track_section_t steep_to_flat_up_diag;
-	track_section_t small_flat_to_steep_up;
-	track_section_t small_steep_to_flat_up;
-	track_section_t small_flat_to_steep_up_diag;
-	track_section_t small_steep_to_flat_up_diag;
-	track_section_t quarter_loop_up;
-	track_section_t corkscrew_left;
-	track_section_t corkscrew_right;
-	track_section_t large_corkscrew_left;
-	track_section_t large_corkscrew_right;
-	track_section_t zero_g_roll_left;
-	track_section_t zero_g_roll_right;
-	track_section_t large_zero_g_roll_left;
-	track_section_t large_zero_g_roll_right;
-	track_section_t dive_loop_45_left;
-	track_section_t dive_loop_45_right;
-	track_section_t dive_loop_90_left;
-	track_section_t dive_loop_90_right;
-	track_section_t small_turn_left_bank_to_gentle_up;
-	track_section_t small_turn_right_bank_to_gentle_up;
-	track_section_t launched_lift;
-	track_section_t large_turn_left_to_diag_gentle_up;
-	track_section_t large_turn_right_to_diag_gentle_up;
-	track_section_t large_turn_left_to_orthogonal_gentle_up;
-	track_section_t large_turn_right_to_orthogonal_gentle_up;
-
-	track_section_t gentle_up_to_gentle_up_left_bank_diag;
-	track_section_t gentle_up_to_gentle_up_right_bank_diag;
-	track_section_t gentle_up_left_bank_to_gentle_up_diag;
-	track_section_t gentle_up_right_bank_to_gentle_up_diag;
-	track_section_t left_bank_to_gentle_up_left_bank_diag;
-	track_section_t right_bank_to_gentle_up_right_bank_diag;
-	track_section_t gentle_up_left_bank_to_left_bank_diag;
-	track_section_t gentle_up_right_bank_to_right_bank_diag;
-	track_section_t gentle_up_left_bank_diag;
-	track_section_t gentle_up_right_bank_diag;
-	track_section_t flat_to_gentle_up_left_bank_diag;
-	track_section_t flat_to_gentle_up_right_bank_diag;
-	track_section_t gentle_up_left_bank_to_flat_diag;
-	track_section_t gentle_up_right_bank_to_flat_diag;
-	track_section_t large_turn_left_bank_to_diag_gentle_up;
-	track_section_t large_turn_right_bank_to_diag_gentle_up;
-	track_section_t large_turn_left_bank_to_orthogonal_gentle_up;
-	track_section_t large_turn_right_bank_to_orthogonal_gentle_up;
-
-	track_section_t steep_to_vertical_up_diag;
-	track_section_t vertical_to_steep_up_diag;
-	track_section_t vertical_diag;
-	track_section_t vertical_twist_left_to_diag_up;
-	track_section_t vertical_twist_right_to_diag_up;
-	track_section_t vertical_twist_left_to_orthogonal_up;
-	track_section_t vertical_twist_right_to_orthogonal_up;
-
-	track_section_t vertical_booster;
-	
-}track_list_t;
-
-extern track_list_t track_list_default;
-extern track_list_t track_list_semi_split;
-extern track_list_t track_list_split;

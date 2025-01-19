@@ -3051,7 +3051,7 @@ int main(int argc,const char** argv)
 	//calc_g_forces(&(track_list_default.large_zero_g_roll_left));
 	//calc_g_forces(&(track_list_default.large_half_loop_left));
 	//generate_subposition_data(&(track_list_default.large_zero_g_roll_left),"LeftEighthDiveLoopUpToOrthogonal",0,0);
-	generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",0,0);
+	//generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",0,0);
 	return 0;
 
 	/*
@@ -3147,10 +3147,10 @@ int main(int argc,const char** argv)
 	//generate_subposition_data(&(track_list_default.dive_loop_90_left),"LeftDiveLoop90Up",  SPRITE_GROUP_CORKSCREW,0);
 
 	int sprites=SPRITE_GROUP_ORTHOGONAL|SPRITE_GROUP_DIAGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_DIVE_LOOP;//|SPRITE_GROUP_ZERO_G_ROLLS_DIAGONAL|SPRITE_GROUP_ZERO_G_ROLLS_OTHER;//;//|SPRITE_GROUP_CORKSCREW;//
-	generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",sprites,0);
-	generate_subposition_data(&(track_list_default.dive_loop_45_right),"RightEighthDiveLoopUpToOrthogonal",sprites,0);
-	generate_subposition_data(&(track_list_default.dive_loop_45_right),"LeftEighthDiveLoopDownToOrthogonal",sprites,28);
-	generate_subposition_data(&(track_list_default.dive_loop_45_left),"RightEighthDiveLoopDownToOrthogonal",sprites,28);
+	//generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",sprites,0);
+	//generate_subposition_data(&(track_list_default.dive_loop_45_right),"RightEighthDiveLoopUpToOrthogonal",sprites,0);
+	//generate_subposition_data(&(track_list_default.dive_loop_45_right),"LeftEighthDiveLoopDownToOrthogonal",sprites,28);
+	//generate_subposition_data(&(track_list_default.dive_loop_45_left),"RightEighthDiveLoopDownToOrthogonal",sprites,28);
 
 	//generate_subposition_data(&(track_list_default.dive_loop_90_left),"LeftDiveLoopUp",sprites,0);
 	//generate_subposition_data(&(track_list_default.dive_loop_90_right),"RightDiveLoopUp",sprites,0);

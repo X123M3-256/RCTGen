@@ -201,6 +201,7 @@ typedef struct
 
 typedef struct
 {
+	const char* name;
 	unsigned int flags;
 	track_point_t (*curve)(float distance);
 	float length;

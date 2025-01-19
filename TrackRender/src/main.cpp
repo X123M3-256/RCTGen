@@ -181,16 +181,6 @@ int load_track_type(track_type_t* track_type,json_t* json)
 
 	if(track_type->flags&TRACK_HAS_LIFT)
 	{
-		json_t* groups=json_object_get(json,"lift_sections");
-		if(groups !=NULL)
-		{
-			if(!json_is_array(groups))
-			{
-				printf("Error: Property \"lift_sections\" is not an array\n");
-				return 1;
-			}
-			if(load_groups(groups,&(track_type->lift_groups)))return 1;
-		}
 		json_t* offset=json_object_get(json,"lift_offset");
 		if(offset)
 		{
@@ -305,24 +295,12 @@ int load_track_type(track_type_t* track_type,json_t* json)
 		return 1;
 	}
 
-	if(track_type->flags&TRACK_HAS_LIFT)
-	{
-		if(load_model(&(track_type->lift_mesh),models,"lift"))
-		{
-			mesh_destroy(&(track_type->mesh));
-			mesh_destroy(&(track_type->mask));
-			printf("Error: Lift mesh not found\n");
-			return 1;
-		}
-	}
-
 	if(track_type->flags&TRACK_SEPARATE_TIE)
 	{
 		if(load_model(&(track_type->tie_mesh),models,"tie"))
 		{
 			mesh_destroy(&(track_type->mesh));
 			mesh_destroy(&(track_type->mask));
-			if(track_type->flags&TRACK_HAS_LIFT)mesh_destroy(&(track_type->lift_mesh));
 			printf("Error: separate tie mesh not found\n");
 			return 1;
 		}
@@ -334,22 +312,8 @@ int load_track_type(track_type_t* track_type,json_t* json)
 				mesh_destroy(&(track_type->mesh));
 				mesh_destroy(&(track_type->mask));
 				mesh_destroy(&(track_type->tie_mesh));
-				if(track_type->flags&TRACK_HAS_LIFT)mesh_destroy(&(track_type->lift_mesh));
 				printf("Error: track_tie mesh not found\n");
 				return 1;
-			}
-			if(track_type->flags&TRACK_HAS_LIFT)
-			{
-				if(load_model(&(track_type->lift_mesh_tie),models,"lift_tie"))
-				{
-					mesh_destroy(&(track_type->mesh));
-					mesh_destroy(&(track_type->mask));
-					mesh_destroy(&(track_type->tie_mesh));
-					mesh_destroy(&(track_type->mesh_tie));
-					mesh_destroy(&(track_type->lift_mesh));
-					printf("Error: lift_tie mesh not found\n");
-					return 1;
-				}
 			}
 		}
 
@@ -390,7 +354,6 @@ int load_track_type(track_type_t* track_type,json_t* json)
 		{
 			mesh_destroy(&(track_type->mesh));
 			mesh_destroy(&(track_type->mask));
-			if(track_type->flags&TRACK_HAS_LIFT)mesh_destroy(&(track_type->lift_mesh));
 			for(int j=0; j<i; j++)mesh_destroy(&(track_type->models[j]));
 			printf("Error: failed to load model %s\n",support_model_names[i]);
 			return 1;

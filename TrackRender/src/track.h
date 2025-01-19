@@ -84,12 +84,6 @@ enum track_flags
 	TRACK_SPECIAL_OFFSETS=128
 };
 
-enum track_subtypes
-{
-	TRACK_SUBTYPE_DEFAULT=0,
-	TRACK_SUBTYPE_LIFT=1,
-};
-
 enum track_groups
 {
 	TRACK_GROUP_FLAT=0x1,
@@ -181,13 +175,10 @@ typedef struct
 {
 	uint32_t flags;
 	uint64_t groups;
-	uint64_t lift_groups;
 	int32_t lift_offset;
 	uint32_t models_loaded;
 	mesh_t mesh;
 	mesh_t mesh_tie;
-	mesh_t lift_mesh;
-	mesh_t lift_mesh_tie;
 	mesh_t tie_mesh;
 	mesh_t mask;
 	mesh_t models[NUM_MODELS];

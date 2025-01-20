@@ -381,8 +381,7 @@ extern track_section_t track_sections[NUM_TRACK_SECTIONS];
 
 
 extern view_t default_masks[NUM_TRACK_SECTIONS][4];
-//extern view_t semi_split_masks[NUM_TRACK_SECTIONS][4];
-//extern view_t split_masks[NUM_TRACK_SECTIONS][4];
+extern view_t split_masks[NUM_TRACK_SECTIONS][4];
 
 
 

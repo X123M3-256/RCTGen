@@ -534,23 +534,6 @@ y        z
 |_
 */
 
-//Mini
-/*
-float offset_tables[11][8]={
-    {0,-1.45,0,-1.45,0,-1.45,0,-1.45},
-    {0,-1,0,-1.25,0,-1.25,0,-1},            //Gentle
-    {1,-0.5,1,-0.5,0.5,-1,1,-0.5},    //Steep
-    {0,-2,-1,-1.5,1,0,-1,0},          //Bank
-    {0.75,-2,-0.75,-2,1,-0.5,-0.5,-0.4}, //Gentle Bank   -0.5,-1    0.5,0
-    {0,0,0,0,0,0,0,0},                //Inverted
-    {0,-1.25,0,-1.25,0,-1.25,0,-1.25},//Diagonal
-    {0,-1.75,-1,-0.25,0,-0.25,-1,-1.5},//Diagonal Bank
-    {0,-1.5,0,-1.5,0,-1.5,0,-1.5},    //Diagonal gentle
-    {0,-1.5,0,-1.5,0,-1.5,0,-1.5},    //Diagonal steep
-    {0,0,0,0,0,0,0,0},                //Other
-};
-*/
-
 //LIM
 /*
 float offset_tables[10][8]={
@@ -771,7 +754,7 @@ const char* suffix="";
 			}
 			//if(view->flags&VIEW_NEEDS_TRACK_MASK)image_write_png(&(track_masks[angle]),file);
 			image_crop(&part_sprite);
-			image_write_png(&part_sprite,file);
+			image_write_png(&part_sprite, NULL, file);
 			//image_write_png(full_sprites+angle,file);
 			fclose(file);
 

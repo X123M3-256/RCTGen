@@ -4,7 +4,7 @@
 #include <png.h>
 #include "image.h"
 
-png_color palette[256] = {
+image_palette_t rct2_palette ={256,0,{
 {0,0,0},//0
 {1,1,1},
 {2,2,2},
@@ -274,190 +274,193 @@ png_color palette[256] = {
 {88,237,88},
 {92,255,92}
 */
-};
+}};
 
 void image_new(image_t* image, uint16_t width, uint16_t height, int16_t x_offset, int16_t y_offset, uint16_t flags)
 {
-    image->width = width;
-    image->height = height;
-    image->x_offset = x_offset;
-    image->y_offset = y_offset;
-    image->flags = flags;
-    image->pixels = (uint8_t*)calloc(width * height, sizeof(uint8_t));
+image->width = width;
+image->height = height;
+image->x_offset = x_offset;
+image->y_offset = y_offset;
+image->pixels = (uint8_t*)calloc(width * height, sizeof(uint8_t));
 }
 
 
 void image_copy(image_t* src, image_t* dst)
 {
-    dst->width = src->width;
-    dst->height = src->height;
-    dst->x_offset = src->x_offset;
-    dst->y_offset = src->y_offset;
-    dst->flags = src->flags;
-    dst->pixels = (uint8_t*)calloc(src->width * src->height, sizeof(uint8_t));
-    memmove(dst->pixels, src->pixels, src->width * src->height);
+dst->width = src->width;
+dst->height = src->height;
+dst->x_offset = src->x_offset;
+dst->y_offset = src->y_offset;
+dst->pixels = (uint8_t*)calloc(src->width * src->height, sizeof(uint8_t));
+memmove(dst->pixels, src->pixels, src->width * src->height);
 }
 //TODO prevent writing outside image
 void image_blit(image_t* dst, image_t* src, int16_t x_offset, int16_t y_offset)
 {
-    x_offset += src->x_offset - dst->x_offset;
-    y_offset += src->y_offset - dst->y_offset;
+x_offset += src->x_offset - dst->x_offset;
+y_offset += src->y_offset - dst->y_offset;
 
-    for (int y = 0; y < src->height; y++)
-        for (int x = 0; x < src->width; x++)
-        {
-            int dst_x = x_offset + x;
-            int dst_y = y_offset + y;
+	for (int y = 0; y < src->height; y++)
+	for (int x = 0; x < src->width; x++)
+	{
+	int dst_x = x_offset + x;
+	int dst_y = y_offset + y;
 
-            if (src->pixels[y * src->width + x] && dst_x >= 0 && dst_y >= 0 && dst_x < dst->width && dst_y < dst->height)dst->pixels[dst_y * dst->width + dst_x] = src->pixels[y * src->width + x];
-        }
+		if (src->pixels[y * src->width + x] && dst_x >= 0 && dst_y >= 0 && dst_x < dst->width && dst_y < dst->height)dst->pixels[dst_y * dst->width + dst_x] = src->pixels[y * src->width + x];
+	}
 }
 
 int image_read_png(image_t* image, FILE* file)
 {
-    if (!file)
-    {
-        return 1;
-    }
-    png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (!png)
-    {
-        fclose(file);
-        return 1;
-    }
-    png_infop info = png_create_info_struct(png);
-    if (!info)
-    {
-        fclose(file);
-        return 1;
-    }
-    if (setjmp(png_jmpbuf(png)))abort();//TODO Not sure what this does but I don't think it's what I want
+	if (!file)
+	{
+	return 1;
+	}
+png_structp png = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	if (!png)
+	{
+	fclose(file);
+	return 1;
+	}
+png_infop info = png_create_info_struct(png);
+	if (!info)
+	{
+	fclose(file);
+	return 1;
+	}
+	if (setjmp(png_jmpbuf(png)))abort();//TODO Not sure what this does but I don't think it's what I want
 
-    png_init_io(png, file);
-    png_read_info(png, info);
+png_init_io(png, file);
+png_read_info(png, info);
 
-    image->width = png_get_image_width(png, info);
-    image->height = png_get_image_height(png, info);
-    image->x_offset = 0;
-    image->y_offset = 0;
-    image->flags = 1;
+image->width = png_get_image_width(png, info);
+image->height = png_get_image_height(png, info);
+image->x_offset = 0;
+image->y_offset = 0;
 
-    png_byte color_type = png_get_color_type(png, info);
-    png_byte bit_depth = png_get_bit_depth(png, info);
+png_byte color_type = png_get_color_type(png, info);
+png_byte bit_depth = png_get_bit_depth(png, info);
 
-    if (color_type != PNG_COLOR_TYPE_PALETTE)
-    {
-        fclose(file);
-        return 1;
-    }
-    png_read_update_info(png, info);
+	if (color_type != PNG_COLOR_TYPE_PALETTE)
+	{
+	fclose(file);
+	return 1;
+	}
+png_read_update_info(png, info);
 
-    png_bytep* row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * image->height);
-    for (int y = 0; y < image->height; y++)
-    {
-        row_pointers[y] = (png_bytep)malloc(sizeof(png_byte) * png_get_rowbytes(png, info));
-    }
+png_bytep* row_pointers = (png_bytep*)malloc(sizeof(png_bytep) * image->height);
+	for (int y = 0; y < image->height; y++)
+	{
+	row_pointers[y] = (png_bytep)malloc(sizeof(png_byte) * png_get_rowbytes(png, info));
+	}
 
-    png_read_image(png, row_pointers);
+png_read_image(png, row_pointers);
 
-    image->pixels = (uint8_t*)malloc(image->width * image->height * sizeof(uint8_t));
+image->pixels = (uint8_t*)malloc(image->width * image->height * sizeof(uint8_t));
 
-    for (int y = 0; y < image->height; y++)
-        for (int x = 0; x < image->width; x++)
-        {
-            image->pixels[x + y * image->width] = (uint8_t)row_pointers[y][x];
-        }
-    for (int y = 0; y < image->height; y++)
-    {
-        free(row_pointers[y]);
-    }
-    free(row_pointers);
-    return 0;
+	for (int y = 0; y < image->height; y++)
+	for (int x = 0; x < image->width; x++)
+	{
+	image->pixels[x + y * image->width] = (uint8_t)row_pointers[y][x];
+	}
+	for (int y = 0; y < image->height; y++)
+	{
+	free(row_pointers[y]);
+	}
+free(row_pointers);
+return 0;
 }
 
-int image_write_png(image_t* image, FILE* file)
+int image_write_png(image_t* image, image_palette_t* palette, FILE* file)
 {
-    png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (png_ptr == NULL)return 1;
+png_structp png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	if (png_ptr == NULL)return 1;
 
-    png_infop info_ptr = png_create_info_struct(png_ptr);
-    if (info_ptr == NULL)
-    {
-        png_destroy_write_struct(&png_ptr, &info_ptr);
-        return 1;
-    }
+png_infop info_ptr = png_create_info_struct(png_ptr);
+	if (info_ptr == NULL)
+	{
+	png_destroy_write_struct(&png_ptr, &info_ptr);
+	return 1;
+	}
 
-    /*TODO make this actually work*/
-    //if (setjmp (png_jmpbuf (png_ptr))) {
-    //    goto png_failure;
-    //}
+	/*TODO make this actually work*/
+	//if (setjmp (png_jmpbuf (png_ptr))) {
+	//	goto png_failure;
+	//}
 
 //Set image attributes
-    png_set_IHDR(png_ptr, info_ptr, image->width, image->height, 8, PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
-    //Set palette
-    png_set_PLTE(png_ptr, info_ptr, palette, 256);
-    //Set transparent color
-    png_byte transparency = 0;
-    png_set_tRNS(png_ptr, info_ptr, &transparency, 1, NULL);
+png_set_IHDR(png_ptr, info_ptr, image->width, image->height, 8, PNG_COLOR_TYPE_PALETTE, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
-    png_byte** row_pointers = (png_byte**)png_malloc(png_ptr, image->height * sizeof(png_byte*));
-    for (size_t y = 0; y < image->height; y++)
-    {
-        row_pointers[y] = image->pixels + y * image->width;
-    }
-    //Write file
-    png_init_io(png_ptr, file);
-    png_set_rows(png_ptr, info_ptr, row_pointers);
-    png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
-    png_free(png_ptr, row_pointers);
-    png_destroy_write_struct(&png_ptr, &info_ptr);
-    return 0;
+//Set palette
+	if(palette==NULL)palette=&rct2_palette;
+png_set_PLTE(png_ptr, info_ptr, palette->colors, palette->num_colors);
+
+//Set transparent color
+	if(palette->transparent_color>=0)	
+	{
+	png_byte transparency = palette->transparent_color;
+	png_set_tRNS(png_ptr, info_ptr, &transparency, 1, NULL);
+	}
+
+png_byte** row_pointers = (png_byte**)png_malloc(png_ptr, image->height * sizeof(png_byte*));
+	for (size_t y = 0; y < image->height; y++)
+	{
+	row_pointers[y] = image->pixels + y * image->width;
+	}
+
+//Write file
+png_init_io(png_ptr, file);
+png_set_rows(png_ptr, info_ptr, row_pointers);
+png_write_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL);
+png_free(png_ptr, row_pointers);
+png_destroy_write_struct(&png_ptr, &info_ptr);
+return 0;
 }
 
 void image_crop(image_t* image)
 {
-    int x_min = INT32_MAX;
-    int x_max = INT32_MIN;
-    int y_min = INT32_MAX;
-    int y_max = INT32_MIN;
+int x_min = INT32_MAX;
+int x_max = INT32_MIN;
+int y_min = INT32_MAX;
+int y_max = INT32_MIN;
 
-    for (int y = 0; y < image->height; y++)
-        for (int x = 0; x < image->width; x++)
-        {
-            if (image->pixels[x + y * image->width] > 0)
-            {
-                if (x < x_min)x_min = x;
-                if (x > x_max)x_max = x;
-                if (y < y_min)y_min = y;
-                if (y > y_max)y_max = y;
-            }
-        }
+	for (int y = 0; y < image->height; y++)
+	for (int x = 0; x < image->width; x++)
+	{
+		if (image->pixels[x + y * image->width] > 0)
+		{
+			if (x < x_min)x_min = x;
+			if (x > x_max)x_max = x;
+			if (y < y_min)y_min = y;
+			if (y > y_max)y_max = y;
+		}
+	}
 
-    if (x_max < x_min)
-    {
-        image->x_offset = 0;
-        image->y_offset = 0;
-        image->width = 1;
-        image->height = 1;
-    }
-    else
-    {
-        int stride = image->width;
-        image->x_offset += x_min;
-        image->y_offset += y_min;
-        image->width = x_max - x_min + 1;
-        image->height = y_max - y_min + 1;
+	if (x_max < x_min)
+	{
+	image->x_offset = 0;
+	image->y_offset = 0;
+	image->width = 1;
+	image->height = 1;
+	}
+	else
+	{
+	int stride = image->width;
+	image->x_offset += x_min;
+	image->y_offset += y_min;
+	image->width = x_max - x_min + 1;
+	image->height = y_max - y_min + 1;
 
-        for (int y = 0; y < image->height; y++)
-            for (int x = 0; x < image->width; x++)
-            {
-                image->pixels[x + y * image->width] = image->pixels[(x + x_min) + (y + y_min) * stride];
-            }
-
-    }
+		for (int y = 0; y < image->height; y++)
+		for (int x = 0; x < image->width; x++)
+		{
+		image->pixels[x + y * image->width] = image->pixels[(x + x_min) + (y + y_min) * stride];
+		}
+	}
 }
 
 void image_destroy(image_t* image)
 {
-    free(image->pixels);
+	free(image->pixels);
 }

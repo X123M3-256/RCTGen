@@ -404,7 +404,7 @@ image_t images[4*MAX_FRAMES];
 			}
 		int index=frame*project->items[i].rotations+angle;
 		image_crop(&images[index]);
-		image_write_png(&images[index],file);
+		image_write_png(&images[index],NULL,file);
 		fclose(file);
 
 		json_t* sprite_entry=json_object();

@@ -6,11 +6,17 @@
 
 typedef struct
 {
+int num_colors;
+int transparent_color;
+png_color colors[256];
+}image_palette_t;
+
+typedef struct
+{
     uint16_t width;
     uint16_t height;
     int16_t x_offset;
     int16_t y_offset;
-    uint16_t flags;
     uint8_t* pixels;
 }image_t;
 
@@ -18,7 +24,7 @@ void image_new(image_t* image, uint16_t width, uint16_t height, int16_t x_offset
 void image_copy(image_t* src, image_t* dst);
 void image_blit(image_t* dst, image_t* src, int16_t x_offset, int16_t y_offset);
 int image_read_png(image_t* image, FILE* file);
-int image_write_png(image_t* image, FILE* file);
+int image_write_png(image_t* image, image_palette_t* palette, FILE* file);
 void image_create_atlas(image_t* image, image_t* images, int num_images, int* x_offsets, int* y_offsets);
 void image_create_grid(image_t* image, image_t* images, int num_images, int* x_offsets, int* y_offsets, int columns);
 void image_crop(image_t* image);

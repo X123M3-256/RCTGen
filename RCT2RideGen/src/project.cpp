@@ -788,7 +788,7 @@ json_t* project_render_sprites(project_t* project, context_t* context)
     FILE* file = fopen("object/images/preview.png", "wb");
     if (file)
     {
-        image_write_png(&(project->preview), file);
+        image_write_png(&(project->preview), NULL, file);
         fclose(file);
     }
     else
@@ -855,7 +855,7 @@ json_t* project_render_sprites(project_t* project, context_t* context)
         FILE* file = fopen(path, "wb");
         if (file)
         {
-            image_write_png(&atlas, file);
+            image_write_png(&atlas, NULL, file);
             fclose(file);
         }
         else
@@ -976,7 +976,7 @@ int project_export_test(project_t* project, context_t* context)
             FILE* file = fopen(path, "wb");
             if (file)
             {
-                image_write_png(&image, file);
+                image_write_png(&image, NULL, file);
                 fclose(file);
             }
             else

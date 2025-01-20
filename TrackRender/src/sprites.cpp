@@ -29,7 +29,7 @@ uint8_t flat_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,2,1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     0,0,0,0,0,0,1,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,3,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1};
 
-image_t flat_chain[4]={{32,17,-16,-6,1,flat_chain_pixels+0},{32,17,-16,-6,1,flat_chain_pixels+544},{32,17,-16,-6,1,flat_chain_pixels+1088},{32,17,-16,-6,1,flat_chain_pixels+1632}};
+image_t flat_chain[4]={{32,17,-16,-6,flat_chain_pixels+0},{32,17,-16,-6,flat_chain_pixels+544},{32,17,-16,-6,flat_chain_pixels+1088},{32,17,-16,-6,flat_chain_pixels+1632}};
 
 uint8_t flat_to_gentle_up_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -60,7 +60,7 @@ uint8_t flat_to_gentle_up_chain_pixels[]={
     0,0,0,0,0,0,0,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,3,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1};
 
 image_t flat_to_gentle_up_chain[4]={
-    {32,25,-16,-14,1,flat_to_gentle_up_chain_pixels+0},{32,9,-16,-6,1,flat_to_gentle_up_chain_pixels+800},{32,9,-16,-6,1,flat_to_gentle_up_chain_pixels+1088},{32,25,-16,-14,1,flat_to_gentle_up_chain_pixels+1376}};
+    {32,25,-16,-14,flat_to_gentle_up_chain_pixels+0},{32,9,-16,-6,flat_to_gentle_up_chain_pixels+800},{32,9,-16,-6,flat_to_gentle_up_chain_pixels+1088},{32,25,-16,-14,flat_to_gentle_up_chain_pixels+1376}};
 
 uint8_t gentle_up_to_flat_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -92,7 +92,7 @@ uint8_t gentle_up_to_flat_chain_pixels[]={
     3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0};
 
 image_t gentle_up_to_flat_chain[4]={
-    {33,25,-17,-14,1,gentle_up_to_flat_chain_pixels+0},{32,9,-16,-6,1,gentle_up_to_flat_chain_pixels+825},{32,9,-16,-6,1,gentle_up_to_flat_chain_pixels+1113},{33,25,-16,-14,1,gentle_up_to_flat_chain_pixels+1401}};
+    {33,25,-17,-14,gentle_up_to_flat_chain_pixels+0},{32,9,-16,-6,gentle_up_to_flat_chain_pixels+825},{32,9,-16,-6,gentle_up_to_flat_chain_pixels+1113},{33,25,-16,-14,gentle_up_to_flat_chain_pixels+1401}};
 
 uint8_t gentle_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -123,14 +123,14 @@ uint8_t gentle_chain_pixels[]={
     0,0,0,0,1,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3,3,0,0,0,0,0,0,0,0,0,
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0};
 
-image_t gentle_chain[4]={{33,33,-17,-22,1,gentle_chain_pixels+0},{32,1,-16,-6,1,gentle_chain_pixels+1089},{32,1,-16,-6,1,gentle_chain_pixels+1121},{33,33,-16,-22,1,gentle_chain_pixels+1153}};
+image_t gentle_chain[4]={{33,33,-17,-22,gentle_chain_pixels+0},{32,1,-16,-6,gentle_chain_pixels+1089},{32,1,-16,-6,gentle_chain_pixels+1121},{33,33,-16,-22,gentle_chain_pixels+1153}};
 
 uint8_t flat_diag_chain_pixels[]={1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,
                                    1,1,2,2,3,3,1,1,2,2,3,3,1,1,2,2,3,3,1,1,2,2,3,3,1,1,2,2,3,3,1,1,2,2,3,3,1,1,2,2,3,3,1,1,2,2,3,3,1,1,2,2,3,3,1,1,2,2,3,3,1,1,2,2,
                                    1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,3,2,1,
                                    2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1};
 
-image_t flat_diag_chain[4]={{64,1,-32,2,1,flat_diag_chain_pixels+0},{2,32,-1,-14,1,flat_diag_chain_pixels+64},{64,1,-32,2,1,flat_diag_chain_pixels+128},{2,32,-1,-14,1,flat_diag_chain_pixels+192}};
+image_t flat_diag_chain[4]={{64,1,-32,2,flat_diag_chain_pixels+0},{2,32,-1,-14,flat_diag_chain_pixels+64},{64,1,-32,2,flat_diag_chain_pixels+128},{2,32,-1,-14,flat_diag_chain_pixels+192}};
 
 uint8_t gentle_diag_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -162,7 +162,7 @@ uint8_t gentle_diag_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,
     2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1};
 
-image_t gentle_diag_chain[4]={{64,17,-32,-14,1,gentle_diag_chain_pixels+0},{2,16,-1,-14,1,gentle_diag_chain_pixels+1088},{64,17,-32,-14,1,gentle_diag_chain_pixels+1120},{2,48,-1,-30,1,gentle_diag_chain_pixels+2208}};
+image_t gentle_diag_chain[4]={{64,17,-32,-14,gentle_diag_chain_pixels+0},{2,16,-1,-14,gentle_diag_chain_pixels+1088},{64,17,-32,-14,gentle_diag_chain_pixels+1120},{2,48,-1,-30,gentle_diag_chain_pixels+2208}};
 
 uint8_t flat_to_gentle_up_diag_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -183,10 +183,10 @@ uint8_t flat_to_gentle_up_diag_chain_pixels[]={
     1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1};
 
 image_t flat_to_gentle_up_diag_chain[4]={
-    {64,9,-32,-6,1,flat_to_gentle_up_diag_chain_pixels+0},
-    {2,24,-1,-14,1,flat_to_gentle_up_diag_chain_pixels+576},
-    {64,9,-32,-6,1,flat_to_gentle_up_diag_chain_pixels+624},
-    {2,40,-1,-22,1,flat_to_gentle_up_diag_chain_pixels+1200}};
+    {64,9,-32,-6,flat_to_gentle_up_diag_chain_pixels+0},
+    {2,24,-1,-14,flat_to_gentle_up_diag_chain_pixels+576},
+    {64,9,-32,-6,flat_to_gentle_up_diag_chain_pixels+624},
+    {2,40,-1,-22,flat_to_gentle_up_diag_chain_pixels+1200}};
 
 uint8_t gentle_to_flat_up_diag_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,2,3,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -207,10 +207,10 @@ uint8_t gentle_to_flat_up_diag_chain_pixels[]={
     1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1};
 
 image_t gentle_to_flat_up_diag_chain[4]={
-    {64,9,-32,-6,1,gentle_to_flat_up_diag_chain_pixels+0},
-    {2,24,-1,-14,1,gentle_to_flat_up_diag_chain_pixels+576},
-    {64,9,-32,-6,1,gentle_to_flat_up_diag_chain_pixels+624},
-    {2,40,-1,-22,1,gentle_to_flat_up_diag_chain_pixels+1200}};
+    {64,9,-32,-6,gentle_to_flat_up_diag_chain_pixels+0},
+    {2,24,-1,-14,gentle_to_flat_up_diag_chain_pixels+576},
+    {64,9,-32,-6,gentle_to_flat_up_diag_chain_pixels+624},
+    {2,40,-1,-22,gentle_to_flat_up_diag_chain_pixels+1200}};
 
 uint8_t steep_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -280,7 +280,7 @@ uint8_t steep_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0};
 
-image_t steep_chain[4]={{34,81,-17,-70,1,steep_chain_pixels+0},{1,1,0,0,1,steep_chain_pixels+2754},{1,1,0,0,1,steep_chain_pixels+2755},{34,81,-17,-70,1,steep_chain_pixels+2756}};
+image_t steep_chain[4]={{34,81,-17,-70,steep_chain_pixels+0},{1,1,0,0,steep_chain_pixels+2754},{1,1,0,0,steep_chain_pixels+2755},{34,81,-17,-70,steep_chain_pixels+2756}};
 
 uint8_t gentle_to_steep_up_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -326,7 +326,7 @@ uint8_t gentle_to_steep_up_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0};
 
 image_t gentle_to_steep_up_chain[4]={
-    {34,49,-17,-38,1,gentle_to_steep_up_chain_pixels+0},{14,3,-16,-8,1,gentle_to_steep_up_chain_pixels+1666},{14,3,2,-8,1,gentle_to_steep_up_chain_pixels+1708},{34,49,-17,-38,1,gentle_to_steep_up_chain_pixels+1750}};
+    {34,49,-17,-38,gentle_to_steep_up_chain_pixels+0},{14,3,-16,-8,gentle_to_steep_up_chain_pixels+1666},{14,3,2,-8,gentle_to_steep_up_chain_pixels+1708},{34,49,-17,-38,gentle_to_steep_up_chain_pixels+1750}};
 
 uint8_t steep_to_gentle_up_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -371,7 +371,7 @@ uint8_t steep_to_gentle_up_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0};
 
 image_t steep_to_gentle_up_chain[4]={
-    {33,49,-17,-38,1,steep_to_gentle_up_chain_pixels+0},{15,3,1,-22,1,steep_to_gentle_up_chain_pixels+1617},{15,3,-16,-22,1,steep_to_gentle_up_chain_pixels+1662},{33,49,-16,-38,1,steep_to_gentle_up_chain_pixels+1707}};
+    {33,49,-17,-38,steep_to_gentle_up_chain_pixels+0},{15,3,1,-22,steep_to_gentle_up_chain_pixels+1617},{15,3,-16,-22,steep_to_gentle_up_chain_pixels+1662},{33,49,-16,-38,steep_to_gentle_up_chain_pixels+1707}};
 
 uint8_t steep_diag_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -477,7 +477,7 @@ uint8_t steep_diag_chain_pixels[]={
     3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,
     3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1};
 
-image_t steep_diag_chain[4]={{64,65,-32,-62,1,steep_diag_chain_pixels+0},{1,1,-129,-129,1,steep_diag_chain_pixels+4160},{64,65,-32,-62,1,steep_diag_chain_pixels+4161},{2,96,-1,-78,1,steep_diag_chain_pixels+8321}};
+image_t steep_diag_chain[4]={{64,65,-32,-62,steep_diag_chain_pixels+0},{1,1,-129,-129,steep_diag_chain_pixels+4160},{64,65,-32,-62,steep_diag_chain_pixels+4161},{2,96,-1,-78,steep_diag_chain_pixels+8321}};
 
 uint8_t gentle_to_steep_up_diag_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -534,10 +534,10 @@ uint8_t gentle_to_steep_up_diag_chain_pixels[]={
     2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1};
 
 image_t gentle_to_steep_up_diag_chain[4]={
-    {64,33,-32,-30,1,gentle_to_steep_up_diag_chain_pixels+0},
-    {1,1,-129,-129,1,gentle_to_steep_up_diag_chain_pixels+2112},
-    {64,33,-32,-30,1,gentle_to_steep_up_diag_chain_pixels+2113},
-    {2,64,-1,-46,1,gentle_to_steep_up_diag_chain_pixels+4225}};
+    {64,33,-32,-30,gentle_to_steep_up_diag_chain_pixels+0},
+    {1,1,-129,-129,gentle_to_steep_up_diag_chain_pixels+2112},
+    {64,33,-32,-30,gentle_to_steep_up_diag_chain_pixels+2113},
+    {2,64,-1,-46,gentle_to_steep_up_diag_chain_pixels+4225}};
 
 uint8_t steep_to_gentle_up_diag_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -594,10 +594,10 @@ uint8_t steep_to_gentle_up_diag_chain_pixels[]={
     3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1};
 
 image_t steep_to_gentle_up_diag_chain[4]={
-    {64,33,-32,-30,1,steep_to_gentle_up_diag_chain_pixels+0},
-    {2,5,-1,-19,1,steep_to_gentle_up_diag_chain_pixels+2112},
-    {64,33,-32,-30,1,steep_to_gentle_up_diag_chain_pixels+2122},
-    {2,64,-1,-46,1,steep_to_gentle_up_diag_chain_pixels+4234}};
+    {64,33,-32,-30,steep_to_gentle_up_diag_chain_pixels+0},
+    {2,5,-1,-19,steep_to_gentle_up_diag_chain_pixels+2112},
+    {64,33,-32,-30,steep_to_gentle_up_diag_chain_pixels+2122},
+    {2,64,-1,-46,steep_to_gentle_up_diag_chain_pixels+4234}};
 
 uint8_t small_flat_to_steep_up_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -636,10 +636,10 @@ uint8_t small_flat_to_steep_up_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,3,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1};
 
 image_t small_flat_to_steep_up_chain[4]={
-    {33,41,-16,-30,1,small_flat_to_steep_up_chain_pixels+0},
-    {16,4,-16,-6,1,small_flat_to_steep_up_chain_pixels+1353},
-    {16,4,0,-6,1,small_flat_to_steep_up_chain_pixels+1417},
-    {33,41,-17,-30,1,small_flat_to_steep_up_chain_pixels+1481}};
+    {33,41,-16,-30,small_flat_to_steep_up_chain_pixels+0},
+    {16,4,-16,-6,small_flat_to_steep_up_chain_pixels+1353},
+    {16,4,0,-6,small_flat_to_steep_up_chain_pixels+1417},
+    {33,41,-17,-30,small_flat_to_steep_up_chain_pixels+1481}};
 
 uint8_t small_steep_to_flat_up_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -678,10 +678,10 @@ uint8_t small_steep_to_flat_up_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0};
 
 image_t small_steep_to_flat_up_chain[4]={
-    {33,41,-17,-30,1,small_steep_to_flat_up_chain_pixels+0},
-    {16,4,0,-17,1,small_steep_to_flat_up_chain_pixels+1353},
-    {16,4,-16,-17,1,small_steep_to_flat_up_chain_pixels+1417},
-    {33,41,-16,-30,1,small_steep_to_flat_up_chain_pixels+1481}};
+    {33,41,-17,-30,small_steep_to_flat_up_chain_pixels+0},
+    {16,4,0,-17,small_steep_to_flat_up_chain_pixels+1353},
+    {16,4,-16,-17,small_steep_to_flat_up_chain_pixels+1417},
+    {33,41,-16,-30,small_steep_to_flat_up_chain_pixels+1481}};
 
 uint8_t small_flat_to_steep_up_diag_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -726,10 +726,10 @@ uint8_t small_flat_to_steep_up_diag_chain_pixels[]={
     2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1};
 
 image_t small_flat_to_steep_up_diag_chain[4]={
-    {64,25,-32,-22,1,small_flat_to_steep_up_diag_chain_pixels+0},
-    {2,8,-1,-14,1,small_flat_to_steep_up_diag_chain_pixels+1600},
-    {64,25,-32,-22,1,small_flat_to_steep_up_diag_chain_pixels+1616},
-    {2,56,-1,-38,1,small_flat_to_steep_up_diag_chain_pixels+3216}};
+    {64,25,-32,-22,small_flat_to_steep_up_diag_chain_pixels+0},
+    {2,8,-1,-14,small_flat_to_steep_up_diag_chain_pixels+1600},
+    {64,25,-32,-22,small_flat_to_steep_up_diag_chain_pixels+1616},
+    {2,56,-1,-38,small_flat_to_steep_up_diag_chain_pixels+3216}};
 
 uint8_t small_steep_to_flat_up_diag_chain_pixels[]={
     0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,2,3,1,2,3,1,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -774,7 +774,7 @@ uint8_t small_steep_to_flat_up_diag_chain_pixels[]={
     3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1,3,3,2,2,1,1};
 
 image_t small_steep_to_flat_up_diag_chain[4]={
-    {64,25,-32,-22,1,small_steep_to_flat_up_diag_chain_pixels+0},
-    {2,12,-1,-17,1,small_steep_to_flat_up_diag_chain_pixels+1600},
-    {64,25,-32,-22,1,small_steep_to_flat_up_diag_chain_pixels+1624},
-    {2,56,-1,-38,1,small_steep_to_flat_up_diag_chain_pixels+3224}};
+    {64,25,-32,-22,small_steep_to_flat_up_diag_chain_pixels+0},
+    {2,12,-1,-17,small_steep_to_flat_up_diag_chain_pixels+1600},
+    {64,25,-32,-22,small_steep_to_flat_up_diag_chain_pixels+1624},
+    {2,56,-1,-38,small_steep_to_flat_up_diag_chain_pixels+3224}};

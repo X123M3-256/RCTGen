@@ -136,6 +136,7 @@ set(maketrack_SOURCES
 	"TrackRender/src/track.cpp"
 	"TrackRender/src/track_sections.cpp"
 	"TrackRender/src/masks.cpp"
+	"TrackRender/src/mask.cpp"
 	"TrackRender/src/sprites.cpp"
 	"TrackRender/src/track.h"
 	"TrackRender/src/sprites.h"

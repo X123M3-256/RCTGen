@@ -715,22 +715,11 @@ const char* suffix="";
 							case TRACK_MASK_INTERSECT:
 								in_mask=in_mask&&in_track_mask;
 								break;
-							case TRACK_MASK_UNION:
-								in_mask=in_mask||in_track_mask;
-								break;
 							}
 
 							if(sprite<view->num_sprites-1&&(view->masks[sprite].track_mask_op&TRACK_MASK_TRANSFER_NEXT)&&in_track_mask
 							  &&is_in_mask(x+full_sprites[angle].x_offset,y+full_sprites[angle].y_offset+((track_section->flags&TRACK_OFFSET_SPRITE_MASK) ? (z_offset-8) : 0),view->masks+sprite+1))
 								in_mask=1;
-						}
-
-						if(view->flags&VIEW_ENFORCE_NON_OVERLAPPING)
-						{
-							for(int i=0; i<sprite; i++)
-							{
-								if(is_in_mask(x+full_sprites[angle].x_offset,y+full_sprites[angle].y_offset+((track_section->flags&TRACK_OFFSET_SPRITE_MASK) ? (z_offset-8) : 0),view->masks+i))in_mask=0;//Note z offset untested
-							}
 						}
 
 						if(in_mask)

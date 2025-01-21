@@ -7972,7 +7972,7 @@ mask_t dive_loop_90_right_masks[]={
 mask_t gentle_to_steep_masks[]={{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all},{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all}};
 rect_t steep_to_gentle_rects[]={{9,INT32_MIN,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,9,INT32_MAX},{INT32_MIN,INT32_MIN,-12,INT32_MAX},{-12,INT32_MIN,INT32_MAX,INT32_MAX}};
 mask_t steep_to_gentle_masks[]={
-    {TRACK_MASK_UNION,1,0,0,steep_to_gentle_rects},{TRACK_MASK_DIFFERENCE,1,0,0,steep_to_gentle_rects+1},{TRACK_MASK_UNION,1,0,0,steep_to_gentle_rects+2},{TRACK_MASK_DIFFERENCE,1,0,0,steep_to_gentle_rects+3}};
+    {TRACK_MASK_TRANSFER_NEXT,1,0,0,steep_to_gentle_rects},{TRACK_MASK_DIFFERENCE,1,0,0,steep_to_gentle_rects+1},{TRACK_MASK_TRANSFER_NEXT,1,0,0,steep_to_gentle_rects+2},{TRACK_MASK_DIFFERENCE,1,0,0,steep_to_gentle_rects+3}};
 
 //Turns
 rect_t small_turn_left_rects[165]={
@@ -9587,29 +9587,29 @@ mask_t steep_to_flat_diag_masks[]={
 //Banked turns
 
 rect_t flat_to_left_bank_rects[]={{INT32_MIN,INT32_MIN,-1,INT32_MAX},{-1,INT32_MIN,INT32_MAX,INT32_MAX}};
-mask_t flat_to_left_bank_masks[]={{TRACK_MASK_UNION,1,0,0,flat_to_left_bank_rects},{TRACK_MASK_DIFFERENCE,1,0,0,flat_to_left_bank_rects+1},{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all}};
+mask_t flat_to_left_bank_masks[]={{TRACK_MASK_TRANSFER_NEXT,1,0,0,flat_to_left_bank_rects},{TRACK_MASK_DIFFERENCE,1,0,0,flat_to_left_bank_rects+1},{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all}};
 
 rect_t flat_to_right_bank_rects[]={{-1,INT32_MIN,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,-1,INT32_MAX}};
-mask_t flat_to_right_bank_masks[]={{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all},{TRACK_MASK_UNION,1,0,0,flat_to_right_bank_rects},{TRACK_MASK_DIFFERENCE,1,0,0,flat_to_right_bank_rects+1}};
+mask_t flat_to_right_bank_masks[]={{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all},{TRACK_MASK_TRANSFER_NEXT,1,0,0,flat_to_right_bank_rects},{TRACK_MASK_DIFFERENCE,1,0,0,flat_to_right_bank_rects+1}};
 
 rect_t left_bank_to_gentle_rects[]={{6,INT32_MIN,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,6,INT32_MAX}};
-mask_t left_bank_to_gentle_masks[]={{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all},{TRACK_MASK_UNION,1,0,0,left_bank_to_gentle_rects},{TRACK_MASK_DIFFERENCE,1,0,0,left_bank_to_gentle_rects+1}};
+mask_t left_bank_to_gentle_masks[]={{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all},{TRACK_MASK_TRANSFER_NEXT,1,0,0,left_bank_to_gentle_rects},{TRACK_MASK_DIFFERENCE,1,0,0,left_bank_to_gentle_rects+1}};
 
 rect_t right_bank_to_gentle_rects[]={{INT32_MIN,INT32_MIN,-5,INT32_MAX},{-5,INT32_MIN,INT32_MAX,INT32_MAX}};
-mask_t right_bank_to_gentle_masks[]={{TRACK_MASK_UNION,1,0,0,right_bank_to_gentle_rects},{TRACK_MASK_DIFFERENCE,1,0,0,right_bank_to_gentle_rects+1},{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all}};
+mask_t right_bank_to_gentle_masks[]={{TRACK_MASK_TRANSFER_NEXT,1,0,0,right_bank_to_gentle_rects},{TRACK_MASK_DIFFERENCE,1,0,0,right_bank_to_gentle_rects+1},{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all}};
 
 rect_t gentle_to_left_bank_rects[]={{INT32_MIN,INT32_MIN,-2,INT32_MAX},{-2,INT32_MIN,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,-16,INT32_MAX},{-16,INT32_MIN,INT32_MAX,INT32_MAX}};
 mask_t gentle_to_left_bank_masks[]={
-    {TRACK_MASK_UNION,1,0,0,gentle_to_left_bank_rects},
+    {TRACK_MASK_TRANSFER_NEXT,1,0,0,gentle_to_left_bank_rects},
     {TRACK_MASK_DIFFERENCE,1,0,0,gentle_to_left_bank_rects+1},
-    {TRACK_MASK_UNION,1,0,0,gentle_to_left_bank_rects+2},
+    {TRACK_MASK_TRANSFER_NEXT,1,0,0,gentle_to_left_bank_rects+2},
     {TRACK_MASK_DIFFERENCE,1,0,0,gentle_to_left_bank_rects+3}};
 
 rect_t gentle_to_right_bank_rects[]={{13,INT32_MIN,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,13,INT32_MAX},{-2,INT32_MIN,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,-2,INT32_MAX}};
 mask_t gentle_to_right_bank_masks[]={
-    {TRACK_MASK_UNION,1,0,0,gentle_to_right_bank_rects},
+    {TRACK_MASK_TRANSFER_NEXT,1,0,0,gentle_to_right_bank_rects},
     {TRACK_MASK_DIFFERENCE,1,0,0,gentle_to_right_bank_rects+1},
-    {TRACK_MASK_UNION,1,0,0,gentle_to_right_bank_rects+2},
+    {TRACK_MASK_TRANSFER_NEXT,1,0,0,gentle_to_right_bank_rects+2},
     {TRACK_MASK_DIFFERENCE,1,0,0,gentle_to_right_bank_rects+3}};
 
 
@@ -10025,7 +10025,7 @@ rect_t large_turn_left_to_diag_bank_rects[]={
     {INT32_MIN,14,-94,15},
     {INT32_MIN,15,-96,INT32_MAX}};
 mask_t large_turn_left_to_diag_bank_masks[]={
-    {0,33,0,0,large_turn_left_to_diag_bank_rects},      {0,47,-32,16,large_turn_left_to_diag_bank_rects+33},  {0,31,0,32,large_turn_left_to_diag_bank_rects+80},  {0,31*2,-32,48,large_turn_left_to_diag_bank_rects+111-31},
+    {0,33,0,0,large_turn_left_to_diag_bank_rects},      {0,47,-32,16,large_turn_left_to_diag_bank_rects+33},  {0,31,0,32,large_turn_left_to_diag_bank_rects+80},  {0,31,-32,48,large_turn_left_to_diag_bank_rects+111},
     {0,33,0,0,large_turn_left_to_diag_bank_rects+142},{0,17,-32,-16,large_turn_left_to_diag_bank_rects+175},{0,1,-64,0,large_turn_left_to_diag_bank_rects+192}, {0,1,-96,-16,large_turn_left_to_diag_bank_rects+193},
     {0,16,0,0,large_turn_left_to_diag_bank_rects+194},{0,32,32,-16,large_turn_left_to_diag_bank_rects+210}, {0,33,0,-32,large_turn_left_to_diag_bank_rects+242},{0,33,32,-48,large_turn_left_to_diag_bank_rects+275},
     {0,17,0,0,large_turn_left_to_diag_bank_rects+308},{0,16,32,16,large_turn_left_to_diag_bank_rects+325},  {0,16,64,0,large_turn_left_to_diag_bank_rects+341}, {0,17,96,16,large_turn_left_to_diag_bank_rects+357},
@@ -11228,7 +11228,7 @@ rect_t very_small_turn_left_steep_rects[]={{INT32_MIN,INT32_MIN,INT32_MAX,-34},{
 mask_t very_small_turn_left_steep_masks[]={
     {0,1,0,0,&all},
     {0,1,0,0,&none},
-    {TRACK_MASK_UNION,2,0,0,very_small_turn_left_steep_rects},
+    {TRACK_MASK_TRANSFER_NEXT,2,0,0,very_small_turn_left_steep_rects},
     {TRACK_MASK_DIFFERENCE,1,0,0,very_small_turn_left_steep_rects+2},
     {0,1,0,0,&none},
     {0,1,0,0,&all},
@@ -11237,8 +11237,8 @@ mask_t very_small_turn_left_steep_masks[]={
 };
 rect_t very_small_turn_right_steep_rects[]={{INT32_MIN,INT32_MIN,0,INT32_MAX},{0,INT32_MIN,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,INT32_MAX,-36},{INT32_MIN,INT32_MIN,-15,INT32_MAX},{-15,-36,INT32_MAX,INT32_MAX}};
 mask_t very_small_turn_right_steep_masks[]={
-    {TRACK_MASK_UNION,1,0,0,very_small_turn_right_steep_rects},    {TRACK_MASK_DIFFERENCE,1,0,0,very_small_turn_right_steep_rects+1},{0,1,0,0,&none},{0,1,0,0,&all},
-    {TRACK_MASK_UNION,2,0,0,very_small_turn_right_steep_rects+2},{TRACK_MASK_DIFFERENCE,1,0,0,very_small_turn_right_steep_rects+4},{0,1,0,0,&all}, {0,1,0,0,&none},
+    {TRACK_MASK_TRANSFER_NEXT,1,0,0,very_small_turn_right_steep_rects},    {TRACK_MASK_DIFFERENCE,1,0,0,very_small_turn_right_steep_rects+1},{0,1,0,0,&none},{0,1,0,0,&all},
+    {TRACK_MASK_TRANSFER_NEXT,2,0,0,very_small_turn_right_steep_rects+2},{TRACK_MASK_DIFFERENCE,1,0,0,very_small_turn_right_steep_rects+4},{0,1,0,0,&all}, {0,1,0,0,&none},
 };
 rect_t vertical_twist_left_rects[]={
     {INT32_MIN,INT32_MIN,INT32_MAX,-44},
@@ -11260,9 +11260,9 @@ mask_t gentle_to_gentle_left_bank_masks[]={{TRACK_MASK_INTERSECT,1,0,0,&all},{TR
 mask_t gentle_to_gentle_right_bank_masks[]={{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all}};
 
 rect_t gentle_left_bank_to_gentle_rects[]={{16,INT32_MIN,INT32_MAX,INT32_MAX},{0,0,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,0,INT32_MAX},{0,INT32_MIN,16,0}};
-mask_t gentle_left_bank_to_gentle_masks[]={{TRACK_MASK_UNION,2,0,0,gentle_left_bank_to_gentle_rects+0},{TRACK_MASK_DIFFERENCE,2,0,0,gentle_left_bank_to_gentle_rects+2}};
+mask_t gentle_left_bank_to_gentle_masks[]={{TRACK_MASK_TRANSFER_NEXT,2,0,0,gentle_left_bank_to_gentle_rects+0},{TRACK_MASK_DIFFERENCE,2,0,0,gentle_left_bank_to_gentle_rects+2}};
 rect_t gentle_right_bank_to_gentle_rects[]={{INT32_MIN,INT32_MIN,-16,INT32_MAX},{INT32_MIN,0,0,INT32_MAX},{0,INT32_MIN,INT32_MAX,INT32_MAX},{-16,INT32_MIN,INT32_MAX,0}};
-mask_t gentle_right_bank_to_gentle_masks[]={{TRACK_MASK_UNION,2,0,0,gentle_right_bank_to_gentle_rects+0},{TRACK_MASK_DIFFERENCE,2,0,0,gentle_right_bank_to_gentle_rects+2}};
+mask_t gentle_right_bank_to_gentle_masks[]={{TRACK_MASK_TRANSFER_NEXT,2,0,0,gentle_right_bank_to_gentle_rects+0},{TRACK_MASK_DIFFERENCE,2,0,0,gentle_right_bank_to_gentle_rects+2}};
 
 
 
@@ -11270,9 +11270,9 @@ mask_t flat_to_gentle_left_bank_masks[]={{TRACK_MASK_INTERSECT,1,0,0,&all},{TRAC
 mask_t flat_to_gentle_right_bank_masks[]={{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all}};
 
 rect_t gentle_left_bank_to_flat_rects[]={{16,INT32_MIN,INT32_MAX,INT32_MAX},{0,8,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,0,INT32_MAX},{INT32_MIN,INT32_MIN,16,8}};
-mask_t gentle_left_bank_to_flat_masks[]={{TRACK_MASK_UNION,2,0,0,gentle_left_bank_to_flat_rects+0},{TRACK_MASK_DIFFERENCE,2,0,0,gentle_left_bank_to_flat_rects+2}};
+mask_t gentle_left_bank_to_flat_masks[]={{TRACK_MASK_TRANSFER_NEXT,2,0,0,gentle_left_bank_to_flat_rects+0},{TRACK_MASK_DIFFERENCE,2,0,0,gentle_left_bank_to_flat_rects+2}};
 rect_t gentle_right_bank_to_flat_rects[]={{INT32_MIN,INT32_MIN,-16,INT32_MAX},{INT32_MIN,8,0,INT32_MAX},{0,INT32_MIN,INT32_MAX,INT32_MAX},{-16,INT32_MIN,INT32_MAX,8}};
-mask_t gentle_right_bank_to_flat_masks[]={{TRACK_MASK_UNION,2,0,0,gentle_right_bank_to_flat_rects+0},{TRACK_MASK_DIFFERENCE,2,0,0,gentle_right_bank_to_flat_rects+2}};
+mask_t gentle_right_bank_to_flat_masks[]={{TRACK_MASK_TRANSFER_NEXT,2,0,0,gentle_right_bank_to_flat_rects+0},{TRACK_MASK_DIFFERENCE,2,0,0,gentle_right_bank_to_flat_rects+2}};
 
 
 /*
@@ -13394,26 +13394,17 @@ rect_t half_loop_rects[]={
     {-47,INT32_MIN,INT32_MAX,-139},
     {-32,-139,INT32_MAX,-76}};
 mask_t half_loop_masks[]={
-    {TRACK_MASK_NONE,24,-6,-3,half_loop_rects},     {TRACK_MASK_NONE,36,-32,32,half_loop_rects+24},     {TRACK_MASK_UNION,12,-48,56,half_loop_rects+60},{TRACK_MASK_DIFFERENCE,2,-32,168,half_loop_rects+72},
-    {TRACK_MASK_UNION,1,6,-3,half_loop_rects+74}, {TRACK_MASK_DIFFERENCE,2,-18,-7,half_loop_rects+75},{TRACK_MASK_NONE,2,-76,-6,half_loop_rects+77},  {TRACK_MASK_NONE,2,-32,136,half_loop_rects+79},
-    {TRACK_MASK_UNION,1,-6,-3,half_loop_rects+81},{TRACK_MASK_DIFFERENCE,2,26,-3,half_loop_rects+82}, {TRACK_MASK_NONE,2,58,-13,half_loop_rects+84},  {TRACK_MASK_NONE,2,16,96+32,half_loop_rects+86},
-    {TRACK_MASK_NONE,24,6,-3,half_loop_rects+88}, {TRACK_MASK_NONE,36,38,29,half_loop_rects+112},     {TRACK_MASK_UNION,12,64,48,half_loop_rects+148},{TRACK_MASK_DIFFERENCE,2,48,160,half_loop_rects+160}};
+    {TRACK_MASK_NONE,24,-6,-3,half_loop_rects},     {TRACK_MASK_NONE,36,-32,32,half_loop_rects+24},     {TRACK_MASK_TRANSFER_NEXT,12,-48,56,half_loop_rects+60},{TRACK_MASK_DIFFERENCE,2,-32,168,half_loop_rects+72},
+    {TRACK_MASK_TRANSFER_NEXT,1,6,-3,half_loop_rects+74}, {TRACK_MASK_DIFFERENCE,2,-18,-7,half_loop_rects+75},{TRACK_MASK_NONE,2,-76,-6,half_loop_rects+77},  {TRACK_MASK_NONE,2,-32,136,half_loop_rects+79},
+    {TRACK_MASK_TRANSFER_NEXT,1,-6,-3,half_loop_rects+81},{TRACK_MASK_DIFFERENCE,2,26,-3,half_loop_rects+82}, {TRACK_MASK_NONE,2,58,-13,half_loop_rects+84},  {TRACK_MASK_NONE,2,16,96+32,half_loop_rects+86},
+    {TRACK_MASK_NONE,24,6,-3,half_loop_rects+88}, {TRACK_MASK_NONE,36,38,29,half_loop_rects+112},     {TRACK_MASK_TRANSFER_NEXT,12,64,48,half_loop_rects+148},{TRACK_MASK_DIFFERENCE,2,48,160,half_loop_rects+160}};
 
-
-/*
-mask_t vertical_loop_right_masks[]={
-    {TRACK_MASK_NONE,24,-6,-3,half_loop_rects},{TRACK_MASK_NONE,36,-32,32,half_loop_rects+24},{TRACK_MASK_UNION,12,-48,56,half_loop_rects+60},{TRACK_MASK_DIFFERENCE,2,-32,168,half_loop_rects+72},
-    {TRACK_MASK_UNION,1,6,-3,half_loop_rects+74},{TRACK_MASK_DIFFERENCE,2,-18,-7,half_loop_rects+75},{TRACK_MASK_NONE,2,-76,-6,half_loop_rects+77},{TRACK_MASK_NONE,2,-32,136,half_loop_rects+79},
-    {TRACK_MASK_UNION,1,-6,-3,half_loop_rects+81},{TRACK_MASK_DIFFERENCE,2,26,-3,half_loop_rects+82},{TRACK_MASK_NONE,2,58,-13,half_loop_rects+84},{TRACK_MASK_NONE,2,16,96+32,half_loop_rects+86},
-    {TRACK_MASK_NONE,24,6,-3,half_loop_rects+88},{TRACK_MASK_NONE,36,38,29,half_loop_rects+112},{TRACK_MASK_UNION,12,64,48,half_loop_rects+148},{TRACK_MASK_DIFFERENCE,2,48,160,half_loop_rects+160}
-};
-*/
 
 mask_t vertical_loop_right_masks[]={
-    {TRACK_MASK_NONE,24,-6,-3,half_loop_rects},     {TRACK_MASK_NONE,36,-38,29,half_loop_rects+24},     {TRACK_MASK_UNION,12,-64,48,half_loop_rects+60},{TRACK_MASK_DIFFERENCE,2,-48,160,half_loop_rects+72},
-    {TRACK_MASK_UNION,1,6,-3,half_loop_rects+74}, {TRACK_MASK_DIFFERENCE,2,-26,-3,half_loop_rects+75},{TRACK_MASK_NONE,2,-58,-13,half_loop_rects+77}, {TRACK_MASK_NONE,2,-16,128,half_loop_rects+79},
-    {TRACK_MASK_UNION,1,-6,-3,half_loop_rects+81},{TRACK_MASK_DIFFERENCE,2,18,-7,half_loop_rects+82}, {TRACK_MASK_NONE,2,76,-6,half_loop_rects+84},   {TRACK_MASK_NONE,2,32,136,half_loop_rects+86},
-    {TRACK_MASK_NONE,24,6,-3,half_loop_rects+88}, {TRACK_MASK_NONE,36,32,32,half_loop_rects+112},     {TRACK_MASK_UNION,12,48,56,half_loop_rects+148},{TRACK_MASK_DIFFERENCE,2,32,168,half_loop_rects+160}};
+    {TRACK_MASK_NONE,24,-6,-3,half_loop_rects},     {TRACK_MASK_NONE,36,-38,29,half_loop_rects+24},     {TRACK_MASK_TRANSFER_NEXT,12,-64,48,half_loop_rects+60},{TRACK_MASK_DIFFERENCE,2,-48,160,half_loop_rects+72},
+    {TRACK_MASK_TRANSFER_NEXT,1,6,-3,half_loop_rects+74}, {TRACK_MASK_DIFFERENCE,2,-26,-3,half_loop_rects+75},{TRACK_MASK_NONE,2,-58,-13,half_loop_rects+77}, {TRACK_MASK_NONE,2,-16,128,half_loop_rects+79},
+    {TRACK_MASK_TRANSFER_NEXT,1,-6,-3,half_loop_rects+81},{TRACK_MASK_DIFFERENCE,2,18,-7,half_loop_rects+82}, {TRACK_MASK_NONE,2,76,-6,half_loop_rects+84},   {TRACK_MASK_NONE,2,32,136,half_loop_rects+86},
+    {TRACK_MASK_NONE,24,6,-3,half_loop_rects+88}, {TRACK_MASK_NONE,36,32,32,half_loop_rects+112},     {TRACK_MASK_TRANSFER_NEXT,12,48,56,half_loop_rects+148},{TRACK_MASK_DIFFERENCE,2,32,168,half_loop_rects+160}};
 
 
 rect_t flat_to_steep_rects[]={
@@ -15155,16 +15146,16 @@ mask_t semi_split_large_turn_right_to_diag_bank_masks[]={
 
 rect_t gentle_left_bank_to_left_bank_rects[]={{INT32_MIN,8,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,INT32_MAX,8},{16,INT32_MIN,INT32_MAX,INT32_MAX},{0,8,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,0,INT32_MAX},{0,INT32_MIN,16,8}};
 mask_t gentle_left_bank_to_left_bank_masks[]={
-    {TRACK_MASK_UNION,1,0,0,gentle_left_bank_to_left_bank_rects+0},
+    {TRACK_MASK_TRANSFER_NEXT,1,0,0,gentle_left_bank_to_left_bank_rects+0},
     {TRACK_MASK_DIFFERENCE,1,0,0,gentle_left_bank_to_left_bank_rects+1},
-    {TRACK_MASK_UNION,2,0,0,gentle_left_bank_to_left_bank_rects+2},
+    {TRACK_MASK_TRANSFER_NEXT,2,0,0,gentle_left_bank_to_left_bank_rects+2},
     {TRACK_MASK_DIFFERENCE,2,0,0,gentle_left_bank_to_left_bank_rects+4}};
 rect_t gentle_right_bank_to_right_bank_rects[]={{INT32_MIN,INT32_MIN,-16,INT32_MAX},{INT32_MIN,8,0,INT32_MAX},        {0,INT32_MIN,INT32_MAX,INT32_MAX},
                                                     {-16,INT32_MIN,INT32_MAX,8},        {INT32_MIN,8,INT32_MAX,INT32_MAX},{INT32_MIN,INT32_MIN,INT32_MAX,8}};
 mask_t gentle_right_bank_to_right_bank_masks[]={
-    {TRACK_MASK_UNION,2,0,0,gentle_right_bank_to_right_bank_rects+0},
+    {TRACK_MASK_TRANSFER_NEXT,2,0,0,gentle_right_bank_to_right_bank_rects+0},
     {TRACK_MASK_DIFFERENCE,2,0,0,gentle_right_bank_to_right_bank_rects+2},
-    {TRACK_MASK_UNION,1,0,0,gentle_right_bank_to_right_bank_rects+4},
+    {TRACK_MASK_TRANSFER_NEXT,1,0,0,gentle_right_bank_to_right_bank_rects+4},
     {TRACK_MASK_DIFFERENCE,1,0,0,gentle_right_bank_to_right_bank_rects+5}};
 
 mask_t small_flat_to_steep_masks[]={{TRACK_MASK_INTERSECT,1,0,0,&all},{TRACK_MASK_DIFFERENCE,1,0,0,&all}};
@@ -16364,9 +16355,9 @@ view_t default_masks[NUM_TRACK_SECTIONS][4]={
 {{VIEW_NEEDS_TRACK_MASK,6,barrel_roll_right_masks},{VIEW_NEEDS_TRACK_MASK,6,barrel_roll_right_masks+6},{VIEW_NEEDS_TRACK_MASK,6,barrel_roll_right_masks+12},{VIEW_NEEDS_TRACK_MASK,6,barrel_roll_right_masks+18}}, //barrel_roll_right
 {{VIEW_NEEDS_TRACK_MASK,6,inline_twist_left_masks},{VIEW_NEEDS_TRACK_MASK,6,inline_twist_left_masks+6},{VIEW_NEEDS_TRACK_MASK,6,inline_twist_left_masks+12},{VIEW_NEEDS_TRACK_MASK,6,inline_twist_left_masks+18}}, //inline_twist_left
 {{VIEW_NEEDS_TRACK_MASK,6,inline_twist_right_masks},{VIEW_NEEDS_TRACK_MASK,6,inline_twist_right_masks+6},{VIEW_NEEDS_TRACK_MASK,6,inline_twist_right_masks+12},{VIEW_NEEDS_TRACK_MASK,6,inline_twist_right_masks+18}}, //inline_twist_right
-{{VIEW_NEEDS_TRACK_MASK|VIEW_ENFORCE_NON_OVERLAPPING,4,half_loop_masks},{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks+4},{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks+8},{VIEW_NEEDS_TRACK_MASK|VIEW_ENFORCE_NON_OVERLAPPING,4,half_loop_masks+12}}, //half_loop
-{{VIEW_NEEDS_TRACK_MASK|VIEW_ENFORCE_NON_OVERLAPPING,4,half_loop_masks},{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks+4},{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks+8},{VIEW_NEEDS_TRACK_MASK|VIEW_ENFORCE_NON_OVERLAPPING,4,half_loop_masks+12}}, //vertical_loop_left
-{{VIEW_NEEDS_TRACK_MASK|VIEW_ENFORCE_NON_OVERLAPPING,4,vertical_loop_right_masks},{VIEW_NEEDS_TRACK_MASK,4,vertical_loop_right_masks+4},{VIEW_NEEDS_TRACK_MASK,4,vertical_loop_right_masks+8},{VIEW_NEEDS_TRACK_MASK|VIEW_ENFORCE_NON_OVERLAPPING,4,vertical_loop_right_masks+12}}, //vertical_loop_right
+{{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks},{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks+4},{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks+8},{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks+12}}, //half_loop
+{{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks},{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks+4},{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks+8},{VIEW_NEEDS_TRACK_MASK,4,half_loop_masks+12}}, //vertical_loop_left
+{{VIEW_NEEDS_TRACK_MASK,4,vertical_loop_right_masks},{VIEW_NEEDS_TRACK_MASK,4,vertical_loop_right_masks+4},{VIEW_NEEDS_TRACK_MASK,4,vertical_loop_right_masks+8},{VIEW_NEEDS_TRACK_MASK,4,vertical_loop_right_masks+12}}, //vertical_loop_right
 {{VIEW_NEEDS_TRACK_MASK,5,medium_half_loop_left_masks},{VIEW_NEEDS_TRACK_MASK,5,medium_half_loop_left_masks+5},{VIEW_NEEDS_TRACK_MASK,5,medium_half_loop_left_masks+10},{VIEW_NEEDS_TRACK_MASK,5,medium_half_loop_left_masks+15}}, //medium_half_loop_left
 {{VIEW_NEEDS_TRACK_MASK,5,medium_half_loop_right_masks},{VIEW_NEEDS_TRACK_MASK,5,medium_half_loop_right_masks+5},{VIEW_NEEDS_TRACK_MASK,5,medium_half_loop_right_masks+10},{VIEW_NEEDS_TRACK_MASK,5,medium_half_loop_right_masks+15}}, //medium_half_loop_right
 {{0,7,large_half_loop_left_masks},{0,7,large_half_loop_left_masks+7},{0,7,large_half_loop_left_masks+14},{0,7,large_half_loop_left_masks+21}}, //large_half_loop_left

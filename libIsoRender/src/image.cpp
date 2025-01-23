@@ -329,7 +329,11 @@ png_infop info = png_create_info_struct(png);
 	fclose(file);
 	return 1;
 	}
-	if (setjmp(png_jmpbuf(png)))abort();//TODO Not sure what this does but I don't think it's what I want
+
+	if (setjmp(png_jmpbuf(png)))
+	{
+	return 1;
+	}
 
 png_init_io(png, file);
 png_read_info(png, info);

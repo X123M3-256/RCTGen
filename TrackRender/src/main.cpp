@@ -6,8 +6,8 @@
 #define _USE_MATH_DEFINES
 #endif
 #include <math.h>
-
 #include "track.h"
+#include "mask.h"
 
 context_t get_context(light_t* lights,uint32_t num_lights,uint32_t dither)
 {
@@ -446,9 +446,26 @@ int load_lights(light_t* lights,int* lights_count,json_t* json)
 	return 0;
 }
 
+view_t masks[NUM_TRACK_SECTIONS][4];
+
+rect_t flat_to_steep_diag_rects[]={
+{-32,INT32_MIN,32,INT32_MAX},{32,INT32_MIN,96,INT32_MAX},{96,INT32_MIN,160,INT32_MAX},
+{INT32_MIN,INT32_MIN,INT32_MAX,INT32_MAX},{0,INT32_MIN,0,INT32_MAX},{INT32_MIN,INT32_MIN,INT32_MAX,INT32_MAX},
+{-32,INT32_MIN,32,INT32_MAX},{-96,INT32_MIN,-32,INT32_MAX},{-160,INT32_MIN,-96,INT32_MAX},
+{INT32_MIN,-16,INT32_MAX,INT32_MAX},{INT32_MIN,-80,INT32_MAX,-16},{INT32_MIN,INT32_MIN,INT32_MAX,-80},
+};
+
+mask_t flat_to_steep_diag_masks[]={
+    {0,1,0,0,flat_to_steep_diag_rects},{0,1,-64,8,flat_to_steep_diag_rects+1}, {0,1,-128,40,flat_to_steep_diag_rects+2},
+    {TRACK_MASK_INTERSECT,1,0,0,flat_to_steep_diag_rects+3},{0,1,0,-24,flat_to_steep_diag_rects+4},{TRACK_MASK_DIFFERENCE,1,0,-24,flat_to_steep_diag_rects+5},
+    {0,1,0,0,flat_to_steep_diag_rects+6},{0,1,64,8,flat_to_steep_diag_rects+7}, {0,1,128,40,flat_to_steep_diag_rects+8}, 
+    {0,1,0,0,flat_to_steep_diag_rects+9},{0,1,0,32,flat_to_steep_diag_rects+10},  {0,1,0,72,flat_to_steep_diag_rects+11}, 
+};
+
+view_t diag_iews[4]={{0,3,flat_to_steep_diag_masks+0},{VIEW_NEEDS_TRACK_MASK,3,flat_to_steep_diag_masks+3},{0,3,flat_to_steep_diag_masks+6},{0,3,flat_to_steep_diag_masks+9}};
+
 int main(int argc,char** argv)
 {
-
 	if(argc !=2)
 	{
 		printf("Usage: TrackRender <file>\n");
@@ -507,8 +524,8 @@ int main(int argc,char** argv)
 	{
 		if(!json_is_array(light_array))
 		{
-			printf("Error: Property \"lights\" is not an array\n");
-			return 1;
+		printf("Error: Property \"lights\" is not an array\n");
+		return 1;
 		}
 		if(load_lights(lights,&num_lights,light_array))return 1;
 	}
@@ -519,32 +536,41 @@ int main(int argc,char** argv)
 	{
 		if(!json_is_true(dither_json) && !json_is_false(dither_json))
 		{
-			printf("Error: Property \"dither\" is not a boolean\n");
-			return 1;
+		printf("Error: Property \"dither\" is not a boolean\n");
+		return 1;
 		}
 	dither=json_is_true(dither_json);
 	}
 
 
+	json_t* masks_json=json_object_get(track,"masks");
+		if(masks_json ==NULL || !json_is_string(masks_json))
+		{
+		printf("Error: Property \"masks\" not found or is not a string\n");
+		return 1;
+		}
+
+		if(load_masks(json_string_value(masks_json),masks))return 1;
+
 	track_type_t track_type;
-	if(load_track_type(&track_type,track))
-	{
+		if(load_track_type(&track_type,track))
+		{
 		printf("Error loading track\n");
 		return 1;
-	}
+		}
 
 	char full_path[256];
 	snprintf(full_path,256,"%s%s",base_dir,spritefile_in);
 	json_t* sprites=json_load_file(full_path,0,&error);
-	if(sprites ==NULL)
-	{
+		if(sprites ==NULL)
+		{
 		printf("Error: %s in file %s line %d column %d\n",error.text,error.source,error.line,error.column);
 		return 1;
-	}
+		}
 
 	context_t context=get_context(lights,num_lights,dither);
 
-	write_track_type(&context,&track_type,sprites,base_dir,sprite_dir);
+	write_track_type(&context,&track_type,masks,sprites,base_dir,sprite_dir);
 
 	snprintf(full_path,256,"%s%s",base_dir,spritefile_out);
 	json_dump_file(sprites,full_path,JSON_INDENT(4));

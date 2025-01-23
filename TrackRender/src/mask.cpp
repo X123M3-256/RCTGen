@@ -228,7 +228,7 @@ int start_x=-1;
 	}
 }
 
-int process_mask(image_t* mask,int mirror,int split[8],int transfer[8],int x_offset[8],int y_offset[8],int num_sprites,view_t* view,mask_list_t* mask_list,int* num_masks_total,int* num_rects_total)
+int process_mask(image_t* mask,int mirror,int split[8],int transfer[8],int split_ends,int x_offset[8],int y_offset[8],int num_sprites,view_t* view,mask_list_t* mask_list,int* num_masks_total,int* num_rects_total)
 {
 int rect_counts[8]={0,0,0,0,0,0,0,0};
 int secondary_rect_counts[8]={0,0,0,0,0,0,0,0};
@@ -277,6 +277,26 @@ int offset=*num_rects_total;
 int mask_start=*num_masks_total;
 	for(int sprite=0;sprite<num_sprites;sprite++)
 	{
+		//If split_ends set then last mask uses same rect as first
+		if(split_ends&&sprite==num_sprites-1)
+		{
+			if(split[num_sprites-1])
+			{
+			printf("Error: Cannot use split and split_ends simultaneously\n");
+			return 1;
+			}
+		//TODO handle case where secondary_identical is false
+		mask_t mask;
+		mask.x_offset=x_offset[sprite];
+		mask.y_offset=y_offset[sprite];
+		mask.rects=mask_list->masks[mask_start].rects;
+		mask.num_rects=mask_list->masks[mask_start].num_rects;
+		mask.track_mask_op=TRACK_MASK_DIFFERENCE;
+		mask_list_add_mask(mask_list,num_masks_total,&mask);
+		break;
+		}
+
+
 	//Generate list of rects from mask
 	int num_rects=0;
 	int secondary_num_rects=0;
@@ -307,7 +327,17 @@ int mask_start=*num_masks_total;
 
 		if(!transfer[sprite])
 		{
-			if(sprite>0&&transfer[sprite-1])
+			if(split_ends&&sprite==0)
+			{
+				if(split[0])
+				{
+				printf("Error: Cannot use split and split_ends simultaneously\n");
+				return 1;
+				}
+			mask.track_mask_op=TRACK_MASK_INTERSECT;
+			mask_list_add_mask(mask_list,num_masks_total,&mask);
+			}
+			else if(sprite>0&&transfer[sprite-1])
 			{
 				if(split[sprite])
 				{
@@ -384,7 +414,7 @@ void print_value(int32_t value)
 	else printf("%d",value);
 }
 
-void print_masks(mask_list_t* mask_list)
+void print_masks(view_t views[NUM_TRACK_SECTIONS][4])
 {
 	for(int i=0;i<NUM_TRACK_SECTIONS;i++)
 	{
@@ -392,9 +422,9 @@ void print_masks(mask_list_t* mask_list)
 	rect_t* start_rect=NULL;
 		for(int j=0;j<4;j++)
 		{
-			if(mask_list->views[i][j].masks)
+			if(views[i][j].masks)
 			{
-			start_rect=mask_list->views[i][j].masks[0].rects;
+			start_rect=views[i][j].masks[0].rects;
 			break;
 			}
 		}
@@ -406,15 +436,15 @@ void print_masks(mask_list_t* mask_list)
 	printf("rect_t %s_rects[]={\n",track_sections[i].name);
 		for(int j=0;j<4;j++)
 		{
-			if(!mask_list->views[i][j].masks)continue;
+			if(!views[i][j].masks)continue;
 		printf("\t//Angle %d\n",j);
-			for(int k=0;k<mask_list->views[i][j].num_sprites;k++)
+			for(int k=0;k<views[i][j].num_sprites;k++)
 			{
-				if(k>0&&(mask_list->views[i][j].masks[k].track_mask_op==TRACK_MASK_DIFFERENCE||mask_list->views[i][j].masks[k-1].track_mask_op!=TRACK_MASK_TRANSFER_NEXT)&&mask_list->views[i][j].masks[k].rects==mask_list->views[i][j].masks[k-1].rects)continue;
+				if(k>0&&(views[i][j].masks[k].track_mask_op==TRACK_MASK_DIFFERENCE||views[i][j].masks[k-1].track_mask_op!=TRACK_MASK_TRANSFER_NEXT)&&views[i][j].masks[k].rects==views[i][j].masks[k-1].rects)continue;
 			putchar('\t');
-				for(int l=0;l<mask_list->views[i][j].masks[k].num_rects;l++)
+				for(int l=0;l<views[i][j].masks[k].num_rects;l++)
 				{
-				rect_t rect=mask_list->views[i][j].masks[k].rects[l];
+				rect_t rect=views[i][j].masks[k].rects[l];
 				putchar('{');
 				print_value(rect.x_lower);
 				putchar(',');
@@ -437,10 +467,10 @@ void print_masks(mask_list_t* mask_list)
 		for(int j=0;j<4;j++)
 		{
 		putchar('\t');
-			if(!mask_list->views[i][j].masks)continue;
-			for(int k=0;k<mask_list->views[i][j].num_sprites;k++)
+			if(!views[i][j].masks)continue;
+			for(int k=0;k<views[i][j].num_sprites;k++)
 			{
-			mask_t* mask=mask_list->views[i][j].masks+k;
+			mask_t* mask=views[i][j].masks+k;
 			const char* track_ops[4]={"TRACK_MASK_NONE","TRACK_MASK_DIFFERENCE","TRACK_MASK_INTERSECT","TRACK_MASK_TRANSFER_NEXT"};
 			printf("{%s,%d,%d,%d,%s_rects+%d},",track_ops[mask->track_mask_op],mask->num_rects,mask->x_offset,mask->y_offset,track_sections[i].name,mask->rects-start_rect);
 			}
@@ -456,12 +486,12 @@ printf("view_t views[TRACK_SECTIONS][4]={\n");
 	putchar('\t');
 		for(int j=0;j<4;j++)
 		{
-			if(!mask_list->views[i][j].masks)printf("{0,%d,NULL},",mask_list->views[i][j].num_sprites);
+			if(!views[i][j].masks)printf("{0,%d,NULL},",views[i][j].num_sprites);
 			else
 			{
-				if(start_mask==NULL)start_mask=mask_list->views[i][j].masks;
+				if(start_mask==NULL)start_mask=views[i][j].masks;
 			const char* flags[4]={"0","VIEW_NEEDS_TRACK_MASK"};
-			printf("{%s,%d,%s_masks+%d},",flags[mask_list->views[i][j].flags],mask_list->views[i][j].num_sprites,track_sections[i].name,mask_list->views[i][j].masks-start_mask);
+			printf("{%s,%d,%s_masks+%d},",flags[views[i][j].flags],views[i][j].num_sprites,track_sections[i].name,views[i][j].masks-start_mask);
 			}
 		}
 	printf(" //%s\n",track_sections[i].name);
@@ -548,6 +578,16 @@ memset(mask_list.views,0,NUM_TRACK_SECTIONS*4*sizeof(view_t));
 			}
 		int mirror=json_boolean_value(mirror_json);
 
+
+		//Check for split_ends
+		json_t* split_ends_json=json_object_get(item,"split_ends");
+			if(split_ends_json&&!json_is_boolean(split_ends_json))
+			{
+			printf("Error: \"split_ends\" is not a boolean\n");
+			return 1;
+			}
+		int split_ends=json_boolean_value(split_ends_json);
+
 		//Load split
 		int num_sprites=0;
 		int split[8]={0,0,0,0,0,0,0,0};
@@ -592,7 +632,7 @@ memset(mask_list.views,0,NUM_TRACK_SECTIONS*4*sizeof(view_t));
 					}
 				transfer[k]=json_boolean_value(transfer_item);
 				}
-				if(num_sprites<json_array_size(transfer_json))num_sprites=json_array_size(split_json);
+				if(num_sprites<json_array_size(transfer_json))num_sprites=json_array_size(transfer_json);
 			}
 		
 		//Load offset
@@ -624,14 +664,12 @@ memset(mask_list.views,0,NUM_TRACK_SECTIONS*4*sizeof(view_t));
 				x_offset[k]=json_integer_value(x_elem);
 				y_offset[k]=json_integer_value(y_elem);
 				}
+				if(num_sprites<json_array_size(offset_json))num_sprites=json_array_size(offset_json);
 			}
 
-			if(process_mask(&image,mirror,split,transfer,x_offset,y_offset,num_sprites,&(mask_list.views[i][j]),&mask_list,&num_masks,&num_rects))return 1;
+			if(process_mask(&image,mirror,split,transfer,split_ends,x_offset,y_offset,num_sprites,&(mask_list.views[i][j]),&mask_list,&num_masks,&num_rects))return 1;
 		}
 	}
-
-//printf("Rects %d Masks %d\n",num_rects,num_masks);
-print_masks(&mask_list);
 
 return 0;
 }
@@ -686,6 +724,7 @@ int transfer=0;
 			if(rect.y_lower<bounds.y_lower)rect.y_lower=bounds.y_lower;
 			if(rect.x_upper>bounds.x_upper)rect.x_upper=bounds.x_upper;
 			if(rect.y_upper>bounds.y_upper)rect.y_upper=bounds.y_upper;
+
 			for(int x=rect.x_lower;x<rect.x_upper;x++)	
 			for(int y=rect.y_lower;y<rect.y_upper;y++)
 			{
@@ -703,6 +742,8 @@ int transfer=0;
 				break;
 				case TRACK_MASK_DIFFERENCE:
 					if(transfer)color=color_index|(color_index<<3);
+					//Check for split ends
+					else if(i>0&&view->masks[i-1].track_mask_op!=TRACK_MASK_INTERSECT)color=1<<3;
 					else color=(color_index-1)<<3;
 				break;
 				}
@@ -784,9 +825,34 @@ json_t* json=json_object();
 			else
 			{
 			sprintf(filename,"masks/%s/%s_%d.png",set_name,track_sections[i].name,j);
-			dump_mask(&(masks[i][j]),filename);
+			mask_num_sprites=dump_mask(&(masks[i][j]),filename);
 			}
 		json_object_set_new(view,"mask",json_string(filename));
+
+		//Check for split_ends
+		int split_ends=0;
+			if(masks[i][j].masks!=NULL&&masks[i][j].num_sprites>1&&masks[i][j].masks[0].track_mask_op==TRACK_MASK_INTERSECT&&masks[i][j].masks[1].track_mask_op!=TRACK_MASK_DIFFERENCE)
+			{
+			split_ends=1;
+			json_object_set_new(view,"split_ends",json_true());
+			}
+
+		//Write offsets if they are not all zero
+		int any_nonzero_offset=0;
+		json_t* offset=json_array();
+			for(int k=0;k<masks[i][j].num_sprites;k++)
+			{
+				if(masks[i][j].masks[k].x_offset||masks[i][j].masks[k].y_offset)any_nonzero_offset=1;
+
+				if(masks[i][j].masks[k].track_mask_op==TRACK_MASK_DIFFERENCE&&(k==0||masks[i][j].masks[k-1].track_mask_op!=TRACK_MASK_TRANSFER_NEXT)&&!(k==masks[i][j].num_sprites-1&&split_ends))continue;
+
+			json_t* coord=json_array();
+			json_array_append_new(coord,json_integer(masks[i][j].masks[k].x_offset));
+			json_array_append_new(coord,json_integer(masks[i][j].masks[k].y_offset));
+			json_array_append_new(offset,coord);
+			}
+			if(any_nonzero_offset)json_object_set_new(view,"offset",offset);
+			else json_decref(offset);
 
 		//Write split and/or transfer if not all false
 		int any_split=0;
@@ -801,7 +867,7 @@ json_t* json=json_object();
 				json_array_append_new(split,json_false());
 				json_array_append_new(transfer,json_true());
 				}
-				else if(k+1<masks[i][j].num_sprites&&masks[i][j].masks[k+1].track_mask_op==TRACK_MASK_DIFFERENCE)
+				else if(k+1<masks[i][j].num_sprites&&masks[i][j].masks[k+1].track_mask_op==TRACK_MASK_DIFFERENCE&&!(k+1==masks[i][j].num_sprites-1&&split_ends))
 				{
 				any_split=1;
 				k++;
@@ -814,28 +880,11 @@ json_t* json=json_object();
 				json_array_append_new(transfer,json_false());
 				}
 			}
-			if(any_split||(!any_transfer&&mask_num_sprites<masks[i][j].num_sprites))json_object_set_new(view,"split",split);
+			if(any_split||(!any_transfer&&!any_nonzero_offset&&mask_num_sprites<masks[i][j].num_sprites))json_object_set_new(view,"split",split);
 			else json_decref(split);
 			if(any_transfer)json_object_set_new(view,"transfer",transfer);
 			else json_decref(transfer);
 
-		//Write offsets if they are not all zero
-		int any_nonzero_offset=0;
-		json_t* offset=json_array();
-			for(int k=0;k<masks[i][j].num_sprites;k++)
-			{
-				if(masks[i][j].masks[k].x_offset||masks[i][j].masks[k].y_offset)any_nonzero_offset=1;
-
-				if(masks[i][j].masks[k].track_mask_op==TRACK_MASK_DIFFERENCE&&(k==0||masks[i][j].masks[k-1].track_mask_op!=TRACK_MASK_TRANSFER_NEXT))continue;
-
-			json_t* coord=json_array();
-			json_array_append_new(coord,json_integer(masks[i][j].masks[k].x_offset));
-			json_array_append_new(coord,json_integer(masks[i][j].masks[k].y_offset));
-			json_array_append_new(offset,coord);
-			}
-			if(any_nonzero_offset)json_object_set_new(view,"offset",offset);
-			else json_decref(offset);
-	
 
 		json_array_append_new(track_section,view);
 		}

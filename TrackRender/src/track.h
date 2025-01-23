@@ -377,11 +377,4 @@ enum track_section_id {
 
 extern track_section_t track_sections[NUM_TRACK_SECTIONS];
 
-
-extern view_t default_masks[NUM_TRACK_SECTIONS][4];
-extern view_t split_masks[NUM_TRACK_SECTIONS][4];
-
-
-
-
-int write_track_type(context_t* context,track_type_t* track_type,json_t* sprites,const char* base_dir,const char* output_dir);
+int write_track_type(context_t* context,track_type_t* track_type,view_t masks[NUM_TRACK_SECTIONS][4],json_t* sprites,const char* base_dir,const char* output_dir);

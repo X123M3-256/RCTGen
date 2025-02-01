@@ -130,13 +130,53 @@ memset(offsets,0,88*sizeof(float));
 return 0;
 }
 
-int load_track_type(track_type_t* track_type,json_t* json)
+int load_required_float(json_t* json,const char* name,float* value,float mult,int preloaded)
+{
+json_t* value_json=json_object_get(json,name);
+	if(value_json !=NULL)
+	{
+		if(json_is_number(value_json))*value=mult*json_number_value(value_json);
+		else
+		{
+		printf("Error: Property \"%s\" is not a number\n",name);
+		return 1;
+		}
+	}
+	else if(!preloaded)
+	{
+		printf("Error: Property \"%s\" not found\n",name);
+		return 1;
+	}
+return 0;
+}
+
+
+int load_float_with_default(json_t* json,const char* name,float* value,float mult,float default_value,int preloaded)
+{
+	json_t* value_json=json_object_get(json,name);
+	if(value_json !=NULL)
+	{
+		if(json_is_number(value_json))*value=mult*json_number_value(value_json);
+		else
+		{
+			printf("Error: Property \"%s\" not found or is not a number\n",name);
+			return 1;
+		}
+	}
+	else if(!preloaded)*value=default_value;
+return 0;
+}
+
+int load_track_type(track_type_t* track_type,json_t* json,int preloaded)
 {
 	//Load track flags
 	track_type->flags=0;
 	json_t* flags=json_object_get(json,"flags");
 	if(flags !=NULL)
 	{
+		//If flags is defined, clear any that may already be set
+		track_type->flags=0;
+
 		if(!json_is_array(flags))
 		{
 			printf("Error: Property \"flags\" is not an array\n");
@@ -153,9 +193,6 @@ int load_track_type(track_type_t* track_type,json_t* json)
 			}
 			if(strcmp(json_string_value(flag_name),"has_lift") ==0)track_type->flags|=TRACK_HAS_LIFT;
 			else if(strcmp(json_string_value(flag_name),"has_supports") ==0)track_type->flags|=TRACK_HAS_SUPPORTS;
-			else if(strcmp(json_string_value(flag_name),"semi_split") ==0)track_type->flags|=TRACK_SEMI_SPLIT;
-			else if(strcmp(json_string_value(flag_name),"split") ==0)track_type->flags|=TRACK_SPLIT;
-			else if(strcmp(json_string_value(flag_name),"no_lift_sprite") ==0)track_type->flags|=TRACK_NO_LIFT_SPRITE;
 			else if(strcmp(json_string_value(flag_name),"separate_tie") ==0)track_type->flags|=TRACK_SEPARATE_TIE;
 			else if(strcmp(json_string_value(flag_name),"tie_at_boundary") ==0)track_type->flags|=TRACK_SEPARATE_TIE|TRACK_TIE_AT_BOUNDARY;
 			else if(strcmp(json_string_value(flag_name),"special_end_offsets") ==0)track_type->flags|=TRACK_SPECIAL_OFFSETS;
@@ -167,6 +204,7 @@ int load_track_type(track_type_t* track_type,json_t* json)
 		}
 	}
 
+	//Load track sections
 	json_t* groups=json_object_get(json,"sections");
 	if(groups !=NULL)
 	{
@@ -179,101 +217,73 @@ int load_track_type(track_type_t* track_type,json_t* json)
 		if(load_groups(groups,&(track_type->groups)))return 1;
 	}
 
-	if(track_type->flags&TRACK_HAS_LIFT)
-	{
-		json_t* offset=json_object_get(json,"lift_offset");
-		if(offset)
+	//Load masks
+	json_t* masks_json=json_object_get(json,"masks");
+		if(masks_json !=NULL)
 		{
-			if(!json_is_integer(offset))
+			if(!json_is_string(masks_json))
 			{
-				printf("Error: Property \"lift_offset\" is not an int\n");
+			printf("Error: Property \"masks\" is not a string\n");
+			return 1;
+			}
+
+			if(load_masks(json_string_value(masks_json),track_type->masks))return 1;
+		}
+		else if(!preloaded)
+		{
+		printf("Error: Property \"masks\" not found\n");
+		return 1;
+		}
+	
+	//Load name
+	json_t* name=json_object_get(json,"name");
+		if(name)
+		{
+			if(!json_is_string(name))
+			{
+				printf("Error: Property \"name\" is not a string\n");
 				return 1;
 			}
-			track_type->lift_offset=json_integer_value(offset);
+		track_type->suffix[0]='_';
+		strncpy(track_type->suffix+1,json_string_value(name),255);
 		}
-		else track_type->lift_offset=13;
-	}
+		else if(!preloaded)track_type->suffix[0]=0;
+
+	//Load lift offset
+		if(track_type->flags&TRACK_HAS_LIFT)
+		{
+		json_t* offset=json_object_get(json,"lift_offset");
+			if(offset)
+			{
+				if(!json_is_integer(offset))
+				{
+					printf("Error: Property \"lift_offset\" is not an int\n");
+					return 1;
+				}
+				track_type->lift_offset=json_integer_value(offset);
+			}
+			else if(!preloaded) track_type->lift_offset=13;
+		}
 
 	//Load length
-	json_t* length=json_object_get(json,"length");
-	if(length !=NULL&&json_is_number(length))track_type->length=json_number_value(length)*TILE_SIZE;
-	else
-	{
-		printf("Error: Property \"length\" not found or is not a number\n");
-		return 1;
-	}
+		if(load_required_float(json,"length",&(track_type->length),TILE_SIZE,preloaded))return 1;
 
 	//Load brake length
-	json_t* brake_length=json_object_get(json,"brake_length");
-	if(brake_length !=NULL)
-	{
-		if(json_is_number(brake_length))track_type->brake_length=json_number_value(brake_length)*TILE_SIZE;
-		else
-		{
-			printf("Error: Property \"brake_length\" not found or is not a number\n");
-			return 1;
-		}
-	}
-	else track_type->brake_length=TILE_SIZE;
+		if(load_float_with_default(json,"brake_length",&(track_type->brake_length),TILE_SIZE,TILE_SIZE,preloaded))return 1;
 
 	//Load tie length
 	if(track_type->flags&TRACK_TIE_AT_BOUNDARY)
 	{
-		json_t* tie_length=json_object_get(json,"tie_length");
-		if(tie_length !=NULL&&json_is_number(tie_length))track_type->tie_length=json_number_value(tie_length)*TILE_SIZE;
-		else
-		{
-			printf("Error: Property \"tie_length\" not found or is not a number\n");
-			return 1;
-		}
+		if(load_required_float(json,"tie_length",&(track_type->tie_length),TILE_SIZE,preloaded))return 1;
 	}
 
 	//Load Z offset
-	json_t* z_offset=json_object_get(json,"z_offset");
-	if(z_offset !=NULL&&json_is_number(z_offset))track_type->z_offset=json_number_value(z_offset);
-	else
-	{
-		printf("Error: Property \"z_offset\" not found or is not a number\n");
-		return 1;
-	}
+		if(load_required_float(json,"z_offset",&(track_type->z_offset),1,preloaded))return 1;
 
 	//Load support_spacing
-	json_t* support_spacing=json_object_get(json,"support_spacing");
-	if(support_spacing !=NULL)
-	{
-		if(json_is_number(support_spacing))track_type->support_spacing=json_number_value(support_spacing)*TILE_SIZE;
-		else
-		{
-			printf("Error: Property \"support_spacing\" not found or is not a number\n");
-			return 1;
-		}
-	}
-	else track_type->support_spacing=TILE_SIZE;
-
+		if(load_float_with_default(json,"support_spacing",&(track_type->support_spacing),TILE_SIZE,TILE_SIZE,preloaded))return 1;
 	//Load pivot
-	json_t* pivot=json_object_get(json,"pivot");
-	if(pivot !=NULL)
-	{
-		if(json_is_number(pivot))track_type->pivot=json_number_value(pivot)*TILE_SIZE;
-		else
-		{
-			printf("Error: Property \"pivot\" not found or is not a number\n");
-			return 1;
-		}
-	}
-	else track_type->pivot=0;
-
-	//Load offset table
-	if(track_type->flags & TRACK_SPECIAL_OFFSETS)
-	{
-	json_t* offsets=json_object_get(json,"offsets");
-		if(offsets ==NULL || !json_is_object(offsets))
-		{
-		printf("Error: Property \"offsets\" not found or is not an object\n");
-		return 1;
-		}
-		if(load_offsets(offsets,track_type->offset_table))return 1;
-	}
+		if(load_float_with_default(json,"pivot",&(track_type->pivot),TILE_SIZE,0,preloaded))return 1;
 
 	//Load models
 	json_t* models=json_object_get(json,"models");
@@ -446,8 +456,6 @@ int load_lights(light_t* lights,int* lights_count,json_t* json)
 	return 0;
 }
 
-view_t masks[NUM_TRACK_SECTIONS][4];
-
 rect_t flat_to_steep_diag_rects[]={
 {-32,INT32_MIN,32,INT32_MAX},{32,INT32_MIN,96,INT32_MAX},{96,INT32_MIN,160,INT32_MAX},
 {INT32_MIN,INT32_MIN,INT32_MAX,INT32_MAX},{0,INT32_MIN,0,INT32_MAX},{INT32_MIN,INT32_MIN,INT32_MAX,INT32_MAX},
@@ -472,54 +480,54 @@ int main(int argc,char** argv)
 		return 1;
 	}
 
-	json_error_t error;
-	json_t* track=json_load_file(argv[1],0,&error);
-	if(track ==NULL)
+json_error_t error;
+json_t* json=json_load_file(argv[1],0,&error);
+	if(json ==NULL)
 	{
 		printf("Error: %s at line %d column %d\n",error.text,error.line,error.column);
 		return 1;
 	}
 
-	const char* base_dir=NULL;
-	json_t* json_base_dir=json_object_get(track,"base_directory");
+const char* base_dir=NULL;
+json_t* json_base_dir=json_object_get(json,"base_directory");
 	if(json_base_dir !=NULL&&json_is_string(json_base_dir))base_dir=json_string_value(json_base_dir);
 	else printf("Error: No property \"base_directory\" found\n");
 
-	const char* sprite_dir=NULL;
-	json_t* json_sprite_dir=json_object_get(track,"sprite_directory");
+const char* sprite_dir=NULL;
+json_t* json_sprite_dir=json_object_get(json,"sprite_directory");
 	if(json_sprite_dir !=NULL&&json_is_string(json_sprite_dir))sprite_dir=json_string_value(json_sprite_dir);
 	else printf("Error: No property \"sprite_directory\" found\n");
 
-	const char* spritefile_in=NULL;
-	json_t* json_spritefile_in=json_object_get(track,"spritefile_in");
+const char* spritefile_in=NULL;
+json_t* json_spritefile_in=json_object_get(json,"spritefile_in");
 	if(json_spritefile_in !=NULL&&json_is_string(json_spritefile_in))spritefile_in=json_string_value(json_spritefile_in);
 	else printf("Error: No property \"spritefile_in\" found\n");
 
-	const char* spritefile_out=NULL;
-	json_t* json_spritefile_out=json_object_get(track,"spritefile_out");
+const char* spritefile_out=NULL;
+json_t* json_spritefile_out=json_object_get(json,"spritefile_out");
 	if(json_spritefile_out !=NULL&&json_is_string(json_spritefile_out))spritefile_out=json_string_value(json_spritefile_out);
 	else printf("Error: No property \"spritefile_out\" found\n");
 
-	int num_lights=9;
-	light_t lights[16]={
-	    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(0.0,-1.0,0.0)),0.25},
-	    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(1.0,0.3,0.0)),0.32},
-	    {LIGHT_SPECULAR,0,vector3_normalize(vector3(1,1,-1)),1.0},
-	    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(1,0.65,-1)),0.8},
-	    {LIGHT_DIFFUSE,0,vector3(0.0,1.0,0.0),0.174},
-	    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(-1.0,0.0,0.0)),0.15},
-	    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(0.0,1.0,1.0)),0.2},
-	    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(0.65,0.816,-0.65000000)),0.25},
-	    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(-1.0,0.0,-1.0)),0.25},
-	    {0,0,{0,0,0},0},
-	    {0,0,{0,0,0},0},
-	    {0,0,{0,0,0},0},
-	    {0,0,{0,0,0},0},
-	    {0,0,{0,0,0},0},
-	    {0,0,{0,0,0},0},
-	    {0,0,{0,0,0},0}};
+int num_lights=9;
+light_t lights[16]={
+    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(0.0,-1.0,0.0)),0.25},
+    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(1.0,0.3,0.0)),0.32},
+    {LIGHT_SPECULAR,0,vector3_normalize(vector3(1,1,-1)),1.0},
+    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(1,0.65,-1)),0.8},
+    {LIGHT_DIFFUSE,0,vector3(0.0,1.0,0.0),0.174},
+    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(-1.0,0.0,0.0)),0.15},
+    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(0.0,1.0,1.0)),0.2},
+    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(0.65,0.816,-0.65000000)),0.25},
+    {LIGHT_DIFFUSE,0,vector3_normalize(vector3(-1.0,0.0,-1.0)),0.25},
+    {0,0,{0,0,0},0},
+    {0,0,{0,0,0},0},
+    {0,0,{0,0,0},0},
+    {0,0,{0,0,0},0},
+    {0,0,{0,0,0},0},
+    {0,0,{0,0,0},0},
+    {0,0,{0,0,0},0}};
 
-	json_t* light_array=json_object_get(track,"lights");
+json_t* light_array=json_object_get(json,"lights");
 	if(light_array !=NULL)
 	{
 		if(!json_is_array(light_array))
@@ -530,8 +538,8 @@ int main(int argc,char** argv)
 		if(load_lights(lights,&num_lights,light_array))return 1;
 	}
 
-	int dither=1;
-	json_t* dither_json=json_object_get(track,"dither");
+int dither=1;
+json_t* dither_json=json_object_get(json,"dither");
 	if(dither_json !=NULL)
 	{
 		if(!json_is_true(dither_json) && !json_is_false(dither_json))
@@ -542,39 +550,60 @@ int main(int argc,char** argv)
 	dither=json_is_true(dither_json);
 	}
 
+json_t* tracks_json=json_object_get(json,"tracks");
+	if(tracks_json ==NULL || !json_is_array(tracks_json))
+	{
+	printf("Error: Property \"tracks\" not found or is not an array\n");
+	return 1;
+	}
 
-	json_t* masks_json=json_object_get(track,"masks");
-		if(masks_json ==NULL || !json_is_string(masks_json))
+//Load offset table
+float offset_table[88];
+json_t* offsets=json_object_get(json,"offsets");
+	if(offsets!=NULL)
+	{
+		if(!json_is_object(offsets))
 		{
-		printf("Error: Property \"masks\" not found or is not a string\n");
+		printf("Error: Property \"offsets\" is not an object\n");
 		return 1;
 		}
+		if(load_offsets(offsets,offset_table))return 1;
+	}
+	else memset(offset_table,0,88*sizeof(float));
 
-		if(load_masks(json_string_value(masks_json),masks))return 1;
+//Load spritefile
+char full_path[256];
+snprintf(full_path,256,"%s%s",base_dir,spritefile_in);
+json_t* sprites=json_load_file(full_path,0,&error);
+	if(sprites ==NULL)
+	{
+	printf("Error: %s in file %s line %d column %d\n",error.text,error.source,error.line,error.column);
+	return 1;
+	}
 
-	track_type_t track_type;
-		if(load_track_type(&track_type,track))
+//Initialize rendering context
+context_t context=get_context(lights,num_lights,dither);
+
+//Load and render tracks
+track_type_t track_type;
+	for(int i=0;i<json_array_size(tracks_json);i++)
+	{
+	json_t* track=json_array_get(tracks_json,i);
+		if(json_is_object(track)&&load_track_type(&track_type,track,i!=0))
 		{
 		printf("Error loading track\n");
+		json_decref(sprites);
+		context_destroy(&context);
 		return 1;
 		}
+	write_track_type(&context,&track_type,sprites,offset_table,base_dir,sprite_dir);
+	}
 
-	char full_path[256];
-	snprintf(full_path,256,"%s%s",base_dir,spritefile_in);
-	json_t* sprites=json_load_file(full_path,0,&error);
-		if(sprites ==NULL)
-		{
-		printf("Error: %s in file %s line %d column %d\n",error.text,error.source,error.line,error.column);
-		return 1;
-		}
 
-	context_t context=get_context(lights,num_lights,dither);
 
-	write_track_type(&context,&track_type,masks,sprites,base_dir,sprite_dir);
+snprintf(full_path,256,"%s%s",base_dir,spritefile_out);
+json_dump_file(sprites,full_path,JSON_INDENT(4));
+context_destroy(&context);
 
-	snprintf(full_path,256,"%s%s",base_dir,spritefile_out);
-	json_dump_file(sprites,full_path,JSON_INDENT(4));
-	context_destroy(&context);
-
-	return 0;
+return 0;
 }

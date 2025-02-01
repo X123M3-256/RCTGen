@@ -74,12 +74,9 @@ enum track_flags
 {
 	TRACK_HAS_LIFT=1,
 	TRACK_HAS_SUPPORTS=2,
-	TRACK_SEMI_SPLIT=4,
-	TRACK_NO_LIFT_SPRITE=8,
-	TRACK_SEPARATE_TIE=16,
-	TRACK_TIE_AT_BOUNDARY=32,
-	TRACK_SPLIT=64,
-	TRACK_SPECIAL_OFFSETS=128
+	TRACK_SEPARATE_TIE=4,
+	TRACK_TIE_AT_BOUNDARY=8,
+	TRACK_SPECIAL_OFFSETS=16
 };
 
 enum track_groups
@@ -165,62 +162,6 @@ OFFSET_DIAGONAL_GENTLE=8,
 OFFSET_DIAGONAL_STEEP=9
 };
 
-
-#define NUM_MODELS 23
-#define SUPPORT_SPECIAL_START SUPPORT_SPECIAL_STEEP_TO_VERTICAL
-
-typedef struct
-{
-	uint32_t flags;
-	uint64_t groups;
-	int32_t lift_offset;
-	uint32_t models_loaded;
-	mesh_t mesh;
-	mesh_t mesh_tie;
-	mesh_t tie_mesh;
-	mesh_t mask;
-	mesh_t models[NUM_MODELS];
-	float length;
-	float brake_length;
-	float tie_length;
-	float pivot;
-	float z_offset;
-	float support_spacing;
-	float offset_table[88];
-}track_type_t;
-
-typedef struct
-{
-	vector3_t position;
-	vector3_t normal;
-	vector3_t tangent;
-	vector3_t binormal;
-}track_point_t;
-
-typedef struct
-{
-	const char* name;
-	unsigned int flags;
-	track_point_t (*curve)(float distance);
-	float length;
-}track_section_t;
-
-typedef struct
-{
-	int32_t track_mask_op;
-	uint32_t num_rects;
-	int32_t x_offset;
-	int32_t y_offset;
-	rect_t* rects;
-}mask_t;
-
-typedef struct
-{
-	int flags;
-	int num_sprites;
-	mask_t* masks;
-}view_t;
-
 enum track_section_id {
 	FLAT,
 	FLAT_ASYMMETRIC,
@@ -286,8 +227,8 @@ enum track_section_id {
 	GENTLE_LEFT_BANK_TO_GENTLE,
 	GENTLE_RIGHT_BANK_TO_GENTLE,
 	LEFT_BANK_TO_GENTLE_LEFT_BANK,
-	GENTLE_LEFT_BANK_TO_LEFT_BANK,
 	RIGHT_BANK_TO_GENTLE_RIGHT_BANK,
+	GENTLE_LEFT_BANK_TO_LEFT_BANK,
 	GENTLE_RIGHT_BANK_TO_RIGHT_BANK,
 	GENTLE_LEFT_BANK,
 	GENTLE_RIGHT_BANK,
@@ -375,6 +316,66 @@ enum track_section_id {
 	NUM_TRACK_SECTIONS 
 };
 
+
+
+typedef struct
+{
+	int32_t track_mask_op;
+	uint32_t num_rects;
+	int32_t x_offset;
+	int32_t y_offset;
+	rect_t* rects;
+}mask_t;
+
+typedef struct
+{
+	int flags;
+	int num_sprites;
+	mask_t* masks;
+}view_t;
+
+#define NUM_TRACK_SECTIONS 150
+#define NUM_MODELS 23
+#define SUPPORT_SPECIAL_START SUPPORT_SPECIAL_STEEP_TO_VERTICAL
+
+typedef struct
+{
+	char suffix[256];
+	uint32_t flags;
+	uint64_t groups;
+	int32_t lift_offset;
+	uint32_t models_loaded;
+	mesh_t mesh;
+	mesh_t mesh_tie;
+	mesh_t tie_mesh;
+	mesh_t mask;
+	mesh_t models[NUM_MODELS];
+	float length;
+	float brake_length;
+	float tie_length;
+	float pivot;
+	float z_offset;
+	float support_spacing;
+	float offset_table[88];
+	view_t masks[NUM_TRACK_SECTIONS][4];
+}track_type_t;
+
+typedef struct
+{
+	vector3_t position;
+	vector3_t normal;
+	vector3_t tangent;
+	vector3_t binormal;
+}track_point_t;
+
+typedef struct
+{
+	const char* name;
+	unsigned int flags;
+	track_point_t (*curve)(float distance);
+	float length;
+}track_section_t;
+
 extern track_section_t track_sections[NUM_TRACK_SECTIONS];
 
-int write_track_type(context_t* context,track_type_t* track_type,view_t masks[NUM_TRACK_SECTIONS][4],json_t* sprites,const char* base_dir,const char* output_dir);
+int write_track_type(context_t* context,track_type_t* track_type,json_t* sprites,float offset_table[88],const char* base_dir,const char* output_dir);

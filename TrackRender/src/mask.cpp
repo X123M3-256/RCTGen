@@ -569,6 +569,33 @@ memset(mask_list.views,0,NUM_TRACK_SECTIONS*4*sizeof(view_t));
 			}
 		fclose(file);
 
+		//Check if extrude_behind
+		json_t* extrude_behind_json=json_object_get(item,"extrude_behind");
+			if(extrude_behind_json&&!json_is_boolean(extrude_behind_json))
+			{
+			printf("Error: \"extrude_behind\" is not a boolean\n");
+			return 1;
+			}
+		int extrude_behind=json_boolean_value(extrude_behind_json);
+
+		//Check if extrude_in_front
+		json_t* extrude_in_front_json=json_object_get(item,"extrude_in_front");
+			if(extrude_in_front_json&&!json_is_boolean(extrude_in_front_json))
+			{
+			printf("Error: \"extrude_in_front\" is not a boolean\n");
+			return 1;
+			}
+		int extrude_in_front=json_boolean_value(extrude_in_front_json);
+
+		//Check if mask_end
+		json_t* mask_end_json=json_object_get(item,"mask_end");
+			if(mask_end_json&&!json_is_boolean(mask_end_json))
+			{
+			printf("Error: \"mask_end\" is not a boolean\n");
+			return 1;
+			}
+		int mask_end=json_boolean_value(mask_end_json);
+
 		//Check if mirrored
 		json_t* mirror_json=json_object_get(item,"mirror");
 			if(mirror_json&&!json_is_boolean(mirror_json))
@@ -577,7 +604,6 @@ memset(mask_list.views,0,NUM_TRACK_SECTIONS*4*sizeof(view_t));
 			return 1;
 			}
 		int mirror=json_boolean_value(mirror_json);
-
 
 		//Check for split_ends
 		json_t* split_ends_json=json_object_get(item,"split_ends");
@@ -668,6 +694,9 @@ memset(mask_list.views,0,NUM_TRACK_SECTIONS*4*sizeof(view_t));
 			}
 
 			if(process_mask(&image,mirror,split,transfer,split_ends,x_offset,y_offset,num_sprites,&(mask_list.views[i][j]),&mask_list,&num_masks,&num_rects))return 1;
+			if(extrude_behind)mask_list.views[i][j].flags|=VIEW_EXTRUDE_BEHIND;
+			if(extrude_in_front)mask_list.views[i][j].flags|=VIEW_EXTRUDE_IN_FRONT;
+			if(mask_end)mask_list.views[i][j].flags|=VIEW_MASK_END;
 		}
 	}
 

@@ -204,7 +204,7 @@ int get_special_index(int flags)
 	return 0;
 }
 
-void render_track_section(context_t* context,track_section_t* track_section,track_type_t* track_type,int extrude_behind,int extrude_in_front,int track_mask,int rendered_views,image_t* images)
+void render_track_section(context_t* context,track_section_t* track_section,track_type_t* track_type,int view_flags,int track_mask,int rendered_views,image_t* images)
 {
 	int num_meshes=(int)floor(0.5+track_section->length/track_type->length);
 	float scale=track_section->length/(num_meshes*track_type->length);
@@ -240,11 +240,12 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 	args.length=track_section->length;
 	args.track_length = track_type->length;
 	if(track_mask)context_add_model_transformed(context,&(track_type->mask),track_transform,&args,0);//);
-	else if(!extrude_behind)context_add_model_transformed(context,mesh,track_transform,&args,MESH_GHOST);
+	else if(!(view_flags & VIEW_EXTRUDE_BEHIND))context_add_model_transformed(context,mesh,track_transform,&args,MESH_GHOST);
 	args.offset=track_section->length;
-	if(track_mask)context_add_model_transformed(context,&(track_type->mask),track_transform,&args,0);//track_mask?0:MESH_GHOST);
-	else if(!extrude_in_front)context_add_model_transformed(context,mesh,track_transform,&args,MESH_GHOST);
+	if(track_mask)context_add_model_transformed(context,&(track_type->mask),track_transform,&args,0);
+	else if(!(view_flags & VIEW_EXTRUDE_IN_FRONT) && !(view_flags & VIEW_MASK_END))context_add_model_transformed(context,mesh,track_transform,&args,MESH_GHOST);
 
+	//TODO VIEW_MASK_END not implemented for this case
 	if(track_type->flags&TRACK_TIE_AT_BOUNDARY)
 	{
 		//Determine start angle
@@ -276,12 +277,12 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 
 		double offset=0;
 
-		if(extrude_behind)
+		if(view_flags & VIEW_EXTRUDE_BEHIND)
 		{
 			num_meshes++;
-			offset-=(extrude_behind ? 1 : 0)*corrected_scale*track_type->length;
+			offset-=((view_flags & VIEW_EXTRUDE_BEHIND) ? 1 : 0)*corrected_scale*track_type->length;
 		}
-		if(extrude_in_front)num_meshes++;
+		if(view_flags & VIEW_EXTRUDE_IN_FRONT)num_meshes++;
 		for(int i=0; i<2*num_meshes+1; i++)
 		{
 			track_transform_args_t args;
@@ -310,7 +311,7 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 			{
 				int use_alt=i&2;
 				if(track_section->flags&TRACK_ALT_INVERT)use_alt=!use_alt;
-				if(extrude_behind)use_alt=!use_alt;
+				if(view_flags & VIEW_EXTRUDE_BEHIND)use_alt=!use_alt;
 				if(!(track_type->models_loaded&(1<<MODEL_TRACK_ALT)))use_alt=0;
 				//Add track model
 				if(use_alt)context_add_model_transformed(context,&(track_type->models[MODEL_TRACK_ALT]),track_transform,&args,track_mask);
@@ -331,40 +332,33 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 	}
 	else
 	{
-		if(extrude_behind)num_meshes++;
-		if(extrude_in_front)num_meshes++;
+		if(view_flags & VIEW_EXTRUDE_BEHIND)num_meshes++;
+		if(view_flags & VIEW_EXTRUDE_IN_FRONT)num_meshes++;
+		if(view_flags & VIEW_MASK_END)num_meshes++;
 		for(int i=0; i<num_meshes; i++)
 		{
-			track_transform_args_t args;
-			args.scale=scale;
-			args.offset=(i-(extrude_behind ? 1 : 0))*length;
-			args.z_offset=z_offset;
-			args.track_curve=track_section->curve;
-			args.flags=track_section->flags;
-			args.length=track_section->length;
-			args.track_length = track_type->length;
+		track_transform_args_t args;
+		args.scale=scale;
+		args.offset=(i-((view_flags & VIEW_EXTRUDE_BEHIND)? 1 : 0))*length;
+		args.z_offset=z_offset;
+		args.track_curve=track_section->curve;
+		args.flags=track_section->flags;
+		args.length=track_section->length;
+		args.track_length = track_type->length;
 
-			int alt_available=track_type->models_loaded&(1<<MODEL_TRACK_ALT);
-			int use_alt=alt_available&&(i&1);
-			if(alt_available&&(track_section->flags&TRACK_ALT_INVERT))use_alt=!use_alt;
+		int alt_available=track_type->models_loaded&(1<<MODEL_TRACK_ALT);
+		int use_alt=alt_available&&(i&1);
+		if(alt_available&&(track_section->flags&TRACK_ALT_INVERT))use_alt=!use_alt;
 
-			if(track_mask)context_add_model_transformed(context,&(track_type->mask),track_transform,&args,0);
-			if(use_alt)context_add_model_transformed(context,&(track_type->models[MODEL_TRACK_ALT]),track_transform,&args,track_mask);
-			else context_add_model_transformed(context,mesh,track_transform,&args,track_mask);
-
-			if((track_type->models_loaded&(1<<MODEL_BASE))&&(track_type->flags&TRACK_HAS_SUPPORTS)&&!(track_section->flags&TRACK_NO_SUPPORTS))
-				context_add_model_transformed(context,&(track_type->models[MODEL_BASE]),base_transform,&args,track_mask);
+		if(track_mask)context_add_model_transformed(context,&(track_type->mask),track_transform,&args,0);
+		if(use_alt)context_add_model_transformed(context,&(track_type->models[MODEL_TRACK_ALT]),track_transform,&args,track_mask || (view_flags & VIEW_MASK_END && i+1==num_meshes));
+		else context_add_model_transformed(context,mesh,track_transform,&args,track_mask || (view_flags & VIEW_MASK_END && i+1==num_meshes));
+		if((track_type->models_loaded&(1<<MODEL_BASE))&&(track_type->flags&TRACK_HAS_SUPPORTS)&&!(track_section->flags&TRACK_NO_SUPPORTS))
+			context_add_model_transformed(context,&(track_type->models[MODEL_BASE]),base_transform,&args,track_mask);
 			if(track_type->flags&TRACK_SEPARATE_TIE)
 			{
-				track_point_t track_point=get_track_point(track_section->curve,track_section->flags,z_offset,args.length,args.offset+0.5*length);
-				context_add_model(
-				    context,&(track_type->tie_mesh),
-				    transform(
-				        matrix(track_point.binormal.z,track_point.normal.z,track_point.tangent.z,track_point.binormal.y,track_point.normal.y,track_point.tangent.y,track_point.binormal.x,track_point.normal.x,track_point.tangent.x),
-				        change_coordinates(track_point.position)
-				    ),
-				    track_mask
-				);
+			track_point_t track_point=get_track_point(track_section->curve,track_section->flags,z_offset,args.length,args.offset+0.5*length);
+			context_add_model(context,&(track_type->tie_mesh),transform(matrix(track_point.binormal.z,track_point.normal.z,track_point.tangent.z,track_point.binormal.y,track_point.normal.y,track_point.tangent.y,track_point.binormal.x,track_point.normal.x,track_point.tangent.x),change_coordinates(track_point.position)),track_mask || (view_flags & VIEW_MASK_END && i+1==num_meshes));
 			}
 		}
 	}
@@ -595,61 +589,6 @@ void set_offset(int view_angle,track_section_t* track_section,float* offset_tabl
 	end_offset=get_offset(end_table,view_angle,offset_table);
 }
 
-void render_track_sections(context_t* context,track_section_t* track_section,track_type_t* track_type,float offset_table[88],int track_mask,int views,image_t* sprites)
-{
-int extrude_behind=track_section->flags&TRACK_EXTRUDE_BEHIND;
-int extrude_in_front_even=!(track_section->flags&TRACK_EXIT_45_DEG_LEFT)&&(track_section->flags&TRACK_EXTRUDE_IN_FRONT);
-int extrude_in_front_odd=(track_section->flags&TRACK_EXIT_45_DEG_LEFT)&&(track_section->flags&TRACK_EXTRUDE_IN_FRONT);
-
-	if(track_type->flags&TRACK_SPECIAL_OFFSETS)
-	{
-	set_offset(0,track_section,offset_table);
-		if(views&0x1)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,0x1,sprites);
-	set_offset(1,track_section,offset_table);
-		if(views&0x2)render_track_section(context,track_section,track_type,0,extrude_in_front_odd,track_mask,0x2,sprites);
-	set_offset(2,track_section,offset_table);
-		if(views&0x4)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,0x4,sprites);
-	set_offset(3,track_section,offset_table);
-		if(views&0x8)render_track_section(context,track_section,track_type,0,extrude_in_front_odd,track_mask,0x8,sprites);
-	return;
-	}
-
-	if((track_section->flags&TRACK_EXTRUDE_BEHIND)||(track_section->flags&TRACK_EXTRUDE_IN_FRONT))
-	{
-		if(track_type->flags&TRACK_SEPARATE_TIE)
-		{
-			if(views&0x1)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,0x1,sprites);
-			if(views&0x2)render_track_section(context,track_section,track_type,0,extrude_in_front_odd,track_mask,0x2,sprites);
-			if(views&0x4)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,0x4,sprites);
-			if(views&0x8)render_track_section(context,track_section,track_type,0,extrude_in_front_odd,track_mask,0x8,sprites);
-		}
-		else
-		{
-			if(views&0x5)render_track_section(context,track_section,track_type,extrude_behind,extrude_in_front_even,track_mask,views&0x5,sprites);
-			if(views&0xA)render_track_section(context,track_section,track_type,0,extrude_in_front_odd,track_mask,views&0xA,sprites);
-		}
-	}
-	else
-	{
-		if((track_type->flags&TRACK_SEPARATE_TIE)&&(track_section->flags&TRACK_EXIT_90_DEG))
-		{
-			if(views&0x1)render_track_section(context,track_section,track_type,0,0,track_mask,0x1,sprites);
-			if(views&0x2)render_track_section(context,track_section,track_type,0,0,track_mask,0x2,sprites);
-			if(views&0x4)render_track_section(context,track_section,track_type,0,0,track_mask,0x4,sprites);
-			if(views&0x8)render_track_section(context,track_section,track_type,0,0,track_mask,0x8,sprites);
-		}
-		else if((track_type->flags&TRACK_SEPARATE_TIE))
-		{
-			if(views&0x3)render_track_section(context,track_section,track_type,0,0,track_mask,views&0x3,sprites);
-			if(views&0xC)render_track_section(context,track_section,track_type,0,0,track_mask,views&0xC,sprites);
-		}
-		else
-		{
-			render_track_section(context,track_section,track_type,0,0,track_mask,views,sprites);
-		}
-	}
-}
-
 void write_track_section(context_t* context,int track_section_id,track_type_t* track_type,float offset_table[88],const char* base_directory,const char* output_directory,json_t* sprites)
 {
 track_section_t* track_section=track_sections+track_section_id;
@@ -657,18 +596,28 @@ view_t* views=track_type->masks[track_section_id];
 
 	int z_offset=(int)(track_type->z_offset+0.499999);
 	image_t full_sprites[4];
-	render_track_sections(context,track_section,track_type,offset_table,0,0xF,full_sprites);
+	image_t track_masks[4];
+	//TODO maybe optimize by not re-assembling the mesh for each view if not needed
+	for(int i=0;i<4;i++)
+	{
+		if(views[i].num_sprites==0)continue;
+		if(track_type->flags&TRACK_SPECIAL_OFFSETS)
+		{
+		set_offset(i,track_section,offset_table);
+		}
+		if(views[i].flags&VIEW_NEEDS_TRACK_MASK)render_track_section(context,track_section,track_type,views[i].flags,1,1<<i,track_masks);//TODO this can be one call if special offsets not set
+	render_track_section(context,track_section,track_type,views[i].flags,0,1<<i,full_sprites);
+	}
+
+
+
+
 
 	//TODO Remember that if these sprites are drawn then flat pieces must render 4 angles instead of 2
 	//if(track_type->flags&TRACK_HAS_LIFT) TODO make this work again
 	//{
 	//	for(int i=0; i<4; i++)image_blit(full_sprites+i,overlay+i,0,track_type->lift_offset-z_offset);
 	//}
-
-	image_t track_masks[4];
-	int track_mask_views=0;
-	for(int i=0; i<4; i++)track_mask_views|=(views[i].flags&VIEW_NEEDS_TRACK_MASK ? 1 : 0)<<i;
-	if(track_mask_views !=0)render_track_sections(context,track_section,track_type,offset_table,1,track_mask_views,track_masks);
 
 	for(int angle=0; angle<4; angle++)
 	{
@@ -692,7 +641,6 @@ view_t* views=track_type->masks[track_section_id];
 
 			image_t part_sprite;
 			image_copy(full_sprites+angle,&part_sprite);
-
 			if(view->masks !=NULL)
 			{
 				for(int x=0; x<full_sprites[angle].width; x++)

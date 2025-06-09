@@ -589,14 +589,34 @@ void set_offset(int view_angle,track_section_t* track_section,float* offset_tabl
 	end_offset=get_offset(end_table,view_angle,offset_table);
 }
 
+int mod(int k,int n)
+{
+return ((k%n)+n)%n;
+}
+
+void apply_lift(image_t* image,image_t* pattern)
+{
+	for(int x=0; x<image->width; x++)
+	for(int y=0; y<image->height; y++)
+	{
+	uint8_t pixel=image->pixels[y*image->width+x];
+		if(pixel>=1&&pixel<=3)
+		{
+		int x_index=mod(x+image->x_offset-pattern->x_offset,pattern->width);
+		int y_index=mod(y+image->y_offset-pattern->y_offset,pattern->height);
+		image->pixels[y*image->width+x]=pattern->pixels[x_index+y_index*pattern->width];
+		}
+	}
+}
+
 void write_track_section(context_t* context,int track_section_id,track_type_t* track_type,float offset_table[88],const char* base_directory,const char* output_directory,json_t* sprites)
 {
 track_section_t* track_section=track_sections+track_section_id;
 view_t* views=track_type->masks[track_section_id];
 
-	int z_offset=(int)(track_type->z_offset+0.499999);
-	image_t full_sprites[4];
-	image_t track_masks[4];
+int z_offset=(int)(track_type->z_offset+0.499999);
+image_t full_sprites[4];
+image_t track_masks[4];
 	//TODO maybe optimize by not re-assembling the mesh for each view if not needed
 	for(int i=0;i<4;i++)
 	{
@@ -613,98 +633,107 @@ view_t* views=track_type->masks[track_section_id];
 
 
 
-	//TODO Remember that if these sprites are drawn then flat pieces must render 4 angles instead of 2
-	//if(track_type->flags&TRACK_HAS_LIFT) TODO make this work again
-	//{
-	//	for(int i=0; i<4; i++)image_blit(full_sprites+i,overlay+i,0,track_type->lift_offset-z_offset);
-	//}
 
-	for(int angle=0; angle<4; angle++)
+	for(int i=0; i<4; i++)
 	{
-		if(views[angle].num_sprites ==0)continue;
+	int angle=i;
 
-		view_t* view=views+angle;
+		if(track_type->flags&TRACK_HAS_LIFT)
+		{
+			if(views[i].num_sprites == 0)angle=i%2;
 
-		char final_filename[512];
-		char relative_filename[512];
-		snprintf(relative_filename,512,"%s%s%s_%d.png",output_directory,track_section->name,track_type->suffix,angle+1);
+		}
+
+		if(views[angle].num_sprites == 0)continue;
+
+		//TODO Remember that if these sprites are drawn then flat pieces must render 4 angles instead of 2
+		if(track_type->flags&TRACK_HAS_LIFT && track_section->chain_pattern!=NULL)
+		{
+		apply_lift(full_sprites+angle,track_section->chain_pattern+i);
+		}
+
+	view_t* view=views+angle;
+
+	char final_filename[512];
+	char relative_filename[512];
+	snprintf(relative_filename,512,"%s%s%s_%d.png",output_directory,track_section->name,track_type->suffix,angle+1);
 
 		for(int sprite=0; sprite<view->num_sprites; sprite++)
 		{
-			char final_filename[512];
-			char relative_filename[512];
-			if(view->num_sprites==1)snprintf(relative_filename,512,"%s%s%s_%d.png",output_directory,track_section->name,track_type->suffix,angle+1);
-			else snprintf(relative_filename,512,"%s%s%s_%d_%d.png",output_directory,track_section->name,track_type->suffix,angle+1,sprite+1);
-			snprintf(final_filename,512,"%s%s",base_directory,relative_filename);
-			//y		snprintf(final_filename,512,"../ImageEncode/%s",relative_filename);
-			printf("%s\n",final_filename);
+		char final_filename[512];
+		char relative_filename[512];
+			if(view->num_sprites==1)snprintf(relative_filename,512,"%s%s%s_%d.png",output_directory,track_section->name,track_type->suffix,i+1);
+			else snprintf(relative_filename,512,"%s%s%s_%d_%d.png",output_directory,track_section->name,track_type->suffix,i+1,sprite+1);
+		snprintf(final_filename,512,"%s%s",base_directory,relative_filename);
+		//y		snprintf(final_filename,512,"../ImageEncode/%s",relative_filename);
+		printf("%s\n",final_filename);
 
-			image_t part_sprite;
-			image_copy(full_sprites+angle,&part_sprite);
+		image_t part_sprite;
+		image_copy(full_sprites+angle,&part_sprite);
 			if(view->masks !=NULL)
 			{
 				for(int x=0; x<full_sprites[angle].width; x++)
-					for(int y=0; y<full_sprites[angle].height; y++)
+				for(int y=0; y<full_sprites[angle].height; y++)
+				{
+					int in_mask=is_in_mask(x+full_sprites[angle].x_offset,y+full_sprites[angle].y_offset+((track_section->flags&TRACK_OFFSET_SPRITE_MASK) ? (z_offset-8) : 0),view->masks+sprite);
+
+					if(view->masks[sprite].track_mask_op !=TRACK_MASK_NONE)
 					{
-						int in_mask=is_in_mask(x+full_sprites[angle].x_offset,y+full_sprites[angle].y_offset+((track_section->flags&TRACK_OFFSET_SPRITE_MASK) ? (z_offset-8) : 0),view->masks+sprite);
+						int mask_x=(x+full_sprites[angle].x_offset)-track_masks[angle].x_offset;
+						int mask_y=(y+full_sprites[angle].y_offset)-track_masks[angle].y_offset;
+						int in_track_mask=mask_x >=0&&mask_y >=0&&mask_x<track_masks[angle].width&&mask_y<track_masks[angle].height&&track_masks[angle].pixels[mask_x+mask_y*track_masks[angle].width] !=0;
 
-						if(view->masks[sprite].track_mask_op !=TRACK_MASK_NONE)
+						switch(view->masks[sprite].track_mask_op)
 						{
-							int mask_x=(x+full_sprites[angle].x_offset)-track_masks[angle].x_offset;
-							int mask_y=(y+full_sprites[angle].y_offset)-track_masks[angle].y_offset;
-							int in_track_mask=mask_x >=0&&mask_y >=0&&mask_x<track_masks[angle].width&&mask_y<track_masks[angle].height&&track_masks[angle].pixels[mask_x+mask_y*track_masks[angle].width] !=0;
-
-							switch(view->masks[sprite].track_mask_op)
-							{
-							case TRACK_MASK_DIFFERENCE:
-								in_mask=in_mask&&!in_track_mask;
-								break;
-							case TRACK_MASK_INTERSECT:
-								in_mask=in_mask&&in_track_mask;
-								break;
-							case TRACK_MASK_TRANSFER_NEXT:
-								if(sprite<view->num_sprites-1&in_track_mask&&is_in_mask(x+full_sprites[angle].x_offset,y+full_sprites[angle].y_offset+((track_section->flags&TRACK_OFFSET_SPRITE_MASK) ? (z_offset-8) : 0),view->masks+sprite+1))in_mask=1;
-								break;
-							}
-
+						case TRACK_MASK_DIFFERENCE:
+							in_mask=in_mask&&!in_track_mask;
+							break;
+						case TRACK_MASK_INTERSECT:
+							in_mask=in_mask&&in_track_mask;
+							break;
+						case TRACK_MASK_TRANSFER_NEXT:
+							if(sprite<view->num_sprites-1&in_track_mask&&is_in_mask(x+full_sprites[angle].x_offset,y+full_sprites[angle].y_offset+((track_section->flags&TRACK_OFFSET_SPRITE_MASK) ? (z_offset-8) : 0),view->masks+sprite+1))in_mask=1;
+							break;
 						}
 
-						if(in_mask)
-						{
-							part_sprite.pixels[x+part_sprite.width*y]=full_sprites[angle].pixels[x+full_sprites[angle].width*y];
-						}
-						else
-						{
-							part_sprite.pixels[x+part_sprite.width*y]=0;
-						}
 					}
-				part_sprite.x_offset+=view->masks[sprite].x_offset;
-				part_sprite.y_offset+=view->masks[sprite].y_offset;
+
+					if(in_mask)
+					{
+						part_sprite.pixels[x+part_sprite.width*y]=full_sprites[angle].pixels[x+full_sprites[angle].width*y];
+					}
+					else
+					{
+						part_sprite.pixels[x+part_sprite.width*y]=0;
+					}
+				}
+			part_sprite.x_offset+=view->masks[sprite].x_offset;
+			part_sprite.y_offset+=view->masks[sprite].y_offset;
 			}
 
-			FILE* file=fopen(final_filename,"wb");
+		FILE* file=fopen(final_filename,"wb");
 			if(file ==NULL)
 			{
-				printf("Error: could not open %s for writing\n",final_filename);
-				exit(1);
+			printf("Error: could not open %s for writing\n",final_filename);
+			exit(1);
 			}
-			//if(view->flags&VIEW_NEEDS_TRACK_MASK)image_write_png(&(track_masks[angle]),file);
-			image_crop(&part_sprite);
-			image_write_png(&part_sprite, NULL, file);
-			//image_write_png(full_sprites+angle,file);
-			fclose(file);
+		//if(view->flags&VIEW_NEEDS_TRACK_MASK)image_write_png(&(track_masks[angle]),file);
+		image_crop(&part_sprite);
+		image_write_png(&part_sprite, NULL, file);
+		//image_write_png(full_sprites+angle,file);
+		fclose(file);
 
-			json_t* sprite_entry=json_object();
-			json_object_set(sprite_entry,"path",json_string(relative_filename));
-			json_object_set(sprite_entry,"x",json_integer(part_sprite.x_offset));
-			json_object_set(sprite_entry,"y",json_integer(part_sprite.y_offset));
-			json_object_set(sprite_entry,"palette",json_string("keep"));
-			json_array_append(sprites,sprite_entry);
-			image_destroy(&part_sprite);
+		json_t* sprite_entry=json_object();
+		json_object_set(sprite_entry,"path",json_string(relative_filename));
+		json_object_set(sprite_entry,"x",json_integer(part_sprite.x_offset));
+		json_object_set(sprite_entry,"y",json_integer(part_sprite.y_offset));
+		json_object_set(sprite_entry,"palette",json_string("keep"));
+		json_array_append(sprites,sprite_entry);
+		image_destroy(&part_sprite);
 		}
 
-		if(view->flags&VIEW_NEEDS_TRACK_MASK)image_destroy(track_masks+angle);
-		image_destroy(full_sprites+angle);
+	//	if(view->flags&VIEW_NEEDS_TRACK_MASK)image_destroy(track_masks+angle);
+	//image_destroy(full_sprites+angle);
 	}
 }
 

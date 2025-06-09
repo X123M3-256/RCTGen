@@ -8,6 +8,7 @@
 #include <math.h>
 #include "track.h"
 #include "mask.h"
+#include "sprites.h"
 
 context_t get_context(light_t* lights,uint32_t num_lights,uint32_t dither)
 {
@@ -170,7 +171,6 @@ return 0;
 int load_track_type(track_type_t* track_type,json_t* json,int preloaded)
 {
 	//Load track flags
-	track_type->flags=0;
 	json_t* flags=json_object_get(json,"flags");
 	if(flags !=NULL)
 	{
@@ -470,10 +470,18 @@ mask_t flat_to_steep_diag_masks[]={
     {0,1,0,0,flat_to_steep_diag_rects+9},{0,1,0,32,flat_to_steep_diag_rects+10},  {0,1,0,72,flat_to_steep_diag_rects+11}, 
 };
 
-view_t diag_iews[4]={{0,3,flat_to_steep_diag_masks+0},{VIEW_NEEDS_TRACK_MASK,3,flat_to_steep_diag_masks+3},{0,3,flat_to_steep_diag_masks+6},{0,3,flat_to_steep_diag_masks+9}};
-
 int main(int argc,char** argv)
 {
+/*
+char filename[256];
+	for(int i=0;i<4;i++)
+	{
+	sprintf(filename,"steep_up_diag_chain_%d.png",i);
+	FILE* file=fopen(filename,"w");
+	image_write_png(steep_diag_chain+i,NULL,file);
+	fclose(file);
+	}
+*/
 	if(argc !=2)
 	{
 		printf("Usage: TrackRender <file>\n");

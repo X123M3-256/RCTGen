@@ -134,9 +134,9 @@ add_custom_command(TARGET makevehicle PRE_BUILD
 set(maketrack_SOURCES
 	"TrackRender/src/main.cpp"
 	"TrackRender/src/track.cpp"
+	"TrackRender/src/sprites.cpp"
 	"TrackRender/src/track_sections.cpp"
 	"TrackRender/src/mask.cpp"
-	"TrackRender/src/sprites.cpp"
 	"TrackRender/src/mask.h"
 	"TrackRender/src/track.h"
 	"TrackRender/src/sprites.h"
@@ -161,6 +161,7 @@ endif()
 # Target: subposition
 set(subposition_SOURCES
 	"TrackRender/src/subposition.cpp"
+	"TrackRender/src/sprites.cpp"
 	"TrackRender/src/track_sections.cpp"
 	"TrackRender/src/track.h"
 	"TrackRender/src/sprites.h"

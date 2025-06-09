@@ -195,6 +195,10 @@ int mesh_load_transform(mesh_t* output, const char* filename, matrix_t matrix)
                 output->materials[i].region = 4;
             }
             else if (strstr(name.data, "Peep") != NULL)output->materials[i].region = 5;
+            else if (strstr(name.data, "Chain") != NULL)
+            {
+                output->materials[i].region = 6;
+            }
             if (strstr(name.data, "VisibleMask") != NULL)output->materials[i].flags |= MATERIAL_IS_VISIBLE_MASK;
             else if (strstr(name.data, "Mask") != NULL)output->materials[i].flags |= MATERIAL_IS_MASK;
             if (strstr(name.data, "NoAO") != NULL)output->materials[i].flags |= MATERIAL_NO_AO;

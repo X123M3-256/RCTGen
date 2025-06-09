@@ -7,6 +7,7 @@
 #define _USE_MATH_DEFINES
 #endif
 #include "track.h"
+#include "sprites.h"
 #include <math.h>
 #include <stdint.h>
 #define NORM(x,y) (sqrt((x)*(x)+(y)*(y)))
@@ -153,13 +154,12 @@ track_point_t flat_curve(float distance)
 	return plane_curve_vertical(vector3(0.0,0.0,distance),vector3(0.0,0.0,1.0));
 }
 
-const track_section_t flat={"flat",0,flat_curve,FLAT_LENGTH};
-const track_section_t flat_asymmetric={"flat_asymmetric",0,flat_curve,FLAT_LENGTH};
-const track_section_t brake={"brake",TRACK_SPECIAL_BRAKE,flat_curve,FLAT_LENGTH};
-const track_section_t magnetic_brake={"magnetic_brake",TRACK_SPECIAL_MAGNETIC_BRAKE,flat_curve,FLAT_LENGTH};
-const track_section_t block_brake={"block_brake",TRACK_SPECIAL_BLOCK_BRAKE,flat_curve,FLAT_LENGTH};
-const track_section_t booster={"booster",TRACK_SPECIAL_BOOSTER,flat_curve,FLAT_LENGTH};
-
+const track_section_t flat={"flat",0,flat_curve,FLAT_LENGTH,flat_chain};
+const track_section_t flat_asymmetric={"flat_asymmetric",0,flat_curve,FLAT_LENGTH,flat_chain};
+const track_section_t brake={"brake",TRACK_SPECIAL_BRAKE,flat_curve,FLAT_LENGTH,flat_chain};
+const track_section_t magnetic_brake={"magnetic_brake",TRACK_SPECIAL_MAGNETIC_BRAKE,flat_curve,FLAT_LENGTH,flat_chain};
+const track_section_t block_brake={"block_brake",TRACK_SPECIAL_BLOCK_BRAKE,flat_curve,FLAT_LENGTH,flat_chain};
+const track_section_t booster={"booster",TRACK_SPECIAL_BOOSTER,flat_curve,FLAT_LENGTH,flat_chain};
 
 //Slopes
 
@@ -246,15 +246,15 @@ track_point_t steep_to_flat_curve(float distance)
 	);
 }
 
-const track_section_t flat_to_gentle={"flat_to_gentle",0,flat_to_gentle_curve,FLAT_TO_GENTLE_LENGTH};
-const track_section_t gentle_to_flat={"gentle_to_flat",0,gentle_to_flat_curve,FLAT_TO_GENTLE_LENGTH};
-const track_section_t gentle={"gentle",0,gentle_curve,GENTLE_LENGTH};
-const track_section_t brake_gentle={"brake_gentle",TRACK_SPECIAL_BRAKE,gentle_curve,GENTLE_LENGTH};
-const track_section_t magnetic_brake_gentle={"magnetic_brake_gentle",TRACK_SPECIAL_MAGNETIC_BRAKE,gentle_curve,GENTLE_LENGTH};
-const track_section_t launched_lift={"launched_lift",TRACK_SPECIAL_LAUNCHED_LIFT,gentle_curve,GENTLE_LENGTH};
-const track_section_t gentle_to_steep={"gentle_to_steep",TRACK_ALT_PREFER_ODD,gentle_to_steep_curve,GENTLE_TO_STEEP_LENGTH};
-const track_section_t steep_to_gentle={"steep_to_gentle",TRACK_ALT_INVERT|TRACK_ALT_PREFER_ODD,steep_to_gentle_curve,GENTLE_TO_STEEP_LENGTH};
-const track_section_t steep={"steep",TRACK_ALT_INVERT,steep_curve,STEEP_LENGTH};
+const track_section_t flat_to_gentle={"flat_to_gentle",0,flat_to_gentle_curve,FLAT_TO_GENTLE_LENGTH,flat_chain};
+const track_section_t gentle_to_flat={"gentle_to_flat",0,gentle_to_flat_curve,FLAT_TO_GENTLE_LENGTH,flat_chain};
+const track_section_t gentle={"gentle",0,gentle_curve,GENTLE_LENGTH,gentle_chain};
+const track_section_t brake_gentle={"brake_gentle",TRACK_SPECIAL_BRAKE,gentle_curve,GENTLE_LENGTH,gentle_chain};
+const track_section_t magnetic_brake_gentle={"magnetic_brake_gentle",TRACK_SPECIAL_MAGNETIC_BRAKE,gentle_curve,GENTLE_LENGTH,gentle_chain};
+const track_section_t launched_lift={"launched_lift",TRACK_SPECIAL_LAUNCHED_LIFT,gentle_curve,GENTLE_LENGTH,gentle_chain};
+const track_section_t gentle_to_steep={"gentle_to_steep",TRACK_ALT_PREFER_ODD,gentle_to_steep_curve,GENTLE_TO_STEEP_LENGTH,gentle_chain};
+const track_section_t steep_to_gentle={"steep_to_gentle",TRACK_ALT_INVERT|TRACK_ALT_PREFER_ODD,steep_to_gentle_curve,GENTLE_TO_STEEP_LENGTH,gentle_chain};
+const track_section_t steep={"steep",TRACK_ALT_INVERT,steep_curve,STEEP_LENGTH,gentle_chain};
 const track_section_t steep_to_vertical={"steep_to_vertical",TRACK_VERTICAL|TRACK_NO_SUPPORTS|TRACK_SPECIAL_STEEP_TO_VERTICAL|TRACK_ALT_INVERT,steep_to_vertical_curve,STEEP_TO_VERTICAL_LENGTH};
 const track_section_t vertical_to_steep={"vertical_to_steep",TRACK_VERTICAL|TRACK_NO_SUPPORTS|TRACK_SPECIAL_VERTICAL_TO_STEEP,vertical_to_steep_curve,STEEP_TO_VERTICAL_LENGTH};
 const track_section_t vertical={"vertical",TRACK_VERTICAL|TRACK_NO_SUPPORTS|TRACK_SPECIAL_VERTICAL,vertical_curve,VERTICAL_LENGTH};
@@ -405,15 +405,15 @@ track_point_t vertical_diag_curve(float distance)
 	return plane_curve_vertical_diagonal(vector3(0.0,distance,0.0),vector3(0.0,1.0,0.0));
 }
 
-const track_section_t flat_diag={"flat_diag",TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH};
-const track_section_t brake_diag={"brake_diag",TRACK_SPECIAL_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH};
-const track_section_t block_brake_diag={"block_brake_diag",TRACK_SPECIAL_BLOCK_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH};
-const track_section_t magnetic_brake_diag={"magnetic_brake_diag",TRACK_SPECIAL_MAGNETIC_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH};
-const track_section_t brake_gentle_diag={"brake_gentle_diag",TRACK_SPECIAL_BRAKE|TRACK_DIAGONAL|TRACK_SUPPORT_BASE,gentle_diag_curve,GENTLE_DIAG_LENGTH};
-const track_section_t magnetic_brake_gentle_diag={"magnetic_brake_gentle_diag",TRACK_SPECIAL_MAGNETIC_BRAKE|TRACK_DIAGONAL|TRACK_SUPPORT_BASE,gentle_diag_curve,GENTLE_DIAG_LENGTH};
-const track_section_t flat_to_gentle_diag={"flat_to_gentle_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,flat_to_gentle_diag_curve,FLAT_TO_GENTLE_DIAG_LENGTH};
-const track_section_t gentle_to_flat_diag={"gentle_to_flat_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,gentle_to_flat_diag_curve,FLAT_TO_GENTLE_DIAG_LENGTH};
-const track_section_t gentle_diag={"gentle_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,gentle_diag_curve,GENTLE_DIAG_LENGTH};
+const track_section_t flat_diag={"flat_diag",TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH,flat_diag_chain};
+const track_section_t brake_diag={"brake_diag",TRACK_SPECIAL_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH,flat_diag_chain};
+const track_section_t block_brake_diag={"block_brake_diag",TRACK_SPECIAL_BLOCK_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH,flat_diag_chain};
+const track_section_t magnetic_brake_diag={"magnetic_brake_diag",TRACK_SPECIAL_MAGNETIC_BRAKE|TRACK_DIAGONAL,flat_diag_curve,FLAT_DIAG_LENGTH,flat_diag_chain};
+const track_section_t brake_gentle_diag={"brake_gentle_diag",TRACK_SPECIAL_BRAKE|TRACK_DIAGONAL|TRACK_SUPPORT_BASE,gentle_diag_curve,GENTLE_DIAG_LENGTH,flat_diag_chain};
+const track_section_t magnetic_brake_gentle_diag={"magnetic_brake_gentle_diag",TRACK_SPECIAL_MAGNETIC_BRAKE|TRACK_DIAGONAL|TRACK_SUPPORT_BASE,gentle_diag_curve,GENTLE_DIAG_LENGTH,flat_diag_chain};
+const track_section_t flat_to_gentle_diag={"flat_to_gentle_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,flat_to_gentle_diag_curve,FLAT_TO_GENTLE_DIAG_LENGTH,flat_diag_chain};
+const track_section_t gentle_to_flat_diag={"gentle_to_flat_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,gentle_to_flat_diag_curve,FLAT_TO_GENTLE_DIAG_LENGTH,flat_diag_chain};
+const track_section_t gentle_diag={"gentle_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,gentle_diag_curve,GENTLE_DIAG_LENGTH,flat_diag_chain};
 const track_section_t gentle_to_steep_diag={"gentle_to_steep_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,gentle_to_steep_diag_curve,GENTLE_TO_STEEP_DIAG_LENGTH};
 const track_section_t steep_to_gentle_diag={"steep_to_gentle_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,steep_to_gentle_diag_curve,GENTLE_TO_STEEP_DIAG_LENGTH};
 const track_section_t steep_diag={"steep_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,steep_diag_curve,STEEP_DIAG_LENGTH};

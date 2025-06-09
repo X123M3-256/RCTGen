@@ -375,6 +375,7 @@ typedef struct
 	unsigned int flags;
 	track_point_t (*curve)(float distance);
 	float length;
+	image_t* chain_pattern;
 }track_section_t;
 
 extern track_section_t track_sections[NUM_TRACK_SECTIONS];

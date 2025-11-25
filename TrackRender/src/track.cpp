@@ -1074,6 +1074,18 @@ uint64_t groups=track_type->groups;
 	write_track_section(context,LARGE_TURN_LEFT_BANK_TO_ORTHOGONAL_GENTLE,track_type,offset_table,base_dir,output_dir,sprites);
 	write_track_section(context,LARGE_TURN_RIGHT_BANK_TO_ORTHOGONAL_GENTLE,track_type,offset_table,base_dir,output_dir,sprites);
 	}
+
+	if(groups&TRACK_GROUP_MEDIUM_QUARTER_HELICES)
+	{
+		write_track_section(context,MEDIUM_QUARTER_HELIX_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
+		write_track_section(context,MEDIUM_QUARTER_HELIX_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
+	}
+
+	if(groups&TRACK_GROUP_BANKED_MEDIUM_QUARTER_HELICES)
+	{
+		write_track_section(context,MEDIUM_QUARTER_HELIX_LEFT_BANK,track_type,offset_table,base_dir,output_dir,sprites);
+		write_track_section(context,MEDIUM_QUARTER_HELIX_RIGHT_BANK,track_type,offset_table,base_dir,output_dir,sprites);
+	}
 	return 0;
 }
 

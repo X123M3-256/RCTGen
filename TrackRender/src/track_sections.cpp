@@ -1,5 +1,6 @@
 #ifdef _MSC_VER
-#pragma warning(disable : 4305)#pragma warning(disable : 4244)
+#pragma warning(disable : 4305)
+#pragma warning(disable : 4244)
 #endif
 
 #include <stdint.h>
@@ -1402,6 +1403,32 @@ const track_section_t dive_loop_45_right={"dive_loop_45_right",TRACK_DIAGONAL|TR
 const track_section_t dive_loop_90_left={"dive_loop_90_left",TRACK_NO_SUPPORTS|TRACK_EXIT_90_DEG_LEFT,dive_loop_90_left_curve,DIVE_LOOP_90_LENGTH};
 const track_section_t dive_loop_90_right={"dive_loop_90_right",TRACK_NO_SUPPORTS|TRACK_EXIT_90_DEG_RIGHT,dive_loop_90_right_curve,DIVE_LOOP_90_LENGTH};
 
+//Quarter helices
+
+#define MEDIUM_QUARTER_HELIX_LENGTH (3.948154*TILE_SIZE)
+
+track_point_t medium_quarter_helix_left_curve(float distance)
+{
+	return sloped_turn_left_curve(2.5*TILE_SIZE,2*CLEARANCE_HEIGHT/MEDIUM_TURN_LENGTH,distance);
+}
+track_point_t medium_quarter_helix_right_curve(float distance)
+{
+	return sloped_turn_right_curve(2.5*TILE_SIZE,2*CLEARANCE_HEIGHT/MEDIUM_TURN_LENGTH,distance);
+}
+track_point_t medium_quarter_helix_left_bank_curve(float distance)
+{
+	return banked_curve(medium_quarter_helix_left_curve(distance),BANK_ANGLE);
+}
+track_point_t medium_quarter_helix_right_bank_curve(float distance)
+{
+	return banked_curve(medium_quarter_helix_right_curve(distance),-BANK_ANGLE);
+}
+
+const track_section_t medium_quarter_helix_left={"medium_quarter_helix_left",TRACK_SUPPORT_BASE|TRACK_EXIT_90_DEG_LEFT,medium_quarter_helix_left_curve,MEDIUM_QUARTER_HELIX_LENGTH};
+const track_section_t medium_quarter_helix_right={"medium_quarter_helix_right",TRACK_SUPPORT_BASE|TRACK_EXIT_90_DEG_RIGHT,medium_quarter_helix_right_curve,MEDIUM_QUARTER_HELIX_LENGTH};
+const track_section_t medium_quarter_helix_left_bank={"medium_quarter_helix_left_bank",TRACK_BANK_LEFT|TRACK_OFFSET_SPRITE_MASK|TRACK_SUPPORT_BASE|TRACK_EXIT_90_DEG_LEFT,medium_quarter_helix_left_bank_curve,MEDIUM_QUARTER_HELIX_LENGTH};
+const track_section_t medium_quarter_helix_right_bank={"medium_quarter_helix_right_bank",TRACK_BANK_RIGHT|TRACK_OFFSET_SPRITE_MASK|TRACK_SUPPORT_BASE|TRACK_EXIT_90_DEG_RIGHT,medium_quarter_helix_right_bank_curve,MEDIUM_QUARTER_HELIX_LENGTH};
+
 track_section_t track_sections[NUM_TRACK_SECTIONS]={
 	flat,
 	flat_asymmetric,
@@ -1552,5 +1579,9 @@ track_section_t track_sections[NUM_TRACK_SECTIONS]={
 	vertical_twist_right_to_diag,
 	vertical_twist_left_to_orthogonal,
 	vertical_twist_right_to_orthogonal,
-	vertical_booster
+	vertical_booster,
+	medium_quarter_helix_left,
+	medium_quarter_helix_right,
+	medium_quarter_helix_left_bank,
+	medium_quarter_helix_right_bank,
 };

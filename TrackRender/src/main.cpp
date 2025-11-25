@@ -90,6 +90,8 @@ int load_groups(json_t* json,uint64_t* out)
 		else if(strcmp(json_string_value(group_name),"launched_lifts") ==0)groups|=TRACK_GROUP_LAUNCHED_LIFTS;
 		else if(strcmp(json_string_value(group_name),"turn_bank_transitions") ==0)groups|=TRACK_GROUP_TURN_BANK_TRANSITIONS;
 		else if(strcmp(json_string_value(group_name),"vertical_boosters") ==0)groups|=TRACK_GROUP_VERTICAL_BOOSTERS;
+		else if(strcmp(json_string_value(group_name),"medium_quarter_helices") ==0)groups|=TRACK_GROUP_MEDIUM_QUARTER_HELICES;
+		else if(strcmp(json_string_value(group_name),"banked_medium_quarter_helices") ==0)groups|=TRACK_GROUP_BANKED_MEDIUM_QUARTER_HELICES;
 		else
 		{
 			printf("Error: Unrecognized section group \"%s\"\n",json_string_value(group_name));

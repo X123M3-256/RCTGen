@@ -89,6 +89,11 @@ int load_groups(json_t* json,uint64_t* out)
 		else if(strcmp(json_string_value(group_name),"boosters") ==0)groups|=TRACK_GROUP_BOOSTERS;
 		else if(strcmp(json_string_value(group_name),"launched_lifts") ==0)groups|=TRACK_GROUP_LAUNCHED_LIFTS;
 		else if(strcmp(json_string_value(group_name),"turn_bank_transitions") ==0)groups|=TRACK_GROUP_TURN_BANK_TRANSITIONS;
+		else if(strcmp(json_string_value(group_name),"steep_bank_transitions") ==0)groups|=TRACK_GROUP_STEEP_BANK_TRANSITIONS;
+		else if(strcmp(json_string_value(group_name),"large_steep_sloped_turns") ==0)groups|=TRACK_GROUP_LARGE_STEEP_SLOPED_TURNS;
+		else if(strcmp(json_string_value(group_name),"banked_barrel_rolls") ==0)groups|=TRACK_GROUP_BANKED_BARREL_ROLLS;
+		else if(strcmp(json_string_value(group_name),"banked_inline_twists") ==0)groups|=TRACK_GROUP_BANKED_INLINE_TWISTS;
+		else if(strcmp(json_string_value(group_name),"banked_zero_g_rolls") ==0)groups|=TRACK_GROUP_BANKED_ZERO_G_ROLLS;
 		else if(strcmp(json_string_value(group_name),"vertical_boosters") ==0)groups|=TRACK_GROUP_VERTICAL_BOOSTERS;
 		else
 		{

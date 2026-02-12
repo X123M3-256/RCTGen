@@ -964,16 +964,51 @@ uint64_t groups=track_type->groups;
 	write_track_section(context,MEDIUM_HELIX_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
 	}
 
+	if(groups&TRACK_GROUP_STEEP_BANK_TRANSITIONS)
+	{
+	write_track_section(context,GENTLE_LEFT_BANK_TO_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,GENTLE_RIGHT_BANK_TO_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,STEEP_TO_GENTLE_LEFT_BANK,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,STEEP_TO_GENTLE_RIGHT_BANK,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,GENTLE_LEFT_BANK_TO_STEEP_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,GENTLE_RIGHT_BANK_TO_STEEP_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,STEEP_TO_GENTLE_LEFT_BANK_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,STEEP_TO_GENTLE_RIGHT_BANK_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+	}
+
+	if(groups&TRACK_GROUP_LARGE_STEEP_SLOPED_TURNS) //TODO move to sloped turn group
+	{
+	printf("Here\n");
+	write_track_section(context,SMALL_TURN_LEFT_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,SMALL_TURN_RIGHT_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,LARGE_TURN_LEFT_TO_DIAG_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,LARGE_TURN_RIGHT_TO_DIAG_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,LARGE_TURN_LEFT_TO_ORTHOGONAL_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,LARGE_TURN_RIGHT_TO_ORTHOGONAL_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
+	}
+
+
+
 	//Inversions
+	if(groups&TRACK_GROUP_INLINE_TWISTS)
+	{
+	write_track_section(context,INLINE_TWIST_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,INLINE_TWIST_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
+	}
+	if(groups&TRACK_GROUP_BANKED_INLINE_TWISTS)
+	{
+	write_track_section(context,INLINE_TWIST_LEFT_BANK,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,INLINE_TWIST_RIGHT_BANK,track_type,offset_table,base_dir,output_dir,sprites);
+	}
 	if(groups&TRACK_GROUP_BARREL_ROLLS)
 	{
 	write_track_section(context,BARREL_ROLL_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
 	write_track_section(context,BARREL_ROLL_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
 	}
-	if(groups&TRACK_GROUP_INLINE_TWISTS)
+	if(groups&TRACK_GROUP_BANKED_BARREL_ROLLS)
 	{
-	write_track_section(context,INLINE_TWIST_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
-	write_track_section(context,INLINE_TWIST_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,BARREL_ROLL_LEFT_BANK,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,BARREL_ROLL_RIGHT_BANK,track_type,offset_table,base_dir,output_dir,sprites);
 	}
 	if(groups&TRACK_GROUP_HALF_LOOPS)
 	{
@@ -1027,6 +1062,11 @@ uint64_t groups=track_type->groups;
 	write_track_section(context,ZERO_G_ROLL_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
 	write_track_section(context,LARGE_ZERO_G_ROLL_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
 	write_track_section(context,LARGE_ZERO_G_ROLL_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
+	}
+	if(groups&TRACK_GROUP_BANKED_ZERO_G_ROLLS)
+	{
+	write_track_section(context,ZERO_G_ROLL_LEFT_BANK,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,ZERO_G_ROLL_RIGHT_BANK,track_type,offset_table,base_dir,output_dir,sprites);
 	}
 	if(groups&TRACK_GROUP_DIVE_LOOPS)
 	{

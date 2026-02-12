@@ -123,6 +123,7 @@ Pitch angle reference
 54 	|Gentle diagonal down
 55 	|Steep diagonal down
 
+
 Bank angle reference
 
 0	|Flat
@@ -141,6 +142,23 @@ Bank angle reference
 13	|135 degree bank left
 14	|157.5 degree bank right
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const char* pitch_names[]={"flat","up12","up25","up42","up60","down12","down25","down42","down60","up75","up90","up105","up120","up135","up150","up165","inverted","down75","down90","down105","down120","down135","down150","down165","","","","","","","","","","","","","","","","","","","","","","","","","","","up8","up16","up50","down8","down16","down50"};
+const char* bank_names[]={"unbanked","left22","left45","right22","right45","left67","left90","left112","left135","left157","right67","right90","right112","right135","right157"};
 
 //float pitch_angles[]={0,FG,G,GS,S,-FG,-G,-GS,-S,SV,V,V+1*M_PI_12,V+2*M_PI_12,V+3*M_PI_12,V+4*M_PI_12,V+5*M_PI_12,V+6*M_PI_12,-SV,-V,-V-1*M_PI_12,-V-2*M_PI_12,-V-3*M_PI_12,-V-4*M_PI_12,-V-5*M_PI_12,FGD,GD,SD,-FGD,-GD,-SD};
 float pitch_angles[]={0,FG,G,GS,S,-FG,-G,-GS,-S,SV,V,-SV,-V,FGD,GD,SD,-FGD,-GD,-SD};
@@ -2801,7 +2819,7 @@ float progress=0;
 	track_point_t point=get_track_point(track_section,progress,reverse,reverse_transform,reverse_offset);
 	coord_t cur_sub=get_subposition(point.position,view,diag);
 
-	calc_g_forces(track_section,progress,count);	
+	//calc_g_forces(track_section,progress,count);	
 	
 	//Write data
 	//Skip first point for view angles 0 and 3
@@ -2868,7 +2886,7 @@ printf("CREATE_VEHICLE_INFO(TrackVehicleInfo%s%d,{\n",name,view);
 			{
 			printf("    ");
 			}
-		printf("{% 7d,% 5d,% 5d,% 3d,% 3d,% 3d },",points[i].x,points[i].y,points[i].z,points[i].yaw_sprite,points[i].pitch_sprite,points[i].bank_sprite);
+		printf("{% 7d,% 5d,% 5d,% 3d, % 8s, % 8s },",points[i].x,points[i].y,points[i].z,points[i].yaw_sprite,pitch_names[points[i].pitch_sprite],bank_names[points[i].bank_sprite]);
 			if(i % 5 ==4)putchar('\n');
 	}
 puts("})\n");
@@ -3005,11 +3023,11 @@ printf("Length (tiles)\t\t%.3f\t%.3f\t%.3f\t%.1f%\n\n",correct_length,actual_len
 void generate_subposition_data(track_section_t* track_section,const char* name,int groups,int reverse)
 {
 subposition_t subposition_points[MAX_SUBPOSITION_POINTS];
-	for(int i=0; i<1; i++)
+	for(int i=0; i<4; i++)
 	{
 	int n=generate_view_subposition_data(track_section,groups,i,reverse,subposition_points);
 	//calculate_energy_error(track_section,subposition_points,n,name);
-	//print_subposition_data(subposition_points,n,name,i);
+	print_subposition_data(subposition_points,n,name,i);
 	}
 }
 
@@ -3052,7 +3070,6 @@ int main(int argc,const char** argv)
 	//calc_g_forces(&(track_list_default.large_half_loop_left));
 	//generate_subposition_data(&(track_list_default.large_zero_g_roll_left),"LeftEighthDiveLoopUpToOrthogonal",0,0);
 	//generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",0,0);
-	return 0;
 
 	/*
 	generate_subposition_data(&(track_list_default.zero_g_roll_left),"LeftZeroGRollUp",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
@@ -3146,7 +3163,7 @@ int main(int argc,const char** argv)
 	//generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",  SPRITE_GROUP_CORKSCREW,0);
 	//generate_subposition_data(&(track_list_default.dive_loop_90_left),"LeftDiveLoop90Up",  SPRITE_GROUP_CORKSCREW,0);
 
-	int sprites=SPRITE_GROUP_ORTHOGONAL|SPRITE_GROUP_DIAGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_DIVE_LOOP;//|SPRITE_GROUP_ZERO_G_ROLLS_DIAGONAL|SPRITE_GROUP_ZERO_G_ROLLS_OTHER;//;//|SPRITE_GROUP_CORKSCREW;//
+	//int sprites=SPRITE_GROUP_ORTHOGONAL|SPRITE_GROUP_DIAGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_DIVE_LOOP;//|SPRITE_GROUP_ZERO_G_ROLLS_DIAGONAL|SPRITE_GROUP_ZERO_G_ROLLS_OTHER;//;//|SPRITE_GROUP_CORKSCREW;//
 	//generate_subposition_data(&(track_list_default.dive_loop_45_left),"LeftEighthDiveLoopUpToOrthogonal",sprites,0);
 	//generate_subposition_data(&(track_list_default.dive_loop_45_right),"RightEighthDiveLoopUpToOrthogonal",sprites,0);
 	//generate_subposition_data(&(track_list_default.dive_loop_45_right),"LeftEighthDiveLoopDownToOrthogonal",sprites,28);
@@ -3165,6 +3182,53 @@ int main(int argc,const char** argv)
 //	generate_subposition_data(&(track_list_default.gentle),"Gentle",sprites,0);
 //	generate_subposition_data(&(track_list_default.steep),"Steep",sprites,0);
 //	generate_subposition_data(&(track_list_default.vertical),"Vertical",sprites,0);
+
+/*	int sprites=SPRITE_GROUP_ORTHOGONAL|SPRITE_GROUP_DIAGONAL|SPRITE_GROUP_BASE;
+	generate_subposition_data(&(track_sections[S_BEND_LEFT_BANK]),"BankedSBendLeft",sprites,0);
+	generate_subposition_data(&(track_sections[S_BEND_RIGHT_BANK]),"BankedSBendRight",sprites,0);
+
+	sprites=SPRITE_GROUP_ORTHOGONAL|SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL;
+	generate_subposition_data(&(track_sections[GENTLE_LEFT_BANK_TO_STEEP]),"LeftBankedUp25ToUp60",sprites,0);
+	generate_subposition_data(&(track_sections[GENTLE_RIGHT_BANK_TO_STEEP]),"RightBankedUp25ToUp60",sprites,0);
+	generate_subposition_data(&(track_sections[STEEP_TO_GENTLE_LEFT_BANK]),"Up60ToLeftBankedUp25",sprites,0);
+	generate_subposition_data(&(track_sections[STEEP_TO_GENTLE_RIGHT_BANK]),"Up60ToRightBankedUp25",sprites,0);
+
+	generate_subposition_data(&(track_sections[GENTLE_LEFT_BANK_TO_STEEP]),"Down60ToRightBankedDown25",sprites,33);
+	generate_subposition_data(&(track_sections[GENTLE_RIGHT_BANK_TO_STEEP]),"Down60ToLeftBankedDown25",sprites,33);
+	generate_subposition_data(&(track_sections[STEEP_TO_GENTLE_LEFT_BANK]),"RightBankedDown25ToDown60",sprites,33);
+	generate_subposition_data(&(track_sections[STEEP_TO_GENTLE_RIGHT_BANK]),"LeftBankedDown25ToDown60",sprites,33);
+
+
+	sprites=SPRITE_GROUP_DIAGONAL;
+
+
+	generate_subposition_data(&(track_sections[GENTLE_LEFT_BANK_TO_STEEP_DIAG]),"DiagLeftBankedUp25ToUp60",sprites,0);
+	generate_subposition_data(&(track_sections[GENTLE_RIGHT_BANK_TO_STEEP_DIAG]),"DiagRightBankedUp25ToUp60",sprites,0);
+	generate_subposition_data(&(track_sections[STEEP_TO_GENTLE_LEFT_BANK_DIAG]),"DiagUp60ToLeftBankedUp25",sprites,0);
+	generate_subposition_data(&(track_sections[STEEP_TO_GENTLE_RIGHT_BANK_DIAG]),"DiagUp60ToRightBankedUp25",sprites,0);
+
+	generate_subposition_data(&(track_sections[GENTLE_LEFT_BANK_TO_STEEP_DIAG]),"DiagDown60ToRightBankedDown25",sprites,33);
+	generate_subposition_data(&(track_sections[GENTLE_RIGHT_BANK_TO_STEEP_DIAG]),"DiagDown60ToLeftBankedUp25",sprites,33);
+	generate_subposition_data(&(track_sections[STEEP_TO_GENTLE_LEFT_BANK_DIAG]),"DiagRightBankedDown25ToDown60",sprites,33);
+	generate_subposition_data(&(track_sections[STEEP_TO_GENTLE_RIGHT_BANK_DIAG]),"DiagLeftBankedDown25ToDown60",sprites,33);
+*/
+
+	generate_subposition_data(&(track_sections[SMALL_TURN_LEFT_STEEP               ]),"LeftQuarterTurn3TilesUp60",SPRITE_GROUP_BASE,0);
+	generate_subposition_data(&(track_sections[SMALL_TURN_RIGHT_STEEP              ]),"RightQuarterTurn3TilesUp60",SPRITE_GROUP_BASE,0);
+	generate_subposition_data(&(track_sections[SMALL_TURN_RIGHT_STEEP              ]),"LeftQuarterTurn3TilesDown60",SPRITE_GROUP_BASE,81);
+	generate_subposition_data(&(track_sections[SMALL_TURN_LEFT_STEEP               ]),"RightQuarterTurn3TilesDown60",SPRITE_GROUP_BASE,81);
+	generate_subposition_data(&(track_sections[LARGE_TURN_LEFT_TO_DIAG_STEEP       ]),"LeftEighthToDiagUp60",SPRITE_GROUP_BASE,0);
+	generate_subposition_data(&(track_sections[LARGE_TURN_RIGHT_TO_DIAG_STEEP      ]),"RightEighthToDiagUp60",SPRITE_GROUP_BASE,0);
+	generate_subposition_data(&(track_sections[LARGE_TURN_RIGHT_TO_ORTHOGONAL_STEEP]),"LeftEighthToDiagDown60",SPRITE_GROUP_BASE,65);
+	generate_subposition_data(&(track_sections[LARGE_TURN_LEFT_TO_ORTHOGONAL_STEEP ]),"RightEighthToDiagDown60",SPRITE_GROUP_BASE,65);
+	generate_subposition_data(&(track_sections[LARGE_TURN_LEFT_TO_ORTHOGONAL_STEEP ]),"LeftEighthToOrthogonalUp60",SPRITE_GROUP_BASE,0);
+	generate_subposition_data(&(track_sections[LARGE_TURN_RIGHT_TO_ORTHOGONAL_STEEP]),"RightEighthToOrthogonalUp60",SPRITE_GROUP_BASE,0);
+	generate_subposition_data(&(track_sections[LARGE_TURN_RIGHT_TO_DIAG_STEEP      ]),"LeftEighthToOrthogonalDown60",SPRITE_GROUP_BASE,65);
+	generate_subposition_data(&(track_sections[LARGE_TURN_LEFT_TO_DIAG_STEEP       ]),"RightEighthToOrthogonalDown60",SPRITE_GROUP_BASE,65);
+
+
+
+
 
 //Steep bank 45, 67.5, 90, 16 frames
 	return 0;

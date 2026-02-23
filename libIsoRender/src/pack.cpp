@@ -278,7 +278,8 @@ void pack_rects(image_t* images, int num_images, int* width_ptr, int* height_ptr
         height = upper_height;
     }
 
-    assert(pack_rects_fixed(images, num_images, width, height, x_coords, y_coords));
+    int pack_rects_fixed_result = pack_rects_fixed(images, num_images, width, height, x_coords, y_coords);
+    assert(pack_rects_fixed_result);
     *width_ptr = width;
     *height_ptr = height;
 }

@@ -430,7 +430,7 @@ return 0;
 
 int main(int argc,char* argv[])
 {
-project_t project;
+project_t* project = (project_t*)malloc(sizeof(project_t));
 
 json_error_t error;
 json_t* project_json=json_load_file(argv[1],0,&error);
@@ -492,7 +492,7 @@ json_t* light_array=json_object_get(project_json,"lights");
 		if(load_lights(lights,&num_lights,light_array))return 1;
 	}
 
-	if(load_project(&project,project_json))return 1;
+	if(load_project(project,project_json))return 1;
 
 
 	char full_path[256];
@@ -507,7 +507,7 @@ json_t* light_array=json_object_get(project_json,"lights");
 context_t context;
 context_init(&context,lights,num_lights,1,palette_rct2(),TILE_SIZE);
 
-        if(project_export(&project,&context,sprites,base_dir,sprite_dir))return 1;
+        if(project_export(project,&context,sprites,base_dir,sprite_dir))return 1;
 
 snprintf(full_path,256,"%s%s",base_dir,spritefile_out);
 json_dump_file(sprites,full_path,JSON_INDENT(4));

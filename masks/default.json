@@ -3217,5 +3217,89 @@
 		"offset":[[0,0],[32,24],[64,56]],
 		"split":[true,false,false]
 		}
-	]
+	],
+    "medium_quarter_helix_left": [
+        {
+            "mask": "default/medium_quarter_helix_left_0.png",
+            "offset": [[0, 0], [-32, 16], [0, 32], [-32, 48], [0, 64]]
+        },
+        {
+            "mask": "default/medium_quarter_helix_left_1.png",
+            "offset": [[0, 0], [-32, -16], [-64, 0], [-96, -16], [-128, 0]]
+        },
+        {
+            "mask": "default/medium_quarter_helix_left_2.png",
+            "offset": [[0, 0], [32, -16], [0, -32], [32, -48], [0, -64]]
+        },
+        {
+            "mask": "default/medium_quarter_helix_left_3.png",
+            "offset": [[0, 0], [32, 16], [64, 0], [96, 16], [128, 0]]
+        }
+    ],
+    "medium_quarter_helix_right": [
+        {
+            "mirror": true,
+            "mask": "default/medium_quarter_helix_left_3.png",
+            "offset": [[0, 0], [-32, 16], [-64, 0], [-96, 16], [-128, 0]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/medium_quarter_helix_left_2.png",
+            "offset": [[0, 0], [-32, -16], [0, -32], [-32, -48], [0, -64]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/medium_quarter_helix_left_1.png",
+            "offset": [[0, 0], [32, -16], [64, 0], [96, -16], [128, 0]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/medium_quarter_helix_left_0.png",
+            "offset": [[0, 0], [32, 16], [0, 32], [32, 48], [0, 64]]
+        }
+    ],
+    "medium_quarter_helix_left_bank": [
+        {
+            "mask": "default/medium_quarter_helix_left_banked_0.png",
+            "offset": [[0, 0], [-32, 16], [0, 32], [-32, 48], [0, 64]],
+            "split": [true, false, false, false, false]
+        },
+        {
+            "mask": "default/medium_quarter_helix_left_banked_1.png",
+            "offset": [[0, 0], [-32, -16], [-96, -16], [-128, 0]]
+        },
+        {
+            "mask": "default/medium_quarter_helix_left_banked_2.png",
+            "offset": [[0, 0], [32, -16], [0, -32], [32, -48], [0, -64]],
+            "split": [false, false, false, true, true]
+        },
+        {
+            "mask":"default/medium_quarter_helix_left_3.png",
+            "offset": [[0, 0], [32, 16], [64, 0], [96, 16], [128, 0]]
+        }
+    ],
+    "medium_quarter_helix_right_bank": [
+        {
+            "mirror": true,
+            "mask": "default/medium_quarter_helix_left_3.png",
+            "offset": [[0, 0], [-32, 16], [-64, 0], [-96, 16], [-128, 0]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/medium_quarter_helix_left_banked_2.png",
+            "offset": [[0, 0], [-32, -16], [0, -32], [-32, -48], [0, -64]],
+            "split": [false, false, false, true, true]
+        },
+        {
+            "mirror": true,
+            "mask": "default/medium_quarter_helix_left_banked_1.png",
+            "offset": [[0, 0], [32, -16], [96, -16], [128, 0]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/medium_quarter_helix_left_banked_0.png",
+            "offset": [[0, 0], [32, 16], [0, 32], [32, 48], [0, 64]],
+            "split": [true, false, false, false, false]
+        }
+    ]
 }

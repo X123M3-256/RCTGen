@@ -143,6 +143,20 @@
             "mask": "default/single_tile.png"
         }
     ],
+    "very_small_turn_left": [
+        {
+            "mask": "default/single_tile.png"
+        },
+        {
+            "mask": "default/single_tile.png"
+        },
+        {
+            "mask": "default/single_tile.png"
+        },
+        {
+            "mask": "default/single_tile.png"
+        }
+    ],
     "small_turn_left": [
         {
             "mask": "default/small_turn_left_0.png",
@@ -1322,6 +1336,899 @@
             "mirror": true,
             "mask": "inverted/medium_quarter_helix_left_banked_0.png",
             "offset": [[0, 0], [32, 16], [0, 32], [32, 48], [0, 64]]
+        }
+    ],
+    "medium_half_loop_left": [
+        {
+            "mask": "default/medium_half_loop_left_0.png",
+            "offset": [[0, 0], [-32, 32], [-64, 88], [-32, 104], [0, 200]]
+        },
+        {
+            "mask": "inverted/medium_half_loop_left_1.png",
+            "offset": [[0, 0], [-32, 0], [-64, 24], [-96, 40], [-64, 168]]
+        },
+        {
+            "mask": "inverted/medium_half_loop_left_2.png",
+            "offset": [[0, 0], [32, 0], [64, 24], [32, 8], [0, 136]]
+        },
+        {
+            "mask": "inverted/medium_half_loop_left_3.png",
+            "offset": [[0, 0], [32, 32], [64, 88], [96, 72], [64, 168]]
+        }
+    ],
+    "medium_half_loop_right": [
+        {
+            "mirror": true,
+            "mask": "inverted/medium_half_loop_left_3.png",
+            "offset": [[0, 0], [-32, 32], [-64, 88], [-96, 72], [-64, 168]]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/medium_half_loop_left_2.png",
+            "offset": [[0, 0], [-32, 0], [-64, 24], [-32, 8], [0, 136]]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/medium_half_loop_left_1.png",
+            "offset": [[0, 0], [32, 0], [64, 24], [96, 40], [64, 168]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/medium_half_loop_left_0.png",
+            "offset": [[0, 0], [32, 32], [64, 88], [32, 104], [0, 200]]
+        }
+    ],
+    "dive_loop_45_left": [
+        {
+            "mask": "default/dive_loop_45_left_0.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [-32, 48], [-64, 112], [-96, 160]]
+        },
+        {
+            "mask": "inverted/dive_loop_45_left_1.png",
+            "offset": [[0, 32], [0, 32], [-32, 64], [-64, 80]]
+        },
+        {
+            "mask": "default/dive_loop_45_left_2.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [32, 48], [64, 80], [96, 96]]
+        },
+        {
+            "mask": "default/dive_loop_45_left_3.png",
+            "offset": [[0, 0], [0, 64], [32, 128], [64, 176]]
+        }
+    ],
+    "dive_loop_45_right": [
+        {
+            "mirror": true,
+            "mask": "default/dive_loop_45_left_2.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [-32, 48], [-64, 80], [-96, 96]]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/dive_loop_45_left_1.png",
+            "offset": [[0, 32], [0, 32], [32, 64], [64, 80]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/dive_loop_45_left_0.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [32, 48], [64, 112], [96, 160]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/dive_loop_45_left_3.png",
+            "offset": [[0, 0], [0, 64], [-32, 128], [-64, 176]]
+        }
+    ],
+    "large_corkscrew_left": [
+        {
+            "mask": "default/large_corkscrew_left_0.png",
+            "offset": [[0, 0], [-32, 24], [-64, 64], [-32, 96], [0, 136]],
+            "split": [false, false, true, false, false]
+        },
+        {
+            "mask": "inverted/large_corkscrew_left_1.png",
+            "offset": [[0, 0], [-32, -8], [-64, 0], [-96, 32], [-128, 72]],
+            "split": [false, true, false, false, false]
+        },
+        {
+            "mask": "inverted/large_corkscrew_left_2.png",
+            "offset": [[0, 0], [32, -8], [64, 0], [32, 0], [0, 8]],
+            "split": [false, false, true, false, false]
+        },
+        {
+            "mask": "inverted/large_corkscrew_left_3.png",
+            "offset": [[0, 0], [32, 24], [64, 64], [96, 64], [128, 72]]
+        }
+    ],
+    "large_corkscrew_right": [
+        {
+            "mirror": true,
+            "mask": "inverted/large_corkscrew_left_3.png",
+            "offset": [[0, 0], [-32, 24], [-64, 64], [-96, 64], [-128, 72]]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/large_corkscrew_left_2.png",
+            "offset": [[0, 0], [-32, -8], [-64, 0], [-32, 0], [0, 8]],
+            "split": [false, false, true, false, false]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/large_corkscrew_left_1.png",
+            "offset": [[0, 0], [32, -8], [64, 0], [96, 32], [128, 72]],
+            "split": [false, true, false, false, false]
+        },
+        {
+            "mirror": true,
+            "mask": "default/large_corkscrew_left_0.png",
+            "offset": [[0, 0], [32, 24], [64, 64], [32, 96], [0, 136]],
+            "split": [false, false, true, false, false]
+        }
+    ],
+    "zero_g_roll_left": [
+        {
+            "mask": "default/zero_g_roll_left_0.png",
+            "offset": [[0, 0], [-32, 24], [-64, 56]],
+            "split": [true, false, false]
+        },
+        {
+            "mask": "default/zero_g_roll_left_1.png",
+            "offset": [[0, 0], [-32, -8], [-64, -8]],
+            "split": [true, false, false]
+        },
+        {
+            "mask": "default/zero_g_roll_left_2.png",
+            "offset": [[0, 0], [32, -8], [64, -8]],
+            "split": [false, false, true]
+        },
+        {
+            "mask": "default/zero_g_roll_left_3.png",
+            "offset": [[0, 0], [32, 24], [64, 56]],
+            "split": [false, false, true]
+        }
+    ],
+    "zero_g_roll_right": [
+        {
+            "mirror": true,
+            "mask": "default/zero_g_roll_left_3.png",
+            "offset": [[0, 0], [-32, 24], [-64, 56]],
+            "split": [false, false, true]
+        },
+        {
+            "mirror": true,
+            "mask": "default/zero_g_roll_left_2.png",
+            "offset": [[0, 0], [-32, -8], [-64, -8]],
+            "split": [false, false, true]
+        },
+        {
+            "mirror": true,
+            "mask": "default/zero_g_roll_left_1.png",
+            "offset": [[0, 0], [32, -8], [64, -8]],
+            "split": [true, false, false]
+        },
+        {
+            "mirror": true,
+            "mask": "default/zero_g_roll_left_0.png",
+            "offset": [[0, 0], [32, 24], [64, 56]],
+            "split": [true, false, false]
+        }
+    ],
+    "large_zero_g_roll_left": [
+        {
+            "mask": "default/large_zero_g_roll_left_0.png",
+            "offset": [[0, 0], [-32, 72], [-64, 128], [-96, 168]],
+            "split": [false, true, false, false]
+        },
+        {
+            "mask": "default/large_zero_g_roll_left_1.png",
+            "offset": [[0, 0], [-32, 40], [-64, 64], [-96, 72]]
+        },
+        {
+            "mask": "inverted/large_zero_g_roll_left_2.png",
+            "offset": [[0, 0], [32, 40], [64, 64], [96, 72]],
+            "split": [true, false, false, true]
+        },
+        {
+            "mask": "default/large_zero_g_roll_left_3.png",
+            "offset": [[0, 0], [32, 72], [64, 128], [96, 168]],
+            "split": [false, false, true, false]
+        }
+    ],
+    "large_zero_g_roll_right": [
+        {
+            "mirror": true,
+            "mask": "default/large_zero_g_roll_left_3.png",
+            "offset": [[0, 0], [-32, 72], [-64, 128], [-96, 168]],
+            "split": [false, false, true, false]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/large_zero_g_roll_left_2.png",
+            "offset": [[0, 0], [-32, 40], [-64, 64], [-96, 72]],
+            "split": [true, false, false, true]
+        },
+        {
+            "mirror": true,
+            "mask": "default/large_zero_g_roll_left_1.png",
+            "offset": [[0, 0], [32, 40], [64, 64], [96, 72]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/large_zero_g_roll_left_0.png",
+            "offset": [[0, 0], [32, 72], [64, 128], [96, 168]],
+            "split": [false, true, false, false]
+        }
+    ],
+    "flat_to_steep": [
+        {
+            "mask": "default/flat_to_steep_0.png",
+            "mask_end": true,
+            "offset": [[0, 0], [-32, 16], [-64, 48], [-96, 88]]
+        },
+        {
+            "mask": "inverted/flat_to_steep_1.png",
+            "offset": [[0, 0], [-32, -16], [-64, -16], [-96, -8]]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/flat_to_steep_1.png",
+            "offset": [[0, 0], [32, -16], [64, -16], [96, -8]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/flat_to_steep_0.png",
+            "offset": [[0, 0], [32, 16], [64, 48], [96, 88]],
+            "mask_end": true
+        }
+    ],
+    "steep_to_flat": [
+        {
+            "mask": "default/steep_to_flat_0.png",
+            "offset": [[0, 0], [-32, 56], [-64, 96], [-96, 128]]
+        },
+        {
+            "mask": "default/steep_to_flat_1.png",
+            "offset": [[0, 0], [-32, 24], [-64, 32], [-96, 32]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/steep_to_flat_1.png",
+            "offset": [[0, 0], [32, 24], [64, 32], [96, 32]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/steep_to_flat_0.png",
+            "offset": [[0, 0], [32, 56], [64, 96], [96, 128]]
+        }
+    ],
+    "flat_to_steep_diag": [
+        {
+            "mask": "default/flat_to_steep_diag_0.png",
+            "extrude_in_front": true,
+            "offset": [[0, 0], [-64, 8], [-128, 40]]
+        },
+        {
+            "mask": "default/flat_to_steep_diag_1.png",
+            "split_ends": true,
+            "offset": [[0, 0], [0, -24], [0, -24]]
+        },
+        {
+            "mask": "default/flat_to_steep_diag_2.png",
+            "extrude_in_front": true,
+            "offset": [[0, 0], [64, 8], [128, 40]]
+        },
+        {
+            "mask": "default/flat_to_steep_diag_3.png",
+            "offset": [[0, 0], [0, 32], [0, 72]]
+        }
+    ],
+    "steep_to_flat_diag": [
+        {
+            "mask": "default/steep_to_flat_diag_0.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [-64, 56], [-128, 80]]
+        },
+        {
+            "mask": "default/steep_to_flat_diag_1.png",
+            "offset": [[0, 0], [0, 0], [0, 16]]
+        },
+        {
+            "mask": "default/steep_to_flat_diag_2.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [64, 56], [128, 80]]
+        },
+        {
+            "mask": "inverted/steep_to_flat_diag_3.png",
+            "offset": [[0, 0], [0, 32], [0, 120]]
+        }
+    ],
+    "small_flat_to_steep": [
+        {
+            "mask": "default/single_tile.png",
+            "mask_end": true
+        },
+        {
+            "mask": "default/single_tile.png",
+            "split": [true]
+        },
+        {
+            "mask": "default/single_tile.png",
+            "split": [true]
+        },
+        {
+            "mask": "default/single_tile.png",
+            "mask_end": true
+        }
+    ],
+    "small_steep_to_flat": [
+        {
+            "mask": "default/single_tile.png"
+        },
+        {
+            "mask": "default/single_tile.png",
+            "split": [true]
+        },
+        {
+            "mask": "default/single_tile.png",
+            "split": [true]
+        },
+        {
+            "mask": "default/single_tile.png"
+        }
+    ],
+    "small_flat_to_steep_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "small_steep_to_flat_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "quarter_loop": [
+        {
+            "mask": "inverted/quarter_loop_0.png",
+            "split": [false, true, false],
+            "offset": [[0, 0], [32, 40], [64, 64]]
+        },
+        {
+            "mask": "inverted/quarter_loop_1.png",
+            "offset": [[0, 0], [32, 72], [64, 128]]
+        },
+        {
+            "mask": "inverted/quarter_loop_2.png",
+            "offset": [[0, 0], [-32, 72], [-64, 128]]
+        },
+        {
+            "mask": "inverted/quarter_loop_3.png",
+            "split": [false, true, false],
+            "offset": [[0, 0], [-32, 40], [-64, 64]]
+        }
+    ],
+    "large_turn_left_to_diag_gentle": [
+        {
+            "mask": "default/large_turn_left_to_diag_gentle_0.png",
+            "offset": [[0, 0], [-32, 32], [0, 64], [-32, 80]]
+        },
+        {
+            "mask": "inverted/large_turn_left_to_diag_gentle_1.png",
+            "extrude_in_front": true,
+            "offset": [[0, 0], [-32, 0], [-64, 32], [-96, 16]]
+        },
+        {
+            "mask": "default/large_turn_left_to_diag_gentle_2.png",
+            "offset": [[0, 0], [32, 0], [0, 0], [32, -16]]
+        },
+        {
+            "mask": "default/large_turn_left_to_diag_gentle_3.png",
+            "extrude_in_front": true,
+            "offset": [[0, 0], [32, 32], [64, 32], [96, 48]]
+        }
+    ],
+    "large_turn_right_to_diag_gentle": [
+        {
+            "mirror": true,
+            "mask": "default/large_turn_left_to_diag_gentle_3.png",
+            "extrude_in_front": true,
+            "offset": [[0, 0], [-32, 32], [-64, 32], [-96, 48]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/large_turn_left_to_diag_gentle_2.png",
+            "offset": [[0, 0], [-32, 0], [0, 0], [-32, -16]]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/large_turn_left_to_diag_gentle_1.png",
+            "extrude_in_front": true,
+            "offset": [[0, 0], [32, 0], [64, 32], [96, 16]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/large_turn_left_to_diag_gentle_0.png",
+            "offset": [[0, 0], [32, 32], [0, 64], [32, 80]]
+        }
+    ],
+    "large_turn_left_to_orthogonal_gentle": [
+        {
+            "mask": "inverted/large_turn_left_to_orthogonal_gentle_0.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [-32, 16], [-64, 16], [-96, 48]]
+        },
+        {
+            "mask": "default/large_turn_left_to_orthogonal_gentle_1.png",
+            "offset": [[0, 0], [-32, -16], [0, -16], [-32, -16]]
+        },
+        {
+            "mask": "default/large_turn_left_to_orthogonal_gentle_2.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [32, -16], [64, 16], [96, 16]]
+        },
+        {
+            "mask": "inverted/large_turn_left_to_orthogonal_gentle_3.png",
+            "offset": [[0, 0], [32, 16], [0, 48], [32, 80]]
+        }
+    ],
+    "large_turn_right_to_orthogonal_gentle": [
+        {
+            "mirror": true,
+            "mask": "default/large_turn_left_to_orthogonal_gentle_2.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [-32, -16], [-64, 16], [-96, 16]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/large_turn_left_to_orthogonal_gentle_1.png",
+            "offset": [[0, 0], [32, -16], [0, -16], [32, -16]]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/large_turn_left_to_orthogonal_gentle_0.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [32, 16], [64, 16], [96, 48]]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/large_turn_left_to_orthogonal_gentle_3.png",
+            "offset": [[0, 0], [-32, 16], [0, 48], [-32, 80]]
+        }
+    ],
+    "gentle_to_gentle_left_bank_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "gentle_to_gentle_right_bank_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "gentle_left_bank_to_gentle_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "gentle_right_bank_to_gentle_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "left_bank_to_gentle_left_bank_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "right_bank_to_gentle_right_bank_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "gentle_left_bank_to_left_bank_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "gentle_right_bank_to_right_bank_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "gentle_left_bank_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "gentle_right_bank_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true,
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "flat_to_gentle_left_bank_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "flat_to_gentle_right_bank_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_in_front": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "gentle_left_bank_to_flat_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "gentle_right_bank_to_flat_diag": [
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        },
+        {
+            "mask": "default/single_tile_diag.png",
+            "extrude_behind": true
+        },
+        {
+            "mask": "default/single_tile_diag.png"
+        }
+    ],
+    "large_turn_left_bank_to_diag_gentle": [
+        {
+            "mask": "default/large_turn_left_bank_to_diag_gentle_0.png",
+            "offset": [[0, 0], [-32, 32], [0, 64], [-32, 80]]
+        },
+        {
+            "mask": "inverted/large_turn_left_bank_to_diag_gentle_1.png",
+            "extrude_in_front": true,
+            "offset": [[0, 0], [-32, 0], [-64, 32], [-96, 16]]
+        },
+        {
+            "mask": "default/large_turn_left_bank_to_diag_gentle_2.png",
+            "offset": [[0, 0], [32, 0], [0, 0], [32, -16]]
+        },
+        {
+            "mask": "default/large_turn_left_bank_to_diag_gentle_3.png",
+            "extrude_in_front": true,
+            "offset": [[0, 0], [32, 32], [64, 32], [96, 48]]
+        }
+    ],
+    "large_turn_right_bank_to_diag_gentle": [
+        {
+            "mirror": true,
+            "mask": "default/large_turn_left_bank_to_diag_gentle_3.png",
+            "extrude_in_front": true,
+            "offset": [[0, 0], [-32, 32], [-64, 32], [-96, 48]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/large_turn_left_bank_to_diag_gentle_2.png",
+            "offset": [[0, 0], [-32, 0], [0, 0], [-32, -16]]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/large_turn_left_bank_to_diag_gentle_1.png",
+            "extrude_in_front": true,
+            "offset": [[0, 0], [32, 0], [64, 32], [96, 16]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/large_turn_left_bank_to_diag_gentle_0.png",
+            "offset": [[0, 0], [32, 32], [0, 64], [32, 80]]
+        }
+    ],
+    "large_turn_left_bank_to_orthogonal_gentle": [
+        {
+            "mask": "default/large_turn_left_bank_to_orthogonal_gentle_0.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [-32, 16], [-64, 16], [-96, 48]]
+        },
+        {
+            "mask": "inverted/large_turn_left_bank_to_orthogonal_gentle_1.png",
+            "offset": [[0, 0], [-32, -16], [0, -16], [-32, -16]]
+        },
+        {
+            "mask": "default/large_turn_left_bank_to_orthogonal_gentle_2.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [32, -16], [64, 16], [96, 16]]
+        },
+        {
+            "mask": "default/large_turn_left_bank_to_orthogonal_gentle_3.png",
+            "offset": [[0, 0], [32, 16], [0, 48], [32, 80]]
+        }
+    ],
+    "large_turn_right_bank_to_orthogonal_gentle": [
+        {
+            "mirror": true,
+            "mask": "default/large_turn_left_bank_to_orthogonal_gentle_2.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [-32, -16], [-64, 16], [-96, 16]]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/large_turn_left_bank_to_orthogonal_gentle_1.png",
+            "offset": [[0, 0], [32, -16], [0, -16], [32, -16]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/large_turn_left_bank_to_orthogonal_gentle_0.png",
+            "extrude_behind": true,
+            "offset": [[0, 0], [32, 16], [64, 16], [96, 48]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/large_turn_left_bank_to_orthogonal_gentle_3.png",
+            "offset": [[0, 0], [-32, 16], [0, 48], [-32, 80]]
+        }
+    ],
+    "small_turn_left_bank_to_gentle": [
+        {
+            "mask": "default/small_turn_left_bank_to_gentle_0.png",
+            "offset": [[-6, -3], [6, 45]]
+        },
+        {
+            "mask": "default/small_turn_left_bank_to_gentle_1.png",
+            "offset": [[6, -3], [-70, 13]]
+        },
+        {
+            "mask": "inverted/small_turn_left_bank_to_gentle_2.png",
+            "offset": [[-6, -3], [6, -19]]
+        },
+        {
+            "mask": "default/small_turn_left_bank_to_gentle_3.png",
+            "offset": [[6, -3], [58, 13]]
+        }
+    ],
+    "small_turn_right_bank_to_gentle": [
+        {
+            "mirror": true,
+            "mask": "default/small_turn_left_bank_to_gentle_3.png",
+            "offset": [[-6, -3], [-58, 13]]
+        },
+        {
+            "mirror": true,
+            "mask": "inverted/small_turn_left_bank_to_gentle_2.png",
+            "offset": [[6, -3], [-6, -19]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/small_turn_left_bank_to_gentle_1.png",
+            "offset": [[-6, -3], [70, 13]]
+        },
+        {
+            "mirror": true,
+            "mask": "default/small_turn_left_bank_to_gentle_0.png",
+            "offset": [[6, -3], [-6, 45]]
+        }
+    ],
+    "barrel_roll_left": [
+        {
+            "mask": "default/barrel_roll_left_0.png",
+            "offset": [[0, 0], [-32, 16], [-64, 32]],
+            "split": [true, true, true]
+        },
+        {
+            "mask": "default/barrel_roll_left_1.png",
+            "offset": [[0, 0], [-32, -16], [-64, -32]],
+            "split": [true, true, true]
+        },
+        {
+            "mask": "default/barrel_roll_left_2.png",
+            "offset": [[0, 0], [32, -16], [64, -32]],
+            "split": [true, true, true]
+        },
+        {
+            "mask": "default/barrel_roll_left_3.png",
+            "offset": [[0, 0], [32, 16], [64, 32]],
+            "split": [true, true, true]
+        }
+    ],
+    "barrel_roll_right": [
+        {
+            "mirror": true,
+            "mask": "default/barrel_roll_left_3.png",
+            "offset": [[0, 0], [-32, 16], [-64, 32]],
+            "split": [true, true, true]
+        },
+        {
+            "mirror": true,
+            "mask": "default/barrel_roll_left_2.png",
+            "offset": [[0, 0], [-32, -16], [-64, -32]],
+            "split": [true, true, true]
+        },
+        {
+            "mirror": true,
+            "mask": "default/barrel_roll_left_1.png",
+            "offset": [[0, 0], [32, -16], [64, -32]],
+            "split": [true, true, true]
+        },
+        {
+            "mirror": true,
+            "mask": "default/barrel_roll_left_0.png",
+            "offset": [[0, 0], [32, 16], [64, 32]],
+            "split": [true, true, true]
         }
     ]
 }

@@ -1324,12 +1324,12 @@
 		{
 		"mask":"masks/default/s_bend_right_0.png",
 		"offset":[[0,0],[-32,16],[-64,0],[-96,16]],
-		"split":[true,false,false,false]
+		"split":[false,false,false,true]
 		},
 		{
 		"mask":"masks/default/s_bend_right_1.png",
 		"offset":[[0,0],[-32,-16],[0,-32],[-32,-48]],
-		"split":[true,false,false,false]
+		"split":[false,false,false,true]
 		}
 	],
 "small_helix_left":
@@ -3216,6 +3216,56 @@
 		"mask":"masks/default/zero_g_roll_left_0.png",
 		"offset":[[0,0],[32,24],[64,56]],
 		"split":[true,false,false]
+		}
+	],
+"large_corkscrew_left_diag":
+	[
+		{
+		"mask":"masks/default/large_corkscrew_left_diag_0.png",
+		"offset":[[0,0],[-64,48],[-96,104],[-96,160]],
+		"split":[false,false,false,false]
+		},
+		{
+		"mask":"masks/default/large_corkscrew_left_diag_1.png",
+		"offset":[[0,0],[-32,0],[-96,32]],
+		"split":[true,false,false]
+		},
+		{
+		"mask":"masks/default/large_corkscrew_left_diag_2.png",
+		"offset":[[0,0],[64,16],[96,40]],
+		"split":[false,false,true]
+		},
+		{
+		"mask":"masks/default/large_corkscrew_left_diag_3.png",
+		"offset":[[0,0],[32,64],[64,120],[96,128]],
+		"split":[false,false,false,false]
+		}
+	],
+"large_corkscrew_right_diag":
+	[
+		{
+		"mirror":true,
+		"mask":"masks/default/large_corkscrew_left_diag_2.png",
+		"offset":[[0,0],[-64,16],[-96,40]],
+		"split":[false,false,true]
+		},
+		{
+		"mirror":true,
+		"mask":"masks/default/large_corkscrew_left_diag_1.png",
+		"offset":[[0,0],[32,0],[96,32]],
+		"split":[true,false,false]
+		},
+		{
+		"mirror":true,
+		"mask":"masks/default/large_corkscrew_left_diag_0.png",
+		"offset":[[0,0],[64,48],[96,104],[96,160]],
+		"split":[false,false,false,false]
+		},
+		{
+		"mirror":true,
+		"mask":"masks/default/large_corkscrew_left_diag_3.png",
+		"offset":[[0,0],[-32,64],[-64,120],[-96,128]],
+		"split":[false,false,false,false]
 		}
 	]
 }

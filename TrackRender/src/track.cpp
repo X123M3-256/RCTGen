@@ -418,8 +418,8 @@ void render_track_section(context_t* context,track_section_t* track_section,trac
 
 		for(int i=0; i<num_supports+1; i++)
 		{
-			int u=(i*DENOM)/num_supports;
-			int bank_angle=(entry*(DENOM-u)+(exit*u))/DENOM;
+			int u=(2*i*DENOM)/num_supports;
+			int bank_angle=(entry*(2*DENOM-u)+(exit*u))/(2*DENOM);
 
 			track_point_t track_point=get_track_point(track_section->curve,track_section->flags,z_offset,track_section->length,i*support_step);
 
@@ -494,8 +494,9 @@ int offset_table_index_with_rot(track_point_t track,int rot)
 		return OFFSET_DIAGONAL;
 	}
 	//Diagonal gentle
-	else if(compare_vec(track.tangent,vector3(-TILE_SIZE,2*CLEARANCE_HEIGHT,TILE_SIZE),rot)&&!banked)
+	else if(compare_vec(track.tangent,vector3(-TILE_SIZE,2*CLEARANCE_HEIGHT,TILE_SIZE),rot))//&&!banked)
 	{
+		if(banked)return right|OFFSET_DIAGONAL_BANK;
 	return OFFSET_DIAGONAL_GENTLE;
 	}
 	//Diagonal steep
@@ -978,7 +979,6 @@ uint64_t groups=track_type->groups;
 
 	if(groups&TRACK_GROUP_LARGE_STEEP_SLOPED_TURNS) //TODO move to sloped turn group
 	{
-	printf("Here\n");
 	write_track_section(context,SMALL_TURN_LEFT_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
 	write_track_section(context,SMALL_TURN_RIGHT_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
 	write_track_section(context,LARGE_TURN_LEFT_TO_DIAG_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
@@ -1021,8 +1021,8 @@ uint64_t groups=track_type->groups;
 	}
 	if(groups&TRACK_GROUP_LARGE_SLOPE_TRANSITIONS)
 	{
-	write_track_section(context,FLAT_TO_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
-	write_track_section(context,STEEP_TO_FLAT,track_type,offset_table,base_dir,output_dir,sprites);
+	//write_track_section(context,FLAT_TO_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
+	//write_track_section(context,STEEP_TO_FLAT,track_type,offset_table,base_dir,output_dir,sprites);
 	write_track_section(context,FLAT_TO_STEEP_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
 	write_track_section(context,STEEP_TO_FLAT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
 	}
@@ -1075,6 +1075,11 @@ uint64_t groups=track_type->groups;
 /*
 	write_track_section(context,&(track_list.dive_loop_90_left),track_type,offset_table,base_dir,output_dir,sprites);
 	write_track_section(context,&(track_list.dive_loop_90_right),track_type,offset_table,base_dir,output_dir,sprites);*/
+	}
+	if(groups&TRACK_GROUP_DIAGONAL_CORKSCREWS)
+	{
+	write_track_section(context,LARGE_CORKSCREW_LEFT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,LARGE_CORKSCREW_RIGHT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
 	}
 
 	if(groups&TRACK_GROUP_SMALL_SLOPE_TRANSITIONS)

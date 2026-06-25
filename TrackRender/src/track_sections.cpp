@@ -752,7 +752,7 @@ track_point_t vertical_twist_right_to_orthogonal_curve(float distance)
 
 const track_section_t small_turn_left_gentle={"small_turn_left_gentle",TRACK_OFFSET_SPRITE_MASK|TRACK_SUPPORT_BASE|TRACK_EXIT_90_DEG_LEFT,small_turn_left_gentle_curve,SMALL_TURN_GENTLE_LENGTH};
 const track_section_t small_turn_right_gentle={"small_turn_right_gentle",TRACK_OFFSET_SPRITE_MASK|TRACK_SUPPORT_BASE|TRACK_EXIT_90_DEG_RIGHT,small_turn_right_gentle_curve,SMALL_TURN_GENTLE_LENGTH};
-const track_section_t medium_turn_left_gentle={"medium_turn_left_gentle",TRACK_OFFSET_SPRITE_MASK|TRACK_SUPPORT_BASE|TRACK_EXIT_90_DEG_LEFT,medium_turn_left_gentle_curve,MEDIUM_TURN_GENTLE_LENGTH};
+const track_section_t medium_turn_left_gentle={"medium_turn_left_%d %d gentle",TRACK_OFFSET_SPRITE_MASK|TRACK_SUPPORT_BASE|TRACK_EXIT_90_DEG_LEFT,medium_turn_left_gentle_curve,MEDIUM_TURN_GENTLE_LENGTH};
 const track_section_t medium_turn_right_gentle={"medium_turn_right_gentle",TRACK_OFFSET_SPRITE_MASK|TRACK_SUPPORT_BASE|TRACK_EXIT_90_DEG_RIGHT,medium_turn_right_gentle_curve,MEDIUM_TURN_GENTLE_LENGTH};
 const track_section_t large_turn_left_to_diag_gentle={"large_turn_left_to_diag_gentle",TRACK_EXIT_45_DEG_LEFT,large_turn_left_to_diag_gentle_curve,LARGE_TURN_GENTLE_LENGTH};
 const track_section_t large_turn_right_to_diag_gentle={"large_turn_right_to_diag_gentle",TRACK_EXIT_45_DEG_RIGHT,large_turn_right_to_diag_gentle_curve,LARGE_TURN_GENTLE_LENGTH};
@@ -1078,8 +1078,8 @@ track_point_t gentle_right_bank_to_steep_diag_curve(float distance)
 
 const track_section_t s_bend_left={"s_bend_left",0,s_bend_left_curve,S_BEND_LENGTH};
 const track_section_t s_bend_right={"s_bend_right",0,s_bend_right_curve,S_BEND_LENGTH};
-const track_section_t s_bend_left_bank={"s_bend_left_bank",0,s_bend_left_bank_curve,S_BEND_LENGTH};
-const track_section_t s_bend_right_bank={"s_bend_right_bank",0,s_bend_right_bank_curve,S_BEND_LENGTH};
+const track_section_t s_bend_left_bank={"s_bend_left_bank",TRACK_ENTRY_BANK_LEFT|TRACK_EXIT_BANK_RIGHT,s_bend_left_bank_curve,S_BEND_LENGTH};
+const track_section_t s_bend_right_bank={"s_bend_right_bank",TRACK_ENTRY_BANK_RIGHT|TRACK_EXIT_BANK_LEFT,s_bend_right_bank_curve,S_BEND_LENGTH};
 const track_section_t small_helix_left={"small_helix_left",TRACK_BANK_LEFT|TRACK_SUPPORT_BASE|TRACK_EXIT_180_DEG,small_helix_left_curve,SMALL_HELIX_LENGTH};
 const track_section_t small_helix_right={"small_helix_right",TRACK_BANK_RIGHT|TRACK_SUPPORT_BASE|TRACK_EXIT_180_DEG,small_helix_right_curve,SMALL_HELIX_LENGTH};
 const track_section_t medium_helix_left={"medium_helix_left",TRACK_BANK_LEFT|TRACK_SUPPORT_BASE|TRACK_EXIT_180_DEG,medium_helix_left_curve,MEDIUM_HELIX_LENGTH};
@@ -1087,15 +1087,15 @@ const track_section_t medium_helix_right={"medium_helix_right",TRACK_BANK_RIGHT|
 const track_section_t small_turn_left_bank_to_gentle={"small_turn_left_bank_to_gentle",TRACK_OFFSET_SPRITE_MASK|TRACK_ENTRY_BANK_LEFT|TRACK_SUPPORT_BASE|TRACK_EXIT_90_DEG_LEFT,small_turn_left_bank_to_gentle_curve,TURN_BANK_TRANSITION_LENGTH};
 const track_section_t small_turn_right_bank_to_gentle={"small_turn_right_bank_to_gentle",TRACK_OFFSET_SPRITE_MASK|TRACK_ENTRY_BANK_RIGHT|TRACK_SUPPORT_BASE|TRACK_EXIT_90_DEG_RIGHT,small_turn_right_bank_to_gentle_curve,TURN_BANK_TRANSITION_LENGTH};
 
-const track_section_t gentle_left_bank_to_steep={"gentle_left_bank_to_steep",TRACK_ALT_PREFER_ODD,gentle_left_bank_to_steep_curve,GENTLE_TO_STEEP_LENGTH};
-const track_section_t gentle_right_bank_to_steep={"gentle_right_bank_to_steep",TRACK_ALT_PREFER_ODD,gentle_right_bank_to_steep_curve,GENTLE_TO_STEEP_LENGTH};
-const track_section_t steep_to_gentle_left_bank={"steep_to_gentle_left_bank",TRACK_ALT_INVERT|TRACK_ALT_PREFER_ODD,steep_to_gentle_left_bank_curve,GENTLE_TO_STEEP_LENGTH};
-const track_section_t steep_to_gentle_right_bank={"steep_to_gentle_right_bank",TRACK_ALT_INVERT|TRACK_ALT_PREFER_ODD,steep_to_gentle_right_bank_curve,GENTLE_TO_STEEP_LENGTH};
+const track_section_t gentle_left_bank_to_steep={"gentle_left_bank_to_steep",TRACK_ENTRY_BANK_LEFT|TRACK_ALT_PREFER_ODD,gentle_left_bank_to_steep_curve,GENTLE_TO_STEEP_LENGTH};
+const track_section_t gentle_right_bank_to_steep={"gentle_right_bank_to_steep",TRACK_ENTRY_BANK_RIGHT|TRACK_ALT_PREFER_ODD,gentle_right_bank_to_steep_curve,GENTLE_TO_STEEP_LENGTH};
+const track_section_t steep_to_gentle_left_bank={"steep_to_gentle_left_bank",TRACK_EXIT_BANK_LEFT|TRACK_ALT_INVERT|TRACK_ALT_PREFER_ODD,steep_to_gentle_left_bank_curve,GENTLE_TO_STEEP_LENGTH};
+const track_section_t steep_to_gentle_right_bank={"steep_to_gentle_right_bank",TRACK_EXIT_BANK_RIGHT|TRACK_ALT_INVERT|TRACK_ALT_PREFER_ODD,steep_to_gentle_right_bank_curve,GENTLE_TO_STEEP_LENGTH};
 
-const track_section_t gentle_left_bank_to_steep_diag={"gentle_left_bank_to_steep_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,gentle_left_bank_to_steep_diag_curve,GENTLE_TO_STEEP_DIAG_LENGTH};
-const track_section_t gentle_right_bank_to_steep_diag={"gentle_right_bank_to_steep_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,gentle_right_bank_to_steep_diag_curve,GENTLE_TO_STEEP_DIAG_LENGTH};
-const track_section_t steep_to_gentle_left_bank_diag={"steep_to_gentle_left_bank_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,steep_to_gentle_left_bank_diag_curve,GENTLE_TO_STEEP_DIAG_LENGTH};
-const track_section_t steep_to_gentle_right_bank_diag={"steep_to_gentle_right_bank_diag",TRACK_DIAGONAL|TRACK_SUPPORT_BASE,steep_to_gentle_right_bank_diag_curve,GENTLE_TO_STEEP_DIAG_LENGTH};
+const track_section_t gentle_left_bank_to_steep_diag={"gentle_left_bank_to_steep_diag",TRACK_DIAGONAL|TRACK_ENTRY_BANK_LEFT|TRACK_SUPPORT_BASE,gentle_left_bank_to_steep_diag_curve,GENTLE_TO_STEEP_DIAG_LENGTH};
+const track_section_t gentle_right_bank_to_steep_diag={"gentle_right_bank_to_steep_diag",TRACK_DIAGONAL|TRACK_ENTRY_BANK_RIGHT|TRACK_SUPPORT_BASE,gentle_right_bank_to_steep_diag_curve,GENTLE_TO_STEEP_DIAG_LENGTH};
+const track_section_t steep_to_gentle_left_bank_diag={"steep_to_gentle_left_bank_diag",TRACK_DIAGONAL|TRACK_EXIT_BANK_LEFT|TRACK_SUPPORT_BASE,steep_to_gentle_left_bank_diag_curve,GENTLE_TO_STEEP_DIAG_LENGTH};
+const track_section_t steep_to_gentle_right_bank_diag={"steep_to_gentle_right_bank_diag",TRACK_DIAGONAL|TRACK_EXIT_BANK_RIGHT|TRACK_SUPPORT_BASE,steep_to_gentle_right_bank_diag_curve,GENTLE_TO_STEEP_DIAG_LENGTH};
 
 
 //Inversions
@@ -1132,6 +1132,7 @@ const track_section_t steep_to_gentle_right_bank_diag={"steep_to_gentle_right_ba
 #define DIVE_LOOP_90_LENGTH_1 3.181834*TILE_SIZE
 #define DIVE_LOOP_90_LENGTH_2 2.272595*TILE_SIZE
 #define DIVE_LOOP_90_LENGTH (DIVE_LOOP_90_LENGTH_1+DIVE_LOOP_90_LENGTH_2)
+#define LARGE_CORKSCREW_DIAG_LENGTH 2*2.821776*TILE_SIZE
 
 track_point_t barrel_roll_left_curve(float x)
 {
@@ -1501,6 +1502,36 @@ track_point_t dive_loop_90_right_curve(float distance)
 	return point;
 }
 
+track_point_t large_corkscrew_left_diag_curve(float distance)
+{
+	if(distance<LARGE_CORKSCREW_DIAG_LENGTH/2)
+	{
+	return bezier3d(4.83380995e-01,3.23492851e+00,-7.92000000e+00,0.00000000e+00,-2.35754915e+00,6.51147550e+00,0.00000000e+00,0.00000000e+00,6.70303564e-01,-1.99030356e+00,7.92000000e+00,0.00000000e+00,-1.57139325e-01,-3.01042672e-01,5.04944690e-01,-1.34344610e-01,-4.99276728e-09,7.70966321e-08,6.39351324e-07,-1.64550789e-05,1.98728029e-06,2.60557647e-03,8.92914361e-02,distance);
+	}
+	else
+	{
+	return bezier3d(-4.83380995e-01,4.68507149e+00,0.00000000e+00,-4.20169050e+00,-2.35754915e+00,5.61171939e-01,5.95030356e+00,4.15392636e+00,6.70303564e-01,-2.06071274e-02,5.95030356e+00,6.60000000e+00,-1.57139325e-01,7.72460646e-01,-5.68558628e-01,8.75819169e-02,-4.99276733e-09,2.48347035e-07,-4.14462823e-06,2.75080451e-05,-1.25398953e-04,-6.16733655e-04,1.18825089e-01,distance-LARGE_CORKSCREW_DIAG_LENGTH/2);
+	}
+}
+track_point_t large_corkscrew_right_diag_curve(float distance)
+{
+	track_point_t point=large_corkscrew_left_diag_curve(distance);
+
+	double temp=point.position.x;
+	point.position.x=-point.position.z;
+	point.position.z=-temp;
+	
+	temp=point.normal.x;
+	point.normal.x=-point.normal.z;
+	point.normal.z=-temp;
+
+	temp=point.tangent.x;
+	point.tangent.x=-point.tangent.z;
+	point.tangent.z=-temp;
+
+	point.binormal=vector3_cross(point.tangent,point.normal);
+	return point;
+}
 
 track_point_t banked_inline_twist_left_curve(float distance)
 {
@@ -1512,19 +1543,33 @@ track_point_t banked_inline_twist_right_curve(float distance)
 }
 track_point_t banked_barrel_roll_left_curve(float distance)
 {
-	return banked_curve(barrel_roll_left_curve(distance),BANK_ANGLE*(1.0-distance/BARREL_ROLL_LENGTH));
+float u=distance/BARREL_ROLL_LENGTH;
+float mid=2*BANK_ANGLE/M_PI;
+float bank=0;
+	if(u<mid)bank=(u-mid)*(u-mid)/(mid*mid);
+return banked_curve(barrel_roll_left_curve(distance),BANK_ANGLE*bank);
 }
 track_point_t banked_barrel_roll_right_curve(float distance)
 {
-	return banked_curve(barrel_roll_right_curve(distance),-BANK_ANGLE*(1.0-distance/BARREL_ROLL_LENGTH));
+float u=distance/BARREL_ROLL_LENGTH;
+float mid=2*BANK_ANGLE/M_PI;
+float bank=0;
+	if(u<mid)bank=(u-mid)*(u-mid)/(mid*mid);
+return banked_curve(barrel_roll_right_curve(distance),-BANK_ANGLE*bank);
 }
 track_point_t banked_zero_g_roll_left_curve(float distance)
 {
-	return banked_curve(zero_g_roll_left_curve(distance),BANK_ANGLE*(1.0-distance/ZERO_G_ROLL_LENGTH));
+float u=distance/TILE_SIZE;
+float bank=0;
+	if(u<2)bank=1-u+0.25*u*u;
+	return banked_curve(zero_g_roll_left_curve(distance),BANK_ANGLE*bank);
 }
 track_point_t banked_zero_g_roll_right_curve(float distance)
 {
-	return banked_curve(zero_g_roll_right_curve(distance),-BANK_ANGLE*(1.0-distance/ZERO_G_ROLL_LENGTH));
+float u=distance/TILE_SIZE;
+float bank=0;
+	if(u<2)bank=1-u+0.25*u*u;
+	return banked_curve(zero_g_roll_right_curve(distance),-BANK_ANGLE*bank);
 }
 
 
@@ -1560,6 +1605,9 @@ const track_section_t banked_barrel_roll_left={"banked_barrel_roll_left",TRACK_N
 const track_section_t banked_barrel_roll_right={"banked_barrel_roll_right",TRACK_NO_SUPPORTS|TRACK_SPECIAL_BARREL_ROLL_RIGHT|TRACK_OFFSET_SPRITE_MASK,banked_barrel_roll_right_curve,BARREL_ROLL_LENGTH};
 const track_section_t banked_zero_g_roll_left={"banked_zero_g_roll_left",TRACK_NO_SUPPORTS|TRACK_OFFSET_SPRITE_MASK|TRACK_SPECIAL_ZERO_G_ROLL_LEFT,banked_zero_g_roll_left_curve,ZERO_G_ROLL_LENGTH};
 const track_section_t banked_zero_g_roll_right={"banked_zero_g_roll_right",TRACK_NO_SUPPORTS|TRACK_OFFSET_SPRITE_MASK|TRACK_SPECIAL_ZERO_G_ROLL_RIGHT,banked_zero_g_roll_right_curve,ZERO_G_ROLL_LENGTH};
+
+const track_section_t large_corkscrew_left_diag={"large_corkscrew_left_diag",TRACK_DIAGONAL|TRACK_NO_SUPPORTS|TRACK_OFFSET_SPRITE_MASK|TRACK_EXIT_90_DEG_LEFT,large_corkscrew_left_diag_curve,LARGE_CORKSCREW_DIAG_LENGTH};
+const track_section_t large_corkscrew_right_diag={"large_corkscrew_right_diag",TRACK_DIAGONAL|TRACK_NO_SUPPORTS|TRACK_OFFSET_SPRITE_MASK|TRACK_EXIT_90_DEG_RIGHT,large_corkscrew_right_diag_curve,LARGE_CORKSCREW_DIAG_LENGTH};
 
 track_section_t track_sections[NUM_TRACK_SECTIONS]={
 	flat,
@@ -1731,5 +1779,7 @@ track_section_t track_sections[NUM_TRACK_SECTIONS]={
 	banked_barrel_roll_left,
 	banked_barrel_roll_right,
 	banked_zero_g_roll_left,
-	banked_zero_g_roll_right
+	banked_zero_g_roll_right,
+	large_corkscrew_left_diag,
+	large_corkscrew_right_diag
 };

@@ -94,6 +94,7 @@ int load_groups(json_t* json,uint64_t* out)
 		else if(strcmp(json_string_value(group_name),"banked_barrel_rolls") ==0)groups|=TRACK_GROUP_BANKED_BARREL_ROLLS;
 		else if(strcmp(json_string_value(group_name),"banked_inline_twists") ==0)groups|=TRACK_GROUP_BANKED_INLINE_TWISTS;
 		else if(strcmp(json_string_value(group_name),"banked_zero_g_rolls") ==0)groups|=TRACK_GROUP_BANKED_ZERO_G_ROLLS;
+		else if(strcmp(json_string_value(group_name),"diagonal_corkscrews") ==0)groups|=TRACK_GROUP_DIAGONAL_CORKSCREWS;
 		else if(strcmp(json_string_value(group_name),"vertical_boosters") ==0)groups|=TRACK_GROUP_VERTICAL_BOOSTERS;
 		else
 		{
@@ -228,11 +229,27 @@ int load_track_type(track_type_t* track_type,json_t* json,int preloaded)
 		{
 			if(!json_is_string(masks_json))
 			{
-			printf("Error: Property \"masks\" is not a string\n");
-			return 1;
-			}
 
-			if(load_masks(json_string_value(masks_json),track_type->masks))return 1;
+				if(json_is_array(masks_json))
+				{
+					for(int i=0; i<json_array_size(masks_json); i++)
+					{
+						json_t* mask_name=json_array_get(masks_json,i);
+						assert(mask_name !=NULL);
+						if(!json_is_string(mask_name))
+						{
+							printf("Error: Array \"masks\" contains non-string value\n");
+							return 1;
+						}
+						if(load_masks(json_string_value(mask_name),track_type->masks))return 1;
+					}
+				}
+				else
+				{
+				printf("Error: Property \"masks\" is not a string or array\n");
+				return 1;
+				}
+			} else if(load_masks(json_string_value(masks_json),track_type->masks))return 1;
 		}
 		else if(!preloaded)
 		{

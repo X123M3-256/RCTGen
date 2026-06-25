@@ -157,7 +157,30 @@ Bank angle reference
 
 
 
-const char* pitch_names[]={"flat","up12","up25","up42","up60","down12","down25","down42","down60","up75","up90","up105","up120","up135","up150","up165","inverted","down75","down90","down105","down120","down135","down150","down165","","","","","","","","","","","","","","","","","","","","","","","","","","","up8","up16","up50","down8","down16","down50"};
+const char* pitch_names[]={"flat","up12","up25","up42","up60","down12","down25","down42","down60","up75","up90","up105","up120","up135","up150","up165","inverted","down75","down90","down105","down120","down135","down150","down165",
+"corkscrewUpRight0",
+"corkscrewUpRight1",
+"corkscrewUpRight2",
+"corkscrewUpRight3",
+"corkscrewUpRight4",
+"corkscrewDownLeft0",
+"corkscrewDownLeft1",
+"corkscrewDownLeft2",
+"corkscrewDownLeft3",
+"corkscrewDownLeft4",
+"corkscrewUpLeft0",
+"corkscrewUpLeft1",
+"corkscrewUpLeft2",
+"corkscrewUpLeft3",
+"corkscrewUpLeft4",
+"corkscrewDownRight0",
+"corkscrewDownRight1",
+"corkscrewDownRight2",
+"corkscrewDownRight3",
+"corkscrewDownRight4",
+"","","","","","","up8","up16","up50","down8","down16","down50"};
+
+
 const char* bank_names[]={"unbanked","left22","left45","right22","right45","left67","left90","left112","left135","left157","right67","right90","right112","right135","right157"};
 
 //float pitch_angles[]={0,FG,G,GS,S,-FG,-G,-GS,-S,SV,V,V+1*M_PI_12,V+2*M_PI_12,V+3*M_PI_12,V+4*M_PI_12,V+5*M_PI_12,V+6*M_PI_12,-SV,-V,-V-1*M_PI_12,-V-2*M_PI_12,-V-3*M_PI_12,-V-4*M_PI_12,-V-5*M_PI_12,FGD,GD,SD,-FGD,-GD,-SD};
@@ -355,7 +378,7 @@ const sprite_rotation_t orthogonal_sprite_rotations[176]={
     {16,5,4,Y(16),-FG,-M_PI_4},
     {24,5,4,Y(24),-FG,-M_PI_4}};
 
-sprite_rotation_t diagonal_sprite_rotations[172]={
+sprite_rotation_t diagonal_sprite_rotations[176]={
     //Flat sprites
     {4,0,0,Y(4),0.0,0.0},
     {12,0,0,Y(12),0.0,0.0},
@@ -396,6 +419,10 @@ sprite_rotation_t diagonal_sprite_rotations[172]={
     {12,18,0,Y(12),-V,0.0},
     {20,18,0,Y(20),-V,0.0},
     {28,18,0,Y(28),-V,0.0},
+    {4,16,0,Y(4),V+6*M_PI_12,0.0},
+    {12,16,0,Y(12),V+6*M_PI_12,0.0},
+    {20,16,0,Y(20),V+6*M_PI_12,0.0},
+    {28,16,0,Y(28),V+6*M_PI_12,0.0},
     //Diagonal sprites
     {4,50,0,Y(4),FGD,0.0},
     {12,50,0,Y(12),FGD,0.0},
@@ -1690,7 +1717,8 @@ sprite_rotation_t inline_twist_sprite_rotations[40]={
     {0,0,13,Y(0),0,-6*M_PI_8},  {8,0,13,Y(8),0,-6*M_PI_8},  {16,0,13,Y(16),0,-6*M_PI_8},{24,0,13,Y(24),0,-6*M_PI_8},{0,0,9,Y(0),0,7*M_PI_8},   {8,0,9,Y(8),0,7*M_PI_8},  {16,0,9,Y(16),0,7*M_PI_8},
     {24,0,9,Y(24),0,7*M_PI_8},  {0,0,14,Y(0),0,-7*M_PI_8},  {8,0,14,Y(8),0,-7*M_PI_8},  {16,0,14,Y(16),0,-7*M_PI_8},{24,0,14,Y(24),0,-7*M_PI_8}};
 
-sprite_rotation_t corkscrew_sprite_rotations[80]={
+
+sprite_rotation_t corkscrew_sprite_rotations[160]={
     //Corkscrew sprites
     {0,34,0,Y(0)+CRY(1*M_PI_6),CRP(1*M_PI_6),CRR(1*M_PI_6)},     {8,34,0,Y(8)+CRY(1*M_PI_6),CRP(1*M_PI_6),CRR(1*M_PI_6)},     {16,34,0,Y(16)+CRY(1*M_PI_6),CRP(1*M_PI_6),CRR(1*M_PI_6)},    {24,34,0,Y(24)+CRY(1*M_PI_6),CRP(1*M_PI_6),CRR(1*M_PI_6)},
     {0,35,0,Y(0)+CRY(2*M_PI_6),CRP(2*M_PI_6),CRR(2*M_PI_6)},     {8,35,0,Y(8)+CRY(2*M_PI_6),CRP(2*M_PI_6),CRR(2*M_PI_6)},     {16,35,0,Y(16)+CRY(2*M_PI_6),CRP(2*M_PI_6),CRR(2*M_PI_6)},    {24,35,0,Y(24)+CRY(2*M_PI_6),CRP(2*M_PI_6),CRR(2*M_PI_6)},
@@ -1711,7 +1739,29 @@ sprite_rotation_t corkscrew_sprite_rotations[80]={
     {0,30,0,Y(0)+CLY(-2*M_PI_6),CLP(-2*M_PI_6),CLR(-2*M_PI_6)},  {8,30,0,Y(8)+CLY(-2*M_PI_6),CLP(-2*M_PI_6),CLR(-2*M_PI_6)},  {16,30,0,Y(16)+CLY(-2*M_PI_6),CLP(-2*M_PI_6),CLR(-2*M_PI_6)}, {24,30,0,Y(24)+CLY(-2*M_PI_6),CLP(-2*M_PI_6),CLR(-2*M_PI_6)},
     {0,31,0,Y(0)+CLY(-3*M_PI_6),CLP(-3*M_PI_6),CLR(-3*M_PI_6)},  {8,31,0,Y(8)+CLY(-3*M_PI_6),CLP(-3*M_PI_6),CLR(-3*M_PI_6)},  {16,31,0,Y(16)+CLY(-3*M_PI_6),CLP(-3*M_PI_6),CLR(-3*M_PI_6)}, {24,31,0,Y(24)+CLY(-3*M_PI_6),CLP(-3*M_PI_6),CLR(-3*M_PI_6)},
     {0,32,0,Y(0)+CLY(-4*M_PI_6),CLP(-4*M_PI_6),CLR(-4*M_PI_6)},  {8,32,0,Y(8)+CLY(-4*M_PI_6),CLP(-4*M_PI_6),CLR(-4*M_PI_6)},  {16,32,0,Y(16)+CLY(-4*M_PI_6),CLP(-4*M_PI_6),CLR(-4*M_PI_6)}, {24,32,0,Y(24)+CLY(-4*M_PI_6),CLP(-4*M_PI_6),CLR(-4*M_PI_6)},
-    {0,33,0,Y(0)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)},  {8,33,0,Y(8)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)},  {16,33,0,Y(16)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)}, {24,33,0,Y(24)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)}};
+    {0,33,0,Y(0)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)},  {8,33,0,Y(8)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)},  {16,33,0,Y(16)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)}, {24,33,0,Y(24)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)},
+    //Diagonal corkscrew sprites
+    {4,34,0,Y(4)+CRY(1*M_PI_6),CRP(1*M_PI_6),CRR(1*M_PI_6)},     {12,34,0,Y(12)+CRY(1*M_PI_6),CRP(1*M_PI_6),CRR(1*M_PI_6)},   {20,34,0,Y(20)+CRY(1*M_PI_6),CRP(1*M_PI_6),CRR(1*M_PI_6)},    {28,34,0,Y(28)+CRY(1*M_PI_6),CRP(1*M_PI_6),CRR(1*M_PI_6)},
+    {4,35,0,Y(4)+CRY(2*M_PI_6),CRP(2*M_PI_6),CRR(2*M_PI_6)},     {12,35,0,Y(12)+CRY(2*M_PI_6),CRP(2*M_PI_6),CRR(2*M_PI_6)},   {20,35,0,Y(20)+CRY(2*M_PI_6),CRP(2*M_PI_6),CRR(2*M_PI_6)},    {28,35,0,Y(28)+CRY(2*M_PI_6),CRP(2*M_PI_6),CRR(2*M_PI_6)},
+    {4,36,0,Y(4)+CRY(3*M_PI_6),CRP(3*M_PI_6),CRR(3*M_PI_6)},     {12,36,0,Y(12)+CRY(3*M_PI_6),CRP(3*M_PI_6),CRR(3*M_PI_6)},   {20,36,0,Y(20)+CRY(3*M_PI_6),CRP(3*M_PI_6),CRR(3*M_PI_6)},    {28,36,0,Y(28)+CRY(3*M_PI_6),CRP(3*M_PI_6),CRR(3*M_PI_6)},
+    {4,37,0,Y(4)+CRY(4*M_PI_6),CRP(4*M_PI_6),CRR(4*M_PI_6)},     {12,37,0,Y(12)+CRY(4*M_PI_6),CRP(4*M_PI_6),CRR(4*M_PI_6)},   {20,37,0,Y(20)+CRY(4*M_PI_6),CRP(4*M_PI_6),CRR(4*M_PI_6)},    {28,37,0,Y(28)+CRY(4*M_PI_6),CRP(4*M_PI_6),CRR(4*M_PI_6)},
+    {4,38,0,Y(4)+CRY(5*M_PI_6),CRP(5*M_PI_6),CRR(5*M_PI_6)},     {12,38,0,Y(12)+CRY(5*M_PI_6),CRP(5*M_PI_6),CRR(5*M_PI_6)},   {20,38,0,Y(20)+CRY(5*M_PI_6),CRP(5*M_PI_6),CRR(5*M_PI_6)},    {28,38,0,Y(28)+CRY(5*M_PI_6),CRP(5*M_PI_6),CRR(5*M_PI_6)},
+    {4,24,0,Y(4)+CLY(1*M_PI_6),CLP(1*M_PI_6),CLR(1*M_PI_6)},     {12,24,0,Y(12)+CLY(1*M_PI_6),CLP(1*M_PI_6),CLR(1*M_PI_6)},   {20,24,0,Y(20)+CLY(1*M_PI_6),CLP(1*M_PI_6),CLR(1*M_PI_6)},    {28,24,0,Y(28)+CLY(1*M_PI_6),CLP(1*M_PI_6),CLR(1*M_PI_6)},
+    {4,25,0,Y(4)+CLY(2*M_PI_6),CLP(2*M_PI_6),CLR(2*M_PI_6)},     {12,25,0,Y(12)+CLY(2*M_PI_6),CLP(2*M_PI_6),CLR(2*M_PI_6)},   {20,25,0,Y(20)+CLY(2*M_PI_6),CLP(2*M_PI_6),CLR(2*M_PI_6)},    {28,25,0,Y(28)+CLY(2*M_PI_6),CLP(2*M_PI_6),CLR(2*M_PI_6)},
+    {4,26,0,Y(4)+CLY(3*M_PI_6),CLP(3*M_PI_6),CLR(3*M_PI_6)},     {12,26,0,Y(12)+CLY(3*M_PI_6),CLP(3*M_PI_6),CLR(3*M_PI_6)},   {20,26,0,Y(20)+CLY(3*M_PI_6),CLP(3*M_PI_6),CLR(3*M_PI_6)},    {28,26,0,Y(28)+CLY(3*M_PI_6),CLP(3*M_PI_6),CLR(3*M_PI_6)},
+    {4,27,0,Y(4)+CLY(4*M_PI_6),CLP(4*M_PI_6),CLR(4*M_PI_6)},     {12,27,0,Y(12)+CLY(4*M_PI_6),CLP(4*M_PI_6),CLR(4*M_PI_6)},   {20,27,0,Y(20)+CLY(4*M_PI_6),CLP(4*M_PI_6),CLR(4*M_PI_6)},    {28,27,0,Y(28)+CLY(4*M_PI_6),CLP(4*M_PI_6),CLR(4*M_PI_6)},
+    {4,28,0,Y(4)+CLY(5*M_PI_6),CLP(5*M_PI_6),CLR(5*M_PI_6)},     {12,28,0,Y(12)+CLY(5*M_PI_6),CLP(5*M_PI_6),CLR(5*M_PI_6)},   {20,28,0,Y(20)+CLY(5*M_PI_6),CLP(5*M_PI_6),CLR(5*M_PI_6)},    {28,28,0,Y(28)+CLY(5*M_PI_6),CLP(5*M_PI_6),CLR(5*M_PI_6)},
+    {4,39,0,Y(4)+CRY(-1*M_PI_6),CRP(-1*M_PI_6),CRR(-1*M_PI_6)},  {12,39,0,Y(12)+CRY(-1*M_PI_6),CRP(-1*M_PI_6),CRR(-1*M_PI_6)},{20,39,0,Y(20)+CRY(-1*M_PI_6),CRP(-1*M_PI_6),CRR(-1*M_PI_6)}, {28,39,0,Y(28)+CRY(-1*M_PI_6),CRP(-1*M_PI_6),CRR(-1*M_PI_6)},
+    {4,40,0,Y(4)+CRY(-2*M_PI_6),CRP(-2*M_PI_6),CRR(-2*M_PI_6)},  {12,40,0,Y(12)+CRY(-2*M_PI_6),CRP(-2*M_PI_6),CRR(-2*M_PI_6)},{20,40,0,Y(20)+CRY(-2*M_PI_6),CRP(-2*M_PI_6),CRR(-2*M_PI_6)}, {28,40,0,Y(28)+CRY(-2*M_PI_6),CRP(-2*M_PI_6),CRR(-2*M_PI_6)},
+    {4,41,0,Y(4)+CRY(-3*M_PI_6),CRP(-3*M_PI_6),CRR(-3*M_PI_6)},  {12,41,0,Y(12)+CRY(-3*M_PI_6),CRP(-3*M_PI_6),CRR(-3*M_PI_6)},{20,41,0,Y(20)+CRY(-3*M_PI_6),CRP(-3*M_PI_6),CRR(-3*M_PI_6)}, {28,41,0,Y(28)+CRY(-3*M_PI_6),CRP(-3*M_PI_6),CRR(-3*M_PI_6)},
+    {4,42,0,Y(4)+CRY(-4*M_PI_6),CRP(-4*M_PI_6),CRR(-4*M_PI_6)},  {12,42,0,Y(12)+CRY(-4*M_PI_6),CRP(-4*M_PI_6),CRR(-4*M_PI_6)},{20,42,0,Y(20)+CRY(-4*M_PI_6),CRP(-4*M_PI_6),CRR(-4*M_PI_6)}, {28,42,0,Y(28)+CRY(-4*M_PI_6),CRP(-4*M_PI_6),CRR(-4*M_PI_6)},
+    {4,43,0,Y(4)+CRY(-5*M_PI_6),CRP(-5*M_PI_6),CRR(-5*M_PI_6)},  {12,43,0,Y(12)+CRY(-5*M_PI_6),CRP(-5*M_PI_6),CRR(-5*M_PI_6)},{20,43,0,Y(20)+CRY(-5*M_PI_6),CRP(-5*M_PI_6),CRR(-5*M_PI_6)}, {28,43,0,Y(28)+CRY(-5*M_PI_6),CRP(-5*M_PI_6),CRR(-5*M_PI_6)},
+    {4,29,0,Y(4)+CLY(-1*M_PI_6),CLP(-1*M_PI_6),CLR(-1*M_PI_6)},  {12,29,0,Y(12)+CLY(-1*M_PI_6),CLP(-1*M_PI_6),CLR(-1*M_PI_6)},{20,29,0,Y(20)+CLY(-1*M_PI_6),CLP(-1*M_PI_6),CLR(-1*M_PI_6)}, {28,29,0,Y(28)+CLY(-1*M_PI_6),CLP(-1*M_PI_6),CLR(-1*M_PI_6)},
+    {4,30,0,Y(4)+CLY(-2*M_PI_6),CLP(-2*M_PI_6),CLR(-2*M_PI_6)},  {12,30,0,Y(12)+CLY(-2*M_PI_6),CLP(-2*M_PI_6),CLR(-2*M_PI_6)},{20,30,0,Y(20)+CLY(-2*M_PI_6),CLP(-2*M_PI_6),CLR(-2*M_PI_6)}, {28,30,0,Y(28)+CLY(-2*M_PI_6),CLP(-2*M_PI_6),CLR(-2*M_PI_6)},
+    {4,31,0,Y(4)+CLY(-3*M_PI_6),CLP(-3*M_PI_6),CLR(-3*M_PI_6)},  {12,31,0,Y(12)+CLY(-3*M_PI_6),CLP(-3*M_PI_6),CLR(-3*M_PI_6)},{20,31,0,Y(20)+CLY(-3*M_PI_6),CLP(-3*M_PI_6),CLR(-3*M_PI_6)}, {28,31,0,Y(28)+CLY(-3*M_PI_6),CLP(-3*M_PI_6),CLR(-3*M_PI_6)},
+    {4,32,0,Y(4)+CLY(-4*M_PI_6),CLP(-4*M_PI_6),CLR(-4*M_PI_6)},  {12,32,0,Y(12)+CLY(-4*M_PI_6),CLP(-4*M_PI_6),CLR(-4*M_PI_6)},{20,32,0,Y(20)+CLY(-4*M_PI_6),CLP(-4*M_PI_6),CLR(-4*M_PI_6)}, {28,32,0,Y(28)+CLY(-4*M_PI_6),CLP(-4*M_PI_6),CLR(-4*M_PI_6)},
+    {4,33,0,Y(4)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)},  {12,33,0,Y(12)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)},{20,33,0,Y(20)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)}, {28,33,0,Y(28)+CLY(-5*M_PI_6),CLP(-5*M_PI_6),CLR(-5*M_PI_6)}
+};
 
 sprite_rotation_t zero_g_orthogonal_sprite_rotations[160]={
     //Gentle up roll sprites
@@ -2566,7 +2616,7 @@ sprite_rotation_t dive_loop_sprite_rotations[144]={
 };
 
 #define NUM_SPRITE_GROUPS 9
-int sprite_group_counts[NUM_SPRITE_GROUPS]={176,172,408,40,80,160,160,320,144};
+int sprite_group_counts[NUM_SPRITE_GROUPS]={176,176,408,40,160,160,160,320,144};
 const sprite_rotation_t* sprite_group_rotations[NUM_SPRITE_GROUPS]={orthogonal_sprite_rotations,diagonal_sprite_rotations,turn_sprite_rotations,inline_twist_sprite_rotations,corkscrew_sprite_rotations,zero_g_orthogonal_sprite_rotations,zero_g_diagonal_sprite_rotations,zero_g_other_sprite_rotations,dive_loop_sprite_rotations};
 
 matrix_t track_point_get_rotation(track_point_t point)
@@ -3031,22 +3081,22 @@ subposition_t subposition_points[MAX_SUBPOSITION_POINTS];
 	}
 }
 
-track_point_t large_zero_g_roll_left_curve(float distance);
+track_point_t banked_zero_g_roll_left_curve(float distance);
 
 void get_angle()
 {
-	float dist=(2.25)*TILE_SIZE;
+	float dist=(2)*TILE_SIZE;
 	float lower=0*TILE_SIZE;
-	float upper=4*TILE_SIZE;
+	float upper=3*TILE_SIZE;
 
 	for(int i=0; i<100; i++)
 	{
 		float mid=0.5*(lower+upper);
-		track_point_t point=large_zero_g_roll_left_curve(mid);
+		track_point_t point=banked_zero_g_roll_left_curve(mid);
 		if(point.position.z>dist)upper=mid;
 		else lower=mid;
 	}
-	track_point_t point=large_zero_g_roll_left_curve(0.5*(lower+upper));
+	track_point_t point=banked_zero_g_roll_left_curve(0.5*(lower+upper));
 
 	float pivot=0.116897727273*TILE_SIZE;
 
@@ -3060,7 +3110,6 @@ void get_angle()
 
 int main(int argc,const char** argv)
 {
-	//get_angle();
 	//calc_g_forces(&(track_list_default.small_flat_to_steep_up));
 	//calc_g_forces(&(track_list_default.small_flat_to_steep_up_diag));
 	//calc_g_forces(&(track_list_default.flat_to_steep_up));
@@ -3183,6 +3232,9 @@ int main(int argc,const char** argv)
 //	generate_subposition_data(&(track_list_default.steep),"Steep",sprites,0);
 //	generate_subposition_data(&(track_list_default.vertical),"Vertical",sprites,0);
 
+
+
+
 /*	int sprites=SPRITE_GROUP_ORTHOGONAL|SPRITE_GROUP_DIAGONAL|SPRITE_GROUP_BASE;
 	generate_subposition_data(&(track_sections[S_BEND_LEFT_BANK]),"BankedSBendLeft",sprites,0);
 	generate_subposition_data(&(track_sections[S_BEND_RIGHT_BANK]),"BankedSBendRight",sprites,0);
@@ -3213,7 +3265,7 @@ int main(int argc,const char** argv)
 	generate_subposition_data(&(track_sections[STEEP_TO_GENTLE_RIGHT_BANK_DIAG]),"DiagLeftBankedDown25ToDown60",sprites,33);
 */
 
-	generate_subposition_data(&(track_sections[SMALL_TURN_LEFT_STEEP               ]),"LeftQuarterTurn3TilesUp60",SPRITE_GROUP_BASE,0);
+	/*generate_subposition_data(&(track_sections[SMALL_TURN_LEFT_STEEP               ]),"LeftQuarterTurn3TilesUp60",SPRITE_GROUP_BASE,0);
 	generate_subposition_data(&(track_sections[SMALL_TURN_RIGHT_STEEP              ]),"RightQuarterTurn3TilesUp60",SPRITE_GROUP_BASE,0);
 	generate_subposition_data(&(track_sections[SMALL_TURN_RIGHT_STEEP              ]),"LeftQuarterTurn3TilesDown60",SPRITE_GROUP_BASE,81);
 	generate_subposition_data(&(track_sections[SMALL_TURN_LEFT_STEEP               ]),"RightQuarterTurn3TilesDown60",SPRITE_GROUP_BASE,81);
@@ -3224,16 +3276,33 @@ int main(int argc,const char** argv)
 	generate_subposition_data(&(track_sections[LARGE_TURN_LEFT_TO_ORTHOGONAL_STEEP ]),"LeftEighthToOrthogonalUp60",SPRITE_GROUP_BASE,0);
 	generate_subposition_data(&(track_sections[LARGE_TURN_RIGHT_TO_ORTHOGONAL_STEEP]),"RightEighthToOrthogonalUp60",SPRITE_GROUP_BASE,0);
 	generate_subposition_data(&(track_sections[LARGE_TURN_RIGHT_TO_DIAG_STEEP      ]),"LeftEighthToOrthogonalDown60",SPRITE_GROUP_BASE,65);
-	generate_subposition_data(&(track_sections[LARGE_TURN_LEFT_TO_DIAG_STEEP       ]),"RightEighthToOrthogonalDown60",SPRITE_GROUP_BASE,65);
+	generate_subposition_data(&(track_sections[LARGE_TURN_LEFT_TO_DIAG_STEEP       ]),"RightEighthToOrthogonalDown60",SPRITE_GROUP_BASE,65);*/
+/*
+	generate_subposition_data(&(track_sections[INLINE_TWIST_LEFT_BANK            ]),"LeftTwistUpToDownBanked", SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
+	generate_subposition_data(&(track_sections[INLINE_TWIST_RIGHT_BANK           ]),"RightTwistUpToDownBanked",SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
+	generate_subposition_data(&(track_sections[INLINE_TWIST_LEFT_BANK           ]),"LeftTwistDownToUpBanked", SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,4);
+	generate_subposition_data(&(track_sections[INLINE_TWIST_RIGHT_BANK            ]),"RightTwistDownToUpBanked",SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,4);
 
+	generate_subposition_data(&(track_sections[BARREL_ROLL_LEFT_BANK             ]),"LeftBarrelRollUpToDownBanked", SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
+	generate_subposition_data(&(track_sections[BARREL_ROLL_RIGHT_BANK            ]),"RightBarrelRollUpToDownBanked",SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
+	generate_subposition_data(&(track_sections[BARREL_ROLL_LEFT_BANK            ]),"LeftBarrelRollDownToUpBanked", SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,20);
+	generate_subposition_data(&(track_sections[BARREL_ROLL_RIGHT_BANK             ]),"RightBarrelRollDownToUpBanked",SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,20);
 
+	generate_subposition_data(&(track_sections[ZERO_G_ROLL_LEFT_BANK             ]),"LeftZeroGRollUpToDownBanked", SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
+	generate_subposition_data(&(track_sections[ZERO_G_ROLL_RIGHT_BANK            ]),"RightZeroGRollUpToDownBanked",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,0);
+	generate_subposition_data(&(track_sections[ZERO_G_ROLL_LEFT_BANK            ]),"LeftZeroGRollDownToUpBanked", SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,20);
+	generate_subposition_data(&(track_sections[ZERO_G_ROLL_RIGHT_BANK             ]),"RightZeroGRollDownToUpBanked",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,20);
+*/
 
+	generate_subposition_data(&(track_sections[LARGE_CORKSCREW_LEFT_DIAG             ]),"DiagLeftLargeCorkscrewUp", SPRITE_GROUP_CORKSCREW|SPRITE_GROUP_DIAGONAL,0);
+	generate_subposition_data(&(track_sections[LARGE_CORKSCREW_RIGHT_DIAG            ]),"DiagRightLargeCorkscrewUp",SPRITE_GROUP_CORKSCREW|SPRITE_GROUP_DIAGONAL,0);
+	generate_subposition_data(&(track_sections[LARGE_CORKSCREW_RIGHT_DIAG            ]),"DiagLeftLargeCorkscrewDown", SPRITE_GROUP_CORKSCREW|SPRITE_GROUP_DIAGONAL,20);
+	generate_subposition_data(&(track_sections[LARGE_CORKSCREW_LEFT_DIAG             ]),"DiagRightLargeCorkscrewDown",SPRITE_GROUP_CORKSCREW|SPRITE_GROUP_DIAGONAL,20);
 
-
-//Steep bank 45, 67.5, 90, 16 frames
 	return 0;
 }
  
+//Steep bank 45, 67.5, 90, 16 frames
 
 //Diagonal steep bank 45 - all offset angles needed, no straight or diagonal
 

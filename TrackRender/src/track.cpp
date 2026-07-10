@@ -460,7 +460,7 @@ int is_in_mask(int x,int y,mask_t* mask)
 
 int compare_vec(vector3_t vec1,vector3_t vec2,int rot)
 {
-	return vector3_norm(vector3_sub(vec1,vector3_normalize(matrix_vector(views[rot],vec2))))<0.15;
+	return vector3_norm(vector3_sub(vec1,vector3_normalize(matrix_vector(views[rot],vec2))))<0.19;
 }
 
 int offset_table_index_with_rot(track_point_t track,int rot)
@@ -488,7 +488,7 @@ int offset_table_index_with_rot(track_point_t track,int rot)
 	//Steep
 	else if(compare_vec(track.tangent,vector3(0,8*CLEARANCE_HEIGHT,TILE_SIZE),rot))return OFFSET_STEEP;
 	//Diagonal flat
-	else if(compare_vec(track.tangent,vector3(-TILE_SIZE,0,TILE_SIZE),rot))
+	else if(compare_vec(track.tangent,vector3(-TILE_SIZE,0,TILE_SIZE),rot)&&track.normal.y>0)
 	{
 		if(banked)return right|OFFSET_DIAGONAL_BANK;
 		return OFFSET_DIAGONAL;
@@ -496,7 +496,7 @@ int offset_table_index_with_rot(track_point_t track,int rot)
 	//Diagonal gentle
 	else if(compare_vec(track.tangent,vector3(-TILE_SIZE,2*CLEARANCE_HEIGHT,TILE_SIZE),rot))//&&!banked)
 	{
-		if(banked)return right|OFFSET_DIAGONAL_BANK;
+		if(banked)return 0xFF;
 	return OFFSET_DIAGONAL_GENTLE;
 	}
 	//Diagonal steep
@@ -518,7 +518,6 @@ int offset_table_index(track_point_t track)
 	index=offset_table_index_with_rot(track,3);
 	if(index !=0xFF)return 0x20|index;
 	return 0xFF;
-
 return 0xFF;
 }
 
@@ -946,6 +945,14 @@ uint64_t groups=track_type->groups;
 	}
 
 	//Miscellaneous
+	if(groups&TRACK_GROUP_LARGE_SLOPE_TRANSITIONS)
+	{
+	//write_track_section(context,FLAT_TO_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
+	//write_track_section(context,STEEP_TO_FLAT,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,FLAT_TO_STEEP_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+	write_track_section(context,STEEP_TO_FLAT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+	}
+
 	if(groups&TRACK_GROUP_S_BENDS)
 	{
 	write_track_section(context,S_BEND_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
@@ -1012,19 +1019,12 @@ uint64_t groups=track_type->groups;
 	}
 	if(groups&TRACK_GROUP_HALF_LOOPS)
 	{
-	write_track_section(context,HALF_LOOP,track_type,offset_table,base_dir,output_dir,sprites);
+	//write_track_section(context,HALF_LOOP,track_type,offset_table,base_dir,output_dir,sprites);
 	}
 	if(groups&TRACK_GROUP_VERTICAL_LOOPS)
 	{
-	write_track_section(context,VERTICAL_LOOP_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
-	write_track_section(context,VERTICAL_LOOP_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
-	}
-	if(groups&TRACK_GROUP_LARGE_SLOPE_TRANSITIONS)
-	{
-	//write_track_section(context,FLAT_TO_STEEP,track_type,offset_table,base_dir,output_dir,sprites);
-	//write_track_section(context,STEEP_TO_FLAT,track_type,offset_table,base_dir,output_dir,sprites);
-	write_track_section(context,FLAT_TO_STEEP_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
-	write_track_section(context,STEEP_TO_FLAT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+	//write_track_section(context,VERTICAL_LOOP_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
+	//write_track_section(context,VERTICAL_LOOP_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
 	}
 	if(groups&TRACK_GROUP_QUARTER_LOOPS)
 	{
@@ -1032,13 +1032,13 @@ uint64_t groups=track_type->groups;
 	}
 	if(groups&TRACK_GROUP_CORKSCREWS)
 	{
-	write_track_section(context,CORKSCREW_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
-	write_track_section(context,CORKSCREW_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
+	//write_track_section(context,CORKSCREW_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
+	//write_track_section(context,CORKSCREW_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
 	}
 	if(groups&TRACK_GROUP_LARGE_CORKSCREWS)
 	{
-	write_track_section(context,LARGE_CORKSCREW_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
-	write_track_section(context,LARGE_CORKSCREW_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
+	//write_track_section(context,LARGE_CORKSCREW_LEFT,track_type,offset_table,base_dir,output_dir,sprites);
+	//write_track_section(context,LARGE_CORKSCREW_RIGHT,track_type,offset_table,base_dir,output_dir,sprites);
 	}
 	if(groups&TRACK_GROUP_TURN_BANK_TRANSITIONS)
 	{
@@ -1076,10 +1076,27 @@ uint64_t groups=track_type->groups;
 	write_track_section(context,&(track_list.dive_loop_90_left),track_type,offset_table,base_dir,output_dir,sprites);
 	write_track_section(context,&(track_list.dive_loop_90_right),track_type,offset_table,base_dir,output_dir,sprites);*/
 	}
-	if(groups&TRACK_GROUP_DIAGONAL_CORKSCREWS)
+	if(groups&TRACK_GROUP_DIAGONAL_INVERSIONS)
 	{
-	write_track_section(context,LARGE_CORKSCREW_LEFT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
-	write_track_section(context,LARGE_CORKSCREW_RIGHT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+		if(groups&TRACK_GROUP_CORKSCREWS)
+		{
+		write_track_section(context,CORKSCREW_LEFT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+		write_track_section(context,CORKSCREW_RIGHT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+		}
+		if(groups&TRACK_GROUP_LARGE_CORKSCREWS)
+		{
+		write_track_section(context,LARGE_CORKSCREW_LEFT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+		write_track_section(context,LARGE_CORKSCREW_RIGHT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+		}
+		if(groups&TRACK_GROUP_HALF_LOOPS)
+		{
+		write_track_section(context,HALF_LOOP_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+		}
+		if(groups&TRACK_GROUP_VERTICAL_LOOPS)
+		{
+		write_track_section(context,VERTICAL_LOOP_LEFT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+		write_track_section(context,VERTICAL_LOOP_RIGHT_DIAG,track_type,offset_table,base_dir,output_dir,sprites);
+		}
 	}
 
 	if(groups&TRACK_GROUP_SMALL_SLOPE_TRANSITIONS)

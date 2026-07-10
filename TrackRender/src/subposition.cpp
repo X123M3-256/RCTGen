@@ -378,7 +378,7 @@ const sprite_rotation_t orthogonal_sprite_rotations[176]={
     {16,5,4,Y(16),-FG,-M_PI_4},
     {24,5,4,Y(24),-FG,-M_PI_4}};
 
-sprite_rotation_t diagonal_sprite_rotations[176]={
+sprite_rotation_t diagonal_sprite_rotations[224]={
     //Flat sprites
     {4,0,0,Y(4),0.0,0.0},
     {12,0,0,Y(12),0.0,0.0},
@@ -411,6 +411,14 @@ sprite_rotation_t diagonal_sprite_rotations[176]={
     {20,8,0,Y(20),-S,0.0},
     {28,8,0,Y(28),-S,0.0},
     //Vertical slope sprites
+    {4,9,0,Y(4),SV,0.0},
+    {12,9,0,Y(12),SV,0.0},
+    {20,9,0,Y(20),SV,0.0},
+    {28,9,0,Y(28),SV,0.0},
+    {4,17,0,Y(4),-SV,0.0},
+    {12,17,0,Y(12),-SV,0.0},
+    {20,17,0,Y(20),-SV,0.0},
+    {28,17,0,Y(28),-SV,0.0},
     {4,10,0,Y(4),V,0.0},
     {12,10,0,Y(12),V,0.0},
     {20,10,0,Y(20),V,0.0},
@@ -419,10 +427,51 @@ sprite_rotation_t diagonal_sprite_rotations[176]={
     {12,18,0,Y(12),-V,0.0},
     {20,18,0,Y(20),-V,0.0},
     {28,18,0,Y(28),-V,0.0},
+    {4,11,0,Y(4),V+1*M_PI_12,0.0},
+    {12,11,0,Y(12),V+1*M_PI_12,0.0},
+    {20,11,0,Y(20),V+1*M_PI_12,0.0},
+    {28,11,0,Y(28),V+1*M_PI_12,0.0},
+    {4,12,0,Y(4),V+2*M_PI_12,0.0},
+    {12,12,0,Y(12),V+2*M_PI_12,0.0},
+    {20,12,0,Y(20),V+2*M_PI_12,0.0},
+    {28,12,0,Y(28),V+2*M_PI_12,0.0},
+    {4,13,0,Y(4),V+3*M_PI_12,0.0},
+    {12,13,0,Y(12),V+3*M_PI_12,0.0},
+    {20,13,0,Y(20),V+3*M_PI_12,0.0},
+    {28,13,0,Y(28),V+3*M_PI_12,0.0},
+    {4,14,0,Y(4),V+4*M_PI_12,0.0},
+    {12,14,0,Y(12),V+4*M_PI_12,0.0},
+    {20,14,0,Y(20),V+4*M_PI_12,0.0},
+    {28,14,0,Y(28),V+4*M_PI_12,0.0},
+    {4,15,0,Y(4),V+5*M_PI_12,0.0},
+    {12,15,0,Y(12),V+5*M_PI_12,0.0},
+    {20,15,0,Y(20),V+5*M_PI_12,0.0},
+    {28,15,0,Y(28),V+5*M_PI_12,0.0},
     {4,16,0,Y(4),V+6*M_PI_12,0.0},
     {12,16,0,Y(12),V+6*M_PI_12,0.0},
     {20,16,0,Y(20),V+6*M_PI_12,0.0},
     {28,16,0,Y(28),V+6*M_PI_12,0.0},
+    {4,19,0,Y(4),-V-1*M_PI_12,0.0},
+    {12,19,0,Y(12),-V-1*M_PI_12,0.0},
+    {20,19,0,Y(20),-V-1*M_PI_12,0.0},
+    {28,19,0,Y(28),-V-1*M_PI_12,0.0},
+    {4,20,0,Y(4),-V-2*M_PI_12,0.0},
+    {12,20,0,Y(12),-V-2*M_PI_12,0.0},
+    {20,20,0,Y(20),-V-2*M_PI_12,0.0},
+    {28,20,0,Y(28),-V-2*M_PI_12,0.0},
+    {4,21,0,Y(4),-V-3*M_PI_12,0.0},
+    {12,21,0,Y(12),-V-3*M_PI_12,0.0},
+    {20,21,0,Y(20),-V-3*M_PI_12,0.0},
+    {28,21,0,Y(28),-V-3*M_PI_12,0.0},
+    {4,22,0,Y(4),-V-4*M_PI_12,0.0},
+    {12,22,0,Y(12),-V-4*M_PI_12,0.0},
+    {20,22,0,Y(20),-V-4*M_PI_12,0.0},
+    {28,22,0,Y(28),-V-4*M_PI_12,0.0},
+    {4,23,0,Y(4),-V-5*M_PI_12,0.0},
+    {12,23,0,Y(12),-V-5*M_PI_12,0.0},
+    {20,23,0,Y(20),-V-5*M_PI_12,0.0},
+    {28,23,0,Y(28),-V-5*M_PI_12,0.0},
+
     //Diagonal sprites
     {4,50,0,Y(4),FGD,0.0},
     {12,50,0,Y(12),FGD,0.0},
@@ -2616,7 +2665,7 @@ sprite_rotation_t dive_loop_sprite_rotations[144]={
 };
 
 #define NUM_SPRITE_GROUPS 9
-int sprite_group_counts[NUM_SPRITE_GROUPS]={176,176,408,40,160,160,160,320,144};
+int sprite_group_counts[NUM_SPRITE_GROUPS]={176,224,408,40,160,160,160,320,144};
 const sprite_rotation_t* sprite_group_rotations[NUM_SPRITE_GROUPS]={orthogonal_sprite_rotations,diagonal_sprite_rotations,turn_sprite_rotations,inline_twist_sprite_rotations,corkscrew_sprite_rotations,zero_g_orthogonal_sprite_rotations,zero_g_diagonal_sprite_rotations,zero_g_other_sprite_rotations,dive_loop_sprite_rotations};
 
 matrix_t track_point_get_rotation(track_point_t point)
@@ -3293,6 +3342,16 @@ int main(int argc,const char** argv)
 	generate_subposition_data(&(track_sections[ZERO_G_ROLL_LEFT_BANK            ]),"LeftZeroGRollDownToUpBanked", SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,20);
 	generate_subposition_data(&(track_sections[ZERO_G_ROLL_RIGHT_BANK             ]),"RightZeroGRollDownToUpBanked",SPRITE_GROUP_ZERO_G_ROLLS_ORTHOGONAL|SPRITE_GROUP_INLINE_TWIST|SPRITE_GROUP_ORTHOGONAL,20);
 */
+
+//	generate_subposition_data(&(track_sections[HALF_LOOP_DIAG            ]),"DiagHalfLoopUp",SPRITE_GROUP_DIAGONAL,0);
+//	generate_subposition_data(&(track_sections[HALF_LOOP_DIAG            ]),"DiagHalfLoopDown", SPRITE_GROUP_DIAGONAL,20);
+//	generate_subposition_data(&(track_sections[VERTICAL_LOOP_LEFT_DIAG            ]),"DiagVerticalLoopLeft",SPRITE_GROUP_DIAGONAL,0);
+//	generate_subposition_data(&(track_sections[VERTICAL_LOOP_RIGHT_DIAG            ]),"DiagVerticalLoopRight", SPRITE_GROUP_DIAGONAL,0);
+
+	//generate_subposition_data(&(track_sections[CORKSCREW_LEFT_DIAG             ]),"DiagLeftCorkscrewUp", SPRITE_GROUP_CORKSCREW|SPRITE_GROUP_DIAGONAL,0);
+	//generate_subposition_data(&(track_sections[CORKSCREW_RIGHT_DIAG            ]),"DiagRightCorkscrewUp",SPRITE_GROUP_CORKSCREW|SPRITE_GROUP_DIAGONAL,0);
+	//generate_subposition_data(&(track_sections[CORKSCREW_RIGHT_DIAG            ]),"DiagLeftCorkscrewDown", SPRITE_GROUP_CORKSCREW|SPRITE_GROUP_DIAGONAL,20);
+	//generate_subposition_data(&(track_sections[CORKSCREW_LEFT_DIAG             ]),"DiagRightCorkscrewDown",SPRITE_GROUP_CORKSCREW|SPRITE_GROUP_DIAGONAL,20);
 
 	generate_subposition_data(&(track_sections[LARGE_CORKSCREW_LEFT_DIAG             ]),"DiagLeftLargeCorkscrewUp", SPRITE_GROUP_CORKSCREW|SPRITE_GROUP_DIAGONAL,0);
 	generate_subposition_data(&(track_sections[LARGE_CORKSCREW_RIGHT_DIAG            ]),"DiagRightLargeCorkscrewUp",SPRITE_GROUP_CORKSCREW|SPRITE_GROUP_DIAGONAL,0);

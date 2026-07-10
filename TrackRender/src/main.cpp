@@ -94,7 +94,7 @@ int load_groups(json_t* json,uint64_t* out)
 		else if(strcmp(json_string_value(group_name),"banked_barrel_rolls") ==0)groups|=TRACK_GROUP_BANKED_BARREL_ROLLS;
 		else if(strcmp(json_string_value(group_name),"banked_inline_twists") ==0)groups|=TRACK_GROUP_BANKED_INLINE_TWISTS;
 		else if(strcmp(json_string_value(group_name),"banked_zero_g_rolls") ==0)groups|=TRACK_GROUP_BANKED_ZERO_G_ROLLS;
-		else if(strcmp(json_string_value(group_name),"diagonal_corkscrews") ==0)groups|=TRACK_GROUP_DIAGONAL_CORKSCREWS;
+		else if(strcmp(json_string_value(group_name),"diagonal_inversions") ==0)groups|=TRACK_GROUP_DIAGONAL_INVERSIONS;
 		else if(strcmp(json_string_value(group_name),"vertical_boosters") ==0)groups|=TRACK_GROUP_VERTICAL_BOOSTERS;
 		else
 		{

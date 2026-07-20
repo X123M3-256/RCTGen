@@ -482,7 +482,8 @@ int offset_table_index_with_rot(track_point_t track,int rot)
 	//Gentle
 	else if(compare_vec(track.tangent,vector3(0,2*CLEARANCE_HEIGHT,TILE_SIZE),rot))
 	{
-		if(banked)return right|OFFSET_GENTLE_BANK;
+		if(banked && right)return OFFSET_GENTLE_BANK_RIGHT;
+		else if(banked)return OFFSET_GENTLE_BANK_LEFT;
 		else return OFFSET_GENTLE;
 	}
 	//Steep

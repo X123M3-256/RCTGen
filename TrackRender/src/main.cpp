@@ -108,13 +108,13 @@ int load_groups(json_t* json,uint64_t* out)
 
 int load_offsets(json_t* json,float* offsets)
 {
-const char* row_names[10]={"flat","gentle","steep","flat_banked","gentle_banked","inverted","diagonal","diagonal_banked","diagonal_gentle","diagonal_steep"};
+const char* row_names[11]={"flat","gentle","steep","flat_banked","gentle_banked","gentle_banked_right","inverted","diagonal","diagonal_banked","diagonal_gentle","diagonal_steep"};
 
 //Zero offset array
 memset(offsets,0,88*sizeof(float));
 
 //Load offsets
-	for(int i=0;i<10;i++)
+	for(int i=0;i<11;i++)
 	{
 	json_t* row=json_object_get(json,row_names[i]);
 		if(row == NULL)continue;
@@ -132,6 +132,14 @@ memset(offsets,0,88*sizeof(float));
 			return 1;
 			}
 		offsets[8*i+j]=json_number_value(value);
+		}
+		if(i==4)
+		{
+			for(int j=0;j<4;j++)
+			{
+			offsets[8*5+2*j]=-offsets[8*4+2*((j+2)%4)];
+			offsets[8*5+2*j+1]=offsets[8*4+2*((j+2)%4)+1];
+			}
 		}
 	}
 return 0;

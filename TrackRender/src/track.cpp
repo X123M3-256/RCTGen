@@ -8,6 +8,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 vector3_t start_offset;
 vector3_t end_offset;
@@ -724,12 +725,35 @@ image_t track_masks[4];
 		//image_write_png(full_sprites+angle,file);
 		fclose(file);
 
-		json_t* sprite_entry=json_object();
-		json_object_set(sprite_entry,"path",json_string(relative_filename));
-		json_object_set(sprite_entry,"x",json_integer(part_sprite.x_offset));
-		json_object_set(sprite_entry,"y",json_integer(part_sprite.y_offset));
-		json_object_set(sprite_entry,"palette",json_string("keep"));
-		json_array_append(sprites,sprite_entry);
+
+		//Check to see if this sprite exists already in source file; if so replace it
+		int i=0;
+			while(i<json_array_size(sprites))
+			{
+			json_t* sprite_entry=json_array_get(sprites,i);
+				if(!json_is_object(sprite_entry))continue;
+			json_t* path=json_object_get(sprite_entry,"path");
+				if(!json_is_string(path))continue;
+				if(strcmp(json_string_value(path),relative_filename)==0)
+				{
+				//Replace existing sprite
+				json_object_set(sprite_entry,"x",json_integer(part_sprite.x_offset));
+				json_object_set(sprite_entry,"y",json_integer(part_sprite.y_offset));
+				json_object_set(sprite_entry,"palette",json_string("keep"));
+				break;
+				}
+			i++;
+			}
+			if(i>=json_array_size(sprites))
+			{
+			json_t* sprite_entry=json_object();
+			json_object_set(sprite_entry,"path",json_string(relative_filename));
+			json_object_set(sprite_entry,"x",json_integer(part_sprite.x_offset));
+			json_object_set(sprite_entry,"y",json_integer(part_sprite.y_offset));
+			json_object_set(sprite_entry,"palette",json_string("keep"));
+			json_array_append(sprites,sprite_entry);
+			}
+
 		image_destroy(&part_sprite);
 		}
 

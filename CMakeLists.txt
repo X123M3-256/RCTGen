@@ -3,10 +3,6 @@
 
 cmake_minimum_required(VERSION 3.15)
 
-# Enable support for MSVC_RUNTIME_LIBRARY
-cmake_policy(SET CMP0091 NEW)
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 	message(FATAL_ERROR "In-tree builds are not supported. Run CMake from a separate directory: cmake -B build")
 endif()
@@ -31,7 +27,6 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 endif()
 
 # Settings
-set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIG>")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/$<CONFIG>")
 
@@ -46,6 +41,10 @@ project(RCT2RideGen
     find_package(assimp REQUIRED)
     find_package(jansson REQUIRED)
     find_package(libzip REQUIRED)
+
+if (MSVC)
+	add_compile_options(/Zc:enumTypes)
+endif()
 
 # Target: IsoRender
 set(IsoRender_SOURCES
